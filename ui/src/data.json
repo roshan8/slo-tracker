@@ -1,0 +1,26 @@
+[
+  {
+    "id": "PushNotificationFailure",
+    "label": "PushNotificationFailure",
+    "value": 575,
+    "color": "hsl(200, 70%, 50%)"
+  },
+  {
+    "id": "HighErrorRate",
+    "label": "HighErrorRate",
+    "value": 519,
+    "color": "hsl(220, 70%, 50%)"
+  },
+  {
+    "id": "HighLatency",
+    "label": "HighLatency",
+    "value": 580,
+    "color": "hsl(40, 70%, 50%)"
+  },
+  {
+    "id": "ThirdPartyOutage",
+    "label": "ThirdPartyOutage",
+    "value": 296,
+    "color": "hsl(62, 70%, 50%)"
+  }
+]

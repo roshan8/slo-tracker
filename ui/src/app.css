@@ -1,0 +1,15 @@
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
+}
+
+#root {
+  margin: 5px;
+}
+
+.header_select_box > * > *:first-child {
+  padding: 4px !important;
+  height: 24px !important;
+}
