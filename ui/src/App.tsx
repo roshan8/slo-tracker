@@ -147,7 +147,7 @@ function App() {
           <Button type="primary" block onClick={showModal}>
             Update SLA Target
           </Button>
-          <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <Modal title="Modify target SLA" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
             <p>Some contents...</p>
             <p>Some contents...</p>
             <p>Some contents...</p>
@@ -157,7 +157,7 @@ function App() {
           <Button type="primary" block onClick={showModal}>
             Create Incident
           </Button>
-          <Modal title="Basic Modal" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
+          <Modal title="Modify target SLA" visible={isModalVisible} onOk={handleOk} onCancel={handleCancel}>
             <p>Some contents...</p>
             <p>Some contents...</p>
             <p>Some contents...</p>
