@@ -19,6 +19,7 @@ var (
 	Env          string
 	Port         string
 	DBDriver     string
+	DBName       string
 	DBDataSource string
 )
 
@@ -33,6 +34,7 @@ func GetAllEnv() {
 	mustEnv("ENV", &Env, EnvDev)
 	mustEnv("PORT", &Port, "8080")
 	mustEnv("DB_DRIVER", &DBDriver, "postgres")
+	mustEnv("DB_NAME", &DBName, "slatracker_dev")
 	mustEnv("DB_DATASOURCE", &DBDataSource,
 		"user=postgres password=mysecretpassword dbname=slatracker_dev sslmode=disable host=localhost")
 }
