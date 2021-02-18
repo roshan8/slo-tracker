@@ -57,8 +57,8 @@ func (cs *IncidentStore) createTableIfNotExists() {
 // All returns all the Incidents
 func (cs *IncidentStore) All() ([]*schema.Incident, *errors.AppError) {
 	var Incidents []*schema.Incident
-	// if err := cs.DB.Find(&Incidents).Error; err != nil { // For displaying all the columns
-	if err := cs.DB.Select("SliName, Alertsource, State, CreatedAt, ErrorBudgetSpent, MarkFalsePositive").Find(&Incidents).Error; err != nil {
+	if err := cs.DB.Find(&Incidents).Error; err != nil { // For displaying all the columns
+		// if err := cs.DB.Select("SliName, Alertsource, State, CreatedAt, ErrorBudgetSpent, MarkFalsePositive").Find(&Incidents).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)
 	}
 
