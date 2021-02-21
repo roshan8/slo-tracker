@@ -45,3 +45,22 @@ func getIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.AppError
 	respond.OK(w, incident)
 	return nil
 }
+
+// Updates the incident
+func updateIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
+	var input schema.Incident
+	ctx := r.Context()
+	incident, _ := ctx.Value("incident").(*schema.Incident)
+
+	if err := utils.Decode(r, &input); err != nil {
+		return errors.BadRequest(err.Error()).AddDebug(err)
+	}
+
+	updated, err := store.Incident().Update(incident, &input)
+	if err != nil {
+		return err
+	}
+
+	respond.OK(w, updated)
+	return nil
+}

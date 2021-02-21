@@ -8,12 +8,12 @@ import (
 	"gorm.io/gorm"
 )
 
-// UserStore implements the cities interface
+// IncidentStore implements the cities interface
 type IncidentStore struct {
 	*Conn
 }
 
-// NewUserStore ...
+// NewIncidentStore ...
 func NewIncidentStore(st *Conn) *IncidentStore {
 	cs := &IncidentStore{st}
 	go cs.createTableIfNotExists()
@@ -27,32 +27,7 @@ func (cs *IncidentStore) createTableIfNotExists() {
 		}
 	}
 
-	// go cs.createIndexesIfNotExists()
 }
-
-// func (cs *IncidentStore) createIndexesIfNotExists() {
-// 	scope := cs.DB.NewScope(&schema.Incident{})
-// 	commonIndexes := getCommonIndexes(scope.TableName())
-// 	for k, v := range commonIndexes {
-// 		if !scope.Dialect().HasIndex(scope.TableName(), k) {
-// 			err := cs.DB.Model(&schema.Incident{}).AddIndex(k, v).Error
-// 			if err != nil {
-// 				fmt.Println(err)
-// 			}
-// 		}
-// 	}
-
-// 	uniqueIndexes := map[string][]string{
-// 		"idx_Incidents_name": []string{"name"},
-// 	}
-// 	for k, v := range uniqueIndexes {
-// 		if !scope.Dialect().HasIndex(scope.TableName(), k) {
-// 			if err := cs.DB.Model(&schema.Incident{}).AddUniqueIndex(k, v...).Error; err != nil {
-// 				fmt.Println(err)
-// 			}
-// 		}
-// 	}
-// }
 
 // All returns all the Incidents
 func (cs *IncidentStore) All() ([]*schema.Incident, *errors.AppError) {
@@ -86,6 +61,15 @@ func (cs *IncidentStore) Create(req *schema.IncidentReq) (*schema.Incident, *err
 		Alertsource: req.Alertsource,
 	}
 	if err := cs.DB.Save(incident).Error; err != nil {
+		return nil, errors.InternalServerStd().AddDebug(err)
+	}
+
+	return incident, nil
+}
+
+// Update the incident record..
+func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incident) (*schema.Incident, *errors.AppError) {
+	if err := cs.DB.Model(incident).Updates(update).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)
 	}
 

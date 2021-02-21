@@ -27,6 +27,6 @@ func Init(r chi.Router) {
 // ROUTE: {host}/v1/incident/:incidentID/*
 func incidentIDSubRoutes(r chi.Router) {
 	r.Method(http.MethodGet, "/", api.Handler(getIncidentHandler))
-	// r.Method(http.MethodPatch, "/", api.Handler(updateIncidentHandler))
+	r.Method(http.MethodPatch, "/", api.Handler(updateIncidentHandler))
 	// r.Method(http.MethodDelete, "/", api.Handler(deleteIncidentHandler))
 }

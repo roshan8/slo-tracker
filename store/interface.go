@@ -17,6 +17,6 @@ type Incident interface {
 	All() ([]*schema.Incident, *errors.AppError)
 	Create(req *schema.IncidentReq) (*schema.Incident, *errors.AppError)
 	GetByID(incidentID uint) (*schema.Incident, *errors.AppError)
-	// Update(city *schema.City, update *schema.City) (*schema.City, *errors.AppError)
+	Update(incident *schema.Incident, update *schema.Incident) (*schema.Incident, *errors.AppError)
 	// Delete(cityID uint) *errors.AppError
 }

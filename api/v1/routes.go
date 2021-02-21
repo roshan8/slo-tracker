@@ -13,6 +13,7 @@ import (
 func Routes(r chi.Router) {
 	r.Route("/api/v1", Init)
 	r.Method(http.MethodGet, "/", v1.Handler(api.IndexHandeler))
+	r.Get("/top", api.HealthHandeler)
 	// r.Get("/top", api.HealthHandeler)
 }
 
