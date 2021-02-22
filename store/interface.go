@@ -9,6 +9,7 @@ import (
 // for diff entities
 type Store interface {
 	Incident() Incident
+	SLA() SLA
 	// TODO: add others
 }
 
@@ -19,4 +20,11 @@ type Incident interface {
 	GetByID(incidentID uint) (*schema.Incident, *errors.AppError)
 	Update(incident *schema.Incident, update *schema.Incident) (*schema.Incident, *errors.AppError)
 	// Delete(cityID uint) *errors.AppError
+}
+
+// SLA store interface expose the SLA db methods/operations
+type SLA interface {
+	All() ([]*schema.SLA, *errors.AppError)
+	Create(req *schema.SLA) (*schema.SLA, *errors.AppError)
+	Update(sla *schema.SLA, update *schema.SLA) (*schema.SLA, *errors.AppError)
 }

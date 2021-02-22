@@ -22,6 +22,7 @@ func Init() {
 	dbConn = db
 	db.AutoMigrate(
 		&schema.Incident{},
+		&schema.SLA{},
 		//TODO: add other schemas
 	)
 }
@@ -30,6 +31,7 @@ func Init() {
 type Conn struct {
 	DB           *gorm.DB
 	IncidentConn Incident
+	SLAConn      SLA
 	// TODO: add other connection
 }
 
@@ -40,6 +42,7 @@ func NewStore() *Conn {
 		DB: dbConn,
 	}
 	conn.IncidentConn = NewIncidentStore(conn)
+	conn.SLAConn = NewSLAStore(conn)
 	// TODO: Add other connections
 
 	return conn
@@ -48,6 +51,11 @@ func NewStore() *Conn {
 // Incident implements the store interface and it returns the Incident interface
 func (s *Conn) Incident() Incident {
 	return s.IncidentConn
+}
+
+// SLA implements the store interface and it returns the SLA interface
+func (s *Conn) SLA() SLA {
+	return s.SLAConn
 }
 
 func getCommonIndexes(tableName string) map[string]string {
