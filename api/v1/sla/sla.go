@@ -37,11 +37,20 @@ func createSLAHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 	return nil
 }
 
+// Get SLA details by ID
+func getSLAHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
+	ctx := r.Context()
+	SLA, _ := ctx.Value("SLA").(*schema.SLA)
+
+	respond.OK(w, SLA)
+	return nil
+}
+
 // Updates the sla
 func updateSLAHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 	var input schema.SLA
 	ctx := r.Context()
-	sla, _ := ctx.Value("sla").(*schema.SLA)
+	sla, _ := ctx.Value("SLA").(*schema.SLA)
 
 	if err := utils.Decode(r, &input); err != nil {
 		return errors.BadRequest(err.Error()).AddDebug(err)

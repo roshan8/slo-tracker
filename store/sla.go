@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"sla-tracker/pkg/errors"
 	"sla-tracker/schema"
+
+	"gorm.io/gorm"
 )
 
 // SLAStore implements the SLA interface
@@ -36,6 +38,19 @@ func (cs *SLAStore) All() ([]*schema.SLA, *errors.AppError) {
 	}
 
 	return SLAs, nil
+}
+
+// GetByID returns the matched record for the given id
+func (cs *SLAStore) GetByID(SLAID uint) (*schema.SLA, *errors.AppError) {
+	var SLA schema.SLA
+	if err := cs.DB.First(&SLA, "id=?", SLAID).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errors.BadRequest("invalid SLA id").AddDebug(err)
+		}
+		return nil, errors.InternalServerStd().AddDebug(err)
+	}
+
+	return &SLA, nil
 }
 
 // Create a new SLA
