@@ -8,7 +8,6 @@ import {
   Modal,
   Button,
   Table,
-  Space,
   Switch,
 } from "antd";
 import "antd/dist/antd.css";
