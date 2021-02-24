@@ -5,7 +5,9 @@ import {
   Card,
   Row,
   Col,
-  Modal,
+  Form,
+  Input,
+  Drawer,
   Button,
   Table,
   Switch,
@@ -24,26 +26,137 @@ interface IIncidentList {
   mark_false_positive: boolean;
 }
 
+// const formLayout = {
+//   labelCol: { span: 8 },
+//   wrapperCol: { span: 16 },
+// };
+// const formTailLayout = {
+//   wrapperCol: { offset: 8, span: 16 },
+// };
+
 function App() {
-  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [isSLADrawerVisible, setIsSLADrawerVisible] = useState(false);
+  const [isIncidentDrawerVisible, setIsIncidentDrawerVisible] = useState(false);
   const [incidentList, setInicidentList] = useState<IIncidentList[]>([]);
 
-  const showModal = () => {
-    setIsModalVisible(true);
+  const showSLADrawer = () => {
+    setIsSLADrawerVisible(true);
   };
 
-  const handleOk = () => {
-    setIsModalVisible(false);
+  const showIncidentDrawer = () => {
+    setIsIncidentDrawerVisible(true);
   };
 
-  const handleCancel = () => {
-    setIsModalVisible(false);
+  const HandleSLAOk = () => {
+    setIsSLADrawerVisible(false);
+  };
+
+  const HandleIncidentOk = () => {
+    setIsIncidentDrawerVisible(false);
+  };
+
+  const HandleSLACancel = () => {
+    setIsSLADrawerVisible(false);
+  };
+
+  const HandleIncidentCancel = () => {
+    setIsIncidentDrawerVisible(false);
   };
 
   // function for switch
   function onChange(checked) {
     console.log(`switch to ${checked}`);
   }
+
+  const SLAFormLayout = () => {
+    const onFinish = (values: any) => {
+      console.log('Success:', values);
+    };
+  
+    const onFinishFailed = (errorInfo: any) => {
+      console.log('Failed:', errorInfo);
+    };
+  
+    return (
+      <Form
+        // {...formLayout}
+        name="basic"
+        layout="vertical"
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+      >
+
+        <Form.Item
+          label="Product name"
+          name="productname"
+          rules={[{ required: false }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Target SLA"
+          name="targetsla"
+          rules={[{ required: true, message: 'This is required field' }]}
+        >
+          <Input />
+        </Form.Item>
+  
+        <Form.Item 
+          // {...formTailLayout}
+        >
+          <Button type="primary" htmlType="submit" onClick={HandleSLAOk}>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    );
+  };
+
+  const IncidentFormLayout = () => {
+    const onFinish = (values: any) => {
+      console.log('Success:', values);
+    };
+  
+    const onFinishFailed = (errorInfo: any) => {
+      console.log('Failed:', errorInfo);
+    };
+  
+    return (
+      <Form
+        // {...formLayout}
+        name="basic"
+        layout="vertical"
+        onFinish={onFinish}
+        onFinishFailed={onFinishFailed}
+      >
+
+        <Form.Item
+          label="SLI"
+          name="sliname"
+          rules={[{ required: true, message: 'This is required field' }]}
+        >
+          <Input />
+        </Form.Item>
+
+        <Form.Item
+          label="Error budget spent"
+          name="errbudget"
+          rules={[{ required: true, message: 'This is required field' }]}
+        >
+          <Input />
+        </Form.Item>
+  
+        <Form.Item 
+          // {...formTailLayout}
+        >
+          <Button type="primary" htmlType="submit" onClick={HandleIncidentOk}>
+            Submit
+          </Button>
+        </Form.Item>
+      </Form>
+    );
+  };
 
   const columns = [
     {
@@ -69,7 +182,7 @@ function App() {
     {
       title: "Mark false positive",
       key: "action",
-      render: () => <Switch defaultChecked onChange={onChange} />,
+      render: () => <Switch onChange={onChange} />,
     },
   ];
 
@@ -142,34 +255,32 @@ function App() {
 
       <Row gutter={[8, 8]}>
         <Col span={12}>
-          <Button type="primary" block onClick={showModal}>
+          <Button type="primary" block onClick={showSLADrawer}>
             Update SLA Target
           </Button>
-          <Modal
+          <Drawer
             title="Modify target SLA"
-            visible={isModalVisible}
-            onOk={handleOk}
-            onCancel={handleCancel}
+            placement="right"
+            visible={isSLADrawerVisible}
+            onClose={HandleSLAOk}
+            bodyStyle={{ paddingBottom: 80 }}
           >
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-          </Modal>
+              <SLAFormLayout />
+          </Drawer>
         </Col>
         <Col span={12}>
-          <Button type="primary" block onClick={showModal}>
-            Create Incident
+          <Button type="primary" block onClick={showIncidentDrawer}>
+            Report an incident
           </Button>
-          <Modal
-            title="Modify target SLA"
-            visible={isModalVisible}
-            onOk={handleOk}
-            onCancel={handleCancel}
+          <Drawer
+            title="Report SLA voilating incident"
+            placement="right"
+            visible={isIncidentDrawerVisible}
+            onClose={HandleIncidentOk}
+            bodyStyle={{ paddingBottom: 80 }}
           >
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-            <p>Some contents...</p>
-          </Modal>
+              <IncidentFormLayout />
+          </Drawer>
         </Col>
       </Row>
 
