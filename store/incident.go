@@ -57,8 +57,10 @@ func (cs *IncidentStore) GetByID(incidentID uint) (*schema.Incident, *errors.App
 func (cs *IncidentStore) Create(req *schema.IncidentReq) (*schema.Incident, *errors.AppError) {
 
 	incident := &schema.Incident{
-		SliName:     req.SliName,
-		Alertsource: req.Alertsource,
+		SliName:          req.SliName,
+		Alertsource:      req.Alertsource,
+		State:            req.State,
+		ErrorBudgetSpent: req.ErrorBudgetSpent,
 	}
 	if err := cs.DB.Save(incident).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)

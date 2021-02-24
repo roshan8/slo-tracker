@@ -11,6 +11,7 @@ import {
   Button,
   Table,
   Switch,
+  InputNumber,
 } from "antd";
 import "antd/dist/antd.css";
 import { ResponsivePie } from "@nivo/pie";
@@ -57,21 +58,16 @@ function App() {
         "http://localhost:8080/api/v1/incident/", {
           method: 'POST',
           body: JSON.stringify({
-            firstParam: 'yourValue',
-            secondParam: 'yourOtherValue',
+            sli_name: "test",
+            alertsource: 'webUI',
           })
         }
       );
       // TODO: Add response code validation.
     } catch (err) {
       console.log(err);
-    }    
-  };
-
-  const HandleIncidentOk = () => {
-
-    createIncidentApi();
-    setIsIncidentDrawerVisible(false);
+    }
+    setIsIncidentDrawerVisible(false);    
   };
 
   // function for switch
@@ -125,9 +121,42 @@ function App() {
   };
 
   const IncidentFormLayout = () => {
-    const onFinish = (values: any) => {
-      console.log('Success:', values);
+
+    const [form] = Form.useForm();
+
+    // const onFinish = (values: any) => {
+    //   console.log('Success:', values);
+    // };
+
+    const HandleIncidentOk = () => {
+      console.log("HandleIncidentOk triggered");
     };
+
+    const onFinish = (values: any) => {
+      const createIncidentApi = async () => {
+        try {
+
+          console.log('Success:', values);
+
+          const incidentCreationReq = await fetch(
+            "http://localhost:8080/api/v1/incident/", {
+              method: 'POST',
+              body: JSON.stringify({
+                sli_name: values["sliname"],
+                alertsource: "webUI",
+                err_budget_spent: values["errbudgetspent"],
+                state: "closed",
+              })
+            }
+          );
+          // TODO: Add response code validation.
+        } catch (err) {
+          console.log(err);
+        }
+        setIsIncidentDrawerVisible(false);    
+      };    
+      createIncidentApi();
+    };  
   
     const onFinishFailed = (errorInfo: any) => {
       console.log('Failed:', errorInfo);
@@ -151,11 +180,11 @@ function App() {
         </Form.Item>
 
         <Form.Item
-          label="Error budget spent"
-          name="errbudget"
-          rules={[{ required: true, message: 'This is required field' }]}
+          label="Error budget spent(In mins)"
+          name="errbudgetspent"
+          rules={[{ required: true, message: "Please enter valid number" }]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
   
         <Form.Item 
@@ -287,7 +316,6 @@ function App() {
             title="Report SLA voilating incident"
             placement="right"
             visible={isIncidentDrawerVisible}
-            onClose={HandleIncidentOk}
             bodyStyle={{ paddingBottom: 80 }}
           >
               <IncidentFormLayout />
