@@ -51,15 +51,26 @@ function App() {
     setIsSLADrawerVisible(false);
   };
 
+  const createIncidentApi = async () => {
+    try {
+      const incidentCreationReq = await fetch(
+        "http://localhost:8080/api/v1/incident/", {
+          method: 'POST',
+          body: JSON.stringify({
+            firstParam: 'yourValue',
+            secondParam: 'yourOtherValue',
+          })
+        }
+      );
+      // TODO: Add response code validation.
+    } catch (err) {
+      console.log(err);
+    }    
+  };
+
   const HandleIncidentOk = () => {
-    setIsIncidentDrawerVisible(false);
-  };
 
-  const HandleSLACancel = () => {
-    setIsSLADrawerVisible(false);
-  };
-
-  const HandleIncidentCancel = () => {
+    createIncidentApi();
     setIsIncidentDrawerVisible(false);
   };
 
@@ -74,9 +85,9 @@ function App() {
     };
   
     const onFinishFailed = (errorInfo: any) => {
-      console.log('Failed:', errorInfo);
+        console.log('Failed:', errorInfo);
     };
-  
+    
     return (
       <Form
         // {...formLayout}
