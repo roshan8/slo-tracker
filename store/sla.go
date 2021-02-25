@@ -5,6 +5,8 @@ import (
 	"sla-tracker/pkg/errors"
 	"sla-tracker/schema"
 
+	// appstore "sla-tracker/store"
+
 	"gorm.io/gorm"
 )
 
@@ -21,12 +23,25 @@ func NewSLAStore(st *Conn) *SLAStore {
 }
 
 func (cs *SLAStore) createTableIfNotExists() {
+	fmt.Println("Creating the sla table now!")
 	if !cs.DB.Migrator().HasTable(&schema.SLA{}) {
 		if err := cs.DB.Migrator().CreateTable(&schema.SLA{}).Error; err != nil {
 			fmt.Println(err)
 		}
+		// Create the first SLA record, Whenever use tries to
+		// set their target SLA, patch calls will be made on this record
+		fmt.Println("Creating the first record!")
+		firstSLARecord := &schema.SLA{
+			ProductName:        "Unnamed",
+			TargetSLA:          100,
+			CurrentSLA:         100,
+			RemainingErrBudget: 0,
+		}
+		if err := cs.DB.Save(firstSLARecord).Error; err != nil {
+			fmt.Println(errors.InternalServerStd().AddDebug(err))
+		}
+		fmt.Println("First SLA record got created")
 	}
-
 }
 
 // All returns all the SLAs

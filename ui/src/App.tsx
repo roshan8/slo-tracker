@@ -27,6 +27,14 @@ interface IIncidentList {
   mark_false_positive: boolean;
 }
 
+interface ISLAList {
+  id: number;
+  product_name: string;
+  target_sla: number;
+  current_sla: number;
+  remaining_err_budget: number;
+}
+
 // const formLayout = {
 //   labelCol: { span: 8 },
 //   wrapperCol: { span: 16 },
@@ -39,6 +47,8 @@ function App() {
   const [isSLADrawerVisible, setIsSLADrawerVisible] = useState(false);
   const [isIncidentDrawerVisible, setIsIncidentDrawerVisible] = useState(false);
   const [incidentList, setInicidentList] = useState<IIncidentList[]>([]);
+  const [currentSLA, setCurrentSLA] = useState();
+  // const [currentSLA, setCurrentSLA] = useState();
 
   const showSLADrawer = () => {
     setIsSLADrawerVisible(true);
@@ -50,24 +60,6 @@ function App() {
 
   const HandleSLAOk = () => {
     setIsSLADrawerVisible(false);
-  };
-
-  const createIncidentApi = async () => {
-    try {
-      const incidentCreationReq = await fetch(
-        "http://localhost:8080/api/v1/incident/", {
-          method: 'POST',
-          body: JSON.stringify({
-            sli_name: "test",
-            alertsource: 'webUI',
-          })
-        }
-      );
-      // TODO: Add response code validation.
-    } catch (err) {
-      console.log(err);
-    }
-    setIsIncidentDrawerVisible(false);    
   };
 
   // function for switch
@@ -123,10 +115,6 @@ function App() {
   const IncidentFormLayout = () => {
 
     const [form] = Form.useForm();
-
-    // const onFinish = (values: any) => {
-    //   console.log('Success:', values);
-    // };
 
     const HandleIncidentOk = () => {
       console.log("HandleIncidentOk triggered");
@@ -228,12 +216,12 @@ function App() {
 
   useEffect(
     () => {
-      const apiCall = async () => {
+      const getIncidentApiCall = async () => {
         try {
-          const incidentListResposne = await fetch(
+          const incidentListResponse = await fetch(
             "http://localhost:8080/api/v1/incident/"
           );
-          const { data: incidentList } = await incidentListResposne.json();
+          const { data: incidentList } = await incidentListResponse.json();
           setInicidentList(
             incidentList.map((i) => {
               i.key = i.id;
@@ -245,8 +233,30 @@ function App() {
         }
       };
     
-      apiCall();
+      const getSLAApiCall = async () => {
+        try {
+          const SLAListResponse = await fetch(
+            "http://localhost:8080/api/v1/sla/1"
+          )
+          .then(response => response.json())
+          .then(response => {
+            console.log(response.data.product_name)
+            setCurrentSLA(response.data.current_sla)
+          })
+          .catch(err => { console.log(err); 
+          });
+
+        } catch (err) {
+          console.log(err);
+        }
+      };
+
+      getIncidentApiCall();
+      getSLAApiCall();
+
     },
+
+
     [],
   )
 
@@ -258,7 +268,7 @@ function App() {
             <Card>
               <Statistic
                 title="Target SLA"
-                value={99.99}
+                value={"10"}
                 precision={2}
                 valueStyle={{ color: "#3f8600" }}
                 // prefix={<ArrowUpOutlined />}
@@ -270,7 +280,7 @@ function App() {
             <Card>
               <Statistic
                 title="Your SLA"
-                value={100}
+                value={ currentSLA }
                 precision={2}
                 valueStyle={{ color: "#cf1322" }}
                 // prefix={<ArrowDownOutlined />}
