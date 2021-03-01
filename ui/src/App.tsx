@@ -73,8 +73,29 @@ function App() {
   }
 
   const SLAFormLayout = () => {
+
     const onFinish = (values: any) => {
-      console.log('Success:', values);
+      const createSLAApi = async () => {
+        try {
+
+          console.log('Success:', values);
+
+          const slaCreationReq = await fetch(
+            "http://localhost:8080/api/v1/sla/1", {
+              method: 'PATCH',
+              body: JSON.stringify({
+                product_name: values["productname"],
+                target_sla: values["targetsla"],
+              })
+            }
+          );
+          // TODO: Add response code validation.
+        } catch (err) {
+          console.log(err);
+        }
+        setIsSLADrawerVisible(false);    
+      };    
+      createSLAApi();
     };
   
     const onFinishFailed = (errorInfo: any) => {
@@ -103,13 +124,13 @@ function App() {
           name="targetsla"
           rules={[{ required: true, message: 'This is required field' }]}
         >
-          <Input />
+          <InputNumber />
         </Form.Item>
   
         <Form.Item 
           // {...formTailLayout}
         >
-          <Button type="primary" htmlType="submit" onClick={HandleSLAOk}>
+          <Button type="primary" htmlType="submit" onClick={onFinish}>
             Submit
           </Button>
         </Form.Item>
@@ -179,7 +200,7 @@ function App() {
         <Form.Item 
           // {...formTailLayout}
         >
-          <Button type="primary" htmlType="submit" onClick={HandleIncidentOk}>
+          <Button type="primary" htmlType="submit" onClick={onFinish}>
             Submit
           </Button>
         </Form.Item>
