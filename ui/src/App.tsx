@@ -47,8 +47,9 @@ function App() {
   const [isSLADrawerVisible, setIsSLADrawerVisible] = useState(false);
   const [isIncidentDrawerVisible, setIsIncidentDrawerVisible] = useState(false);
   const [incidentList, setInicidentList] = useState<IIncidentList[]>([]);
-  const [currentSLA, setCurrentSLA] = useState();
-  // const [currentSLA, setCurrentSLA] = useState();
+  const [currentSLA, setCurrentSLA] = useState(100);
+  const [targetSLA, setTargetSLA] = useState(100);
+  const [remainingErrBudget, setRemainingErrBudget] = useState(0);
 
   const showSLADrawer = () => {
     setIsSLADrawerVisible(true);
@@ -60,6 +61,10 @@ function App() {
 
   const HandleSLAOk = () => {
     setIsSLADrawerVisible(false);
+  };
+
+  const HandleIncidentOk = () => {
+    setIsIncidentDrawerVisible(false);    
   };
 
   // function for switch
@@ -115,10 +120,6 @@ function App() {
   const IncidentFormLayout = () => {
 
     const [form] = Form.useForm();
-
-    const HandleIncidentOk = () => {
-      console.log("HandleIncidentOk triggered");
-    };
 
     const onFinish = (values: any) => {
       const createIncidentApi = async () => {
@@ -242,6 +243,8 @@ function App() {
           .then(response => {
             console.log(response.data.product_name)
             setCurrentSLA(response.data.current_sla)
+            setTargetSLA(response.data.target_sla)
+            setRemainingErrBudget(response.data.remaining_err_budget)
           })
           .catch(err => { console.log(err); 
           });
@@ -268,7 +271,7 @@ function App() {
             <Card>
               <Statistic
                 title="Target SLA"
-                value={"10"}
+                value={ targetSLA }
                 precision={2}
                 valueStyle={{ color: "#3f8600" }}
                 // prefix={<ArrowUpOutlined />}
@@ -292,7 +295,7 @@ function App() {
             <Card>
               <Statistic
                 title="Remaining error budget"
-                value={52.5}
+                value={ remainingErrBudget }
                 precision={2}
                 valueStyle={{ color: "#3f8600" }}
                 // prefix={<ArrowDownOutlined />}
@@ -325,6 +328,7 @@ function App() {
           <Drawer
             title="Report SLA voilating incident"
             placement="right"
+            onClose={HandleIncidentOk}
             visible={isIncidentDrawerVisible}
             bodyStyle={{ paddingBottom: 80 }}
           >

@@ -50,7 +50,7 @@ func getSLAHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 func updateSLAHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 	var input schema.SLA
 	ctx := r.Context()
-	sla, _ := ctx.Value("SLA").(*schema.SLA)
+	sla, _ := ctx.Value("sla").(*schema.SLA)
 
 	if err := utils.Decode(r, &input); err != nil {
 		return errors.BadRequest(err.Error()).AddDebug(err)

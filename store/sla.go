@@ -85,10 +85,10 @@ func (cs *SLAStore) Create(req *schema.SLA) (*schema.SLA, *errors.AppError) {
 }
 
 // Update the SLA record..
-func (cs *SLAStore) Update(sla *schema.SLA, update *schema.SLA) (*schema.SLA, *errors.AppError) {
-	if err := cs.DB.Model(sla).Updates(update).Error; err != nil {
+func (cs *SLAStore) Update(SLA *schema.SLA, update *schema.SLA) (*schema.SLA, *errors.AppError) {
+	if err := cs.DB.Model(SLA).Updates(update).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)
 	}
 
-	return sla, nil
+	return SLA, nil
 }

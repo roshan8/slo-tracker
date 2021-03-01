@@ -27,5 +27,5 @@ type SLA interface {
 	All() ([]*schema.SLA, *errors.AppError)
 	Create(req *schema.SLA) (*schema.SLA, *errors.AppError)
 	GetByID(SLAID uint) (*schema.SLA, *errors.AppError)
-	Update(sla *schema.SLA, update *schema.SLA) (*schema.SLA, *errors.AppError)
+	Update(SLA *schema.SLA, update *schema.SLA) (*schema.SLA, *errors.AppError)
 }
