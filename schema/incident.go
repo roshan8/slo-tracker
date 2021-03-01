@@ -26,7 +26,7 @@ type IncidentReq struct {
 	ErrorBudgetSpent int    `json:"err_budget_spent"`
 }
 
-// Ok implements the Ok interface, it validates user input
+// Ok implements the Ok interface, it validates incident input
 func (i *IncidentReq) Ok() error {
 	switch {
 	case strings.TrimSpace(i.SliName) == "":
@@ -35,4 +35,19 @@ func (i *IncidentReq) Ok() error {
 		return errors.IsRequiredErr("Alertsource")
 	}
 	return nil
+}
+
+// PromIncident stores the prometheus incident payload
+type PromIncident struct {
+	Receiver string `json:"receiver"`
+	Status   string `json:"status"`
+	Alerts   []struct {
+		Status string `json:"status"`
+		Labels struct {
+			Alertname string `json:"alertname"`
+			Instance  string `json:"instance"`
+		} `json:"labels"`
+		StartsAt time.Time `json:"startsAt"`
+		EndsAt   time.Time `json:"endsAt"`
+	} `json:"alerts"`
 }

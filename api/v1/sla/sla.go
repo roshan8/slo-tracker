@@ -9,7 +9,7 @@ import (
 	"sla-tracker/utils"
 )
 
-// InitUsers fetches and unmarshal the user data from yaml config files
+// getAllSLAsHandler fetches and unmarshal the sla data
 func getAllSLAsHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 	slas, err := store.SLA().All()
 	if err != nil {
