@@ -37,8 +37,8 @@ func (i *IncidentReq) Ok() error {
 	return nil
 }
 
-// PromIncident stores the prometheus incident payload
-type PromIncident struct {
+// PromIncidentReq stores the prometheus incident payload
+type PromIncidentReq struct {
 	Receiver string `json:"receiver"`
 	Status   string `json:"status"`
 	Alerts   []struct {

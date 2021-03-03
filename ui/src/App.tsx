@@ -288,7 +288,7 @@ function App() {
     <div className="App">
       <div className="site-statistic-demo-card">
         <Row gutter={16}>
-          <Col span={8}>
+          <Col span={6}>
             <Card>
               <Statistic
                 title="Target SLA"
@@ -300,7 +300,7 @@ function App() {
               />
             </Card>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <Card>
               <Statistic
                 title="Your SLA"
@@ -312,18 +312,29 @@ function App() {
               />
             </Card>
           </Col>
-          <Col span={8}>
+          <Col span={6}>
             <Card>
               <Statistic
                 title="Remaining error budget"
                 value={ remainingErrBudget }
                 precision={2}
+                background-color="#1c87c9"
                 valueStyle={{ color: "#3f8600" }}
                 // prefix={<ArrowDownOutlined />}
                 suffix="min"
               />
             </Card>
           </Col>
+          <Col span={6}>
+            <Card>
+              <Statistic
+                title="SLA burning rate"
+                value="Healthy"
+                precision={2}
+                valueStyle={{ color: "#3f8600" }}
+              />
+            </Card>
+          </Col>          
         </Row>
       </div>
 
