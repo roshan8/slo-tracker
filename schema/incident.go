@@ -14,16 +14,16 @@ type Incident struct {
 	Alertsource       string     `json:"alertsource"`
 	State             string     `json:"state"`
 	CreatedAt         *time.Time `json:"created_at,omitempty" sql:"default:current_timestamp"`
-	ErrorBudgetSpent  int        `json:"err_budget_spent"`
+	ErrorBudgetSpent  float32    `json:"err_budget_spent"`
 	MarkFalsePositive bool       `json:"mark_false_positive"`
 }
 
 // IncidentReq Schema stores the new incident creation request payload
 type IncidentReq struct {
-	SliName          string `json:"sli_name"`
-	Alertsource      string `json:"alertsource"`
-	State            string `json:"state"`
-	ErrorBudgetSpent int    `json:"err_budget_spent"`
+	SliName          string  `json:"sli_name"`
+	Alertsource      string  `json:"alertsource"`
+	State            string  `json:"state"`
+	ErrorBudgetSpent float32 `json:"err_budget_spent"`
 }
 
 // Ok implements the Ok interface, it validates incident input

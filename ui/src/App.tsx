@@ -215,6 +215,11 @@ function App() {
       key: "sli_name",
     },
     {
+      title: "Status",
+      dataIndex: "state",
+      key: "state",
+    },        
+    {
       title: "Alertsource",
       dataIndex: "alertsource",
       key: "alertsource",
@@ -225,7 +230,7 @@ function App() {
       key: "created_at",
     },
     {
-      title: "Error budget spent",
+      title: "Error budget spent(min)",
       dataIndex: "err_budget_spent",
       key: "err_budget_spent",
     },

@@ -32,7 +32,7 @@ func (cs *IncidentStore) createTableIfNotExists() {
 // All returns all the Incidents
 func (cs *IncidentStore) All() ([]*schema.Incident, *errors.AppError) {
 	var Incidents []*schema.Incident
-	if err := cs.DB.Find(&Incidents).Error; err != nil { // For displaying all the columns
+	if err := cs.DB.Order("created_at desc").Find(&Incidents).Error; err != nil { // For displaying all the columns
 		// if err := cs.DB.Select("SliName, Alertsource, State, CreatedAt, ErrorBudgetSpent, MarkFalsePositive").Find(&Incidents).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)
 	}
@@ -46,6 +46,19 @@ func (cs *IncidentStore) GetByID(incidentID uint) (*schema.Incident, *errors.App
 	if err := cs.DB.First(&incident, "id=?", incidentID).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.BadRequest("invalid incident id").AddDebug(err)
+		}
+		return nil, errors.InternalServerStd().AddDebug(err)
+	}
+
+	return &incident, nil
+}
+
+// GetBySLIName returns the matched record for the given SLI
+func (cs *IncidentStore) GetBySLIName(sliName string) (*schema.Incident, *errors.AppError) {
+	var incident schema.Incident
+	if err := cs.DB.First(&incident, "state=? AND sli_name=?", "open", sliName).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errors.InternalServerStd().AddDebug(err)
 		}
 		return nil, errors.InternalServerStd().AddDebug(err)
 	}
