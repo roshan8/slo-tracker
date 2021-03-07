@@ -92,3 +92,23 @@ func (cs *SLAStore) Update(SLA *schema.SLA, update *schema.SLA) (*schema.SLA, *e
 
 	return SLA, nil
 }
+
+// CutErrBudget subtract the downtime mins from error budget
+func (cs *SLAStore) CutErrBudget(downtimeInMins float32) *errors.AppError {
+
+	slaRecord, err := cs.GetByID(1)
+
+	if err != nil {
+		return errors.InternalServerStd().AddDebug(err)
+	}
+
+	updatedSLArecord := slaRecord
+	updatedSLArecord.RemainingErrBudget -= downtimeInMins
+	updatedSLArecord, err = cs.Update(slaRecord, updatedSLArecord)
+
+	if err != nil {
+		return errors.InternalServerStd().AddDebug(err)
+	}
+
+	return nil
+}

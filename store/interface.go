@@ -29,4 +29,5 @@ type SLA interface {
 	Create(req *schema.SLA) (*schema.SLA, *errors.AppError)
 	GetByID(SLAID uint) (*schema.SLA, *errors.AppError)
 	Update(SLA *schema.SLA, update *schema.SLA) (*schema.SLA, *errors.AppError)
+	CutErrBudget(downtimeInMins float32) *errors.AppError
 }
