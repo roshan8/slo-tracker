@@ -89,7 +89,6 @@ func (cs *SLAStore) Update(SLA *schema.SLA, update *schema.SLA) (*schema.SLA, *e
 	if err := cs.DB.Model(SLA).Updates(update).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)
 	}
-
 	return SLA, nil
 }
 
