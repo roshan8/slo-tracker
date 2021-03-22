@@ -1,6 +1,7 @@
 package incident
 
 import (
+	"fmt"
 	"net/http"
 
 	"sla-tracker/pkg/errors"
@@ -26,6 +27,12 @@ func createIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.AppEr
 
 	if err := utils.Decode(r, &input); err != nil {
 		return errors.BadRequest(err.Error()).AddDebug(err)
+	}
+
+	// deduct error budget with incident downtime
+	err := store.SLA().CutErrBudget(input.ErrorBudgetSpent)
+	if err != nil {
+		fmt.Println("Unable to deduct error budget for the incident")
 	}
 
 	incident, err := store.Incident().Create(&input)

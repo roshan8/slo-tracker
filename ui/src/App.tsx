@@ -310,7 +310,7 @@ function App() {
               <Statistic
                 title="Your SLA"
                 value={ currentSLA }
-                precision={2}
+                precision={4}
                 valueStyle={{ color: "#cf1322" }}
                 // prefix={<ArrowDownOutlined />}
                 suffix="%"

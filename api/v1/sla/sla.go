@@ -20,13 +20,6 @@ func getAllSLAsHandler(w http.ResponseWriter, r *http.Request) *errors.AppError 
 	return nil
 }
 
-func calculateErrBudget(targetSLAinPerc float32) float32 {
-	totalSecInYear := 31536000
-	downtimeInFraction := 1 - (targetSLAinPerc / 100)
-	errBudgetInMin := (downtimeInFraction * float32(totalSecInYear)) / 60
-	return errBudgetInMin
-}
-
 // creates a new sla
 func createSLAHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 	var input schema.SLA
@@ -35,7 +28,7 @@ func createSLAHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
-	input.RemainingErrBudget = calculateErrBudget(input.TargetSLA)
+	input.RemainingErrBudget = utils.CalculateErrBudget(input.TargetSLA)
 
 	sla, err := store.SLA().Create(&input)
 	if err != nil {
@@ -65,7 +58,7 @@ func updateSLAHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
-	input.RemainingErrBudget = calculateErrBudget(input.TargetSLA)
+	input.RemainingErrBudget = utils.CalculateErrBudget(input.TargetSLA)
 	updated, err := store.SLA().Update(sla, &input)
 	if err != nil {
 		return err
