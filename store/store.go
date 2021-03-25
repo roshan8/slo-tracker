@@ -1,12 +1,14 @@
 package store
 
 import (
+	"database/sql"
 	"fmt"
 	"log"
 	"sla-tracker/config"
 	"sla-tracker/schema"
 
-	"gorm.io/driver/sqlite"
+	_ "github.com/go-sql-driver/mysql"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
@@ -14,13 +16,23 @@ var dbConn *gorm.DB
 
 // Init ...
 func Init() {
-	// db, err := gorm.Open(config.DBDriver, config.DBDataSource)
-	db, err := gorm.Open(sqlite.Open(config.DBName), &gorm.Config{})
+
+	// Connect to mysql using sql driver and create a database
+	db, err := sql.Open("mysql", "root:SecretPassword@tcp(127.0.0.1:3306)/")
+	if err != nil {
+		panic(err)
+	}
+	_, _ = db.Exec("CREATE DATABASE IF NOT EXISTS " + config.DBName)
+	db.Close()
+
+	// Connect to newrely created database using gorm
+	gormDb, err := gorm.Open(mysql.Open("root:SecretPassword@tcp(127.0.0.1:3306)/slatracker_dev?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}
-	dbConn = db
-	db.AutoMigrate(
+
+	dbConn = gormDb
+	gormDb.AutoMigrate(
 		&schema.Incident{},
 		&schema.SLA{},
 		//TODO: add other schemas

@@ -33,10 +33,10 @@ func GetAllEnv() {
 	// API Configs
 	mustEnv("ENV", &Env, EnvDev)
 	mustEnv("PORT", &Port, "8080")
-	mustEnv("DB_DRIVER", &DBDriver, "postgres")
+	mustEnv("DB_DRIVER", &DBDriver, "mysql")
 	mustEnv("DB_NAME", &DBName, "slatracker_dev")
 	mustEnv("DB_DATASOURCE", &DBDataSource,
-		"user=postgres password=mysecretpassword dbname=slatracker_dev sslmode=disable host=localhost")
+		"root:SecretPassword@tcp(127.0.0.1:3306)/slatracker_dev?charset=utf8mb4&parseTime=True&loc=Local")
 }
 
 // mustEnv get the env variable with the name 'key' and store it in 'value'
