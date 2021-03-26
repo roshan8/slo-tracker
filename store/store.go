@@ -18,7 +18,8 @@ var dbConn *gorm.DB
 func Init() {
 
 	// Connect to mysql using sql driver and create a database
-	db, err := sql.Open("mysql", "root:SecretPassword@tcp(127.0.0.1:3306)/")
+	dbConnectionString := fmt.Sprintf("root:SecretPassword@tcp(%s:3306)/", config.DBHost)
+	db, err := sql.Open("mysql", dbConnectionString)
 	if err != nil {
 		panic(err)
 	}
@@ -26,7 +27,8 @@ func Init() {
 	db.Close()
 
 	// Connect to newrely created database using gorm
-	gormDb, err := gorm.Open(mysql.Open("root:SecretPassword@tcp(127.0.0.1:3306)/slatracker_dev?charset=utf8mb4&parseTime=True&loc=Local"), &gorm.Config{})
+	dbConnectionString = fmt.Sprintf("root:SecretPassword@tcp(%s:3306)/slatracker_dev?charset=utf8mb4&parseTime=True&loc=Local", config.DBHost)
+	gormDb, err := gorm.Open(mysql.Open(dbConnectionString), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
 	}

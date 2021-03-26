@@ -18,6 +18,7 @@ const (
 var (
 	Env          string
 	Port         string
+	DBHost       string
 	DBDriver     string
 	DBName       string
 	DBDataSource string
@@ -32,6 +33,7 @@ func Initialize() {
 func GetAllEnv() {
 	// API Configs
 	mustEnv("ENV", &Env, EnvDev)
+	mustEnv("DB_HOST", &DBHost, "localhost")
 	mustEnv("PORT", &Port, "8080")
 	mustEnv("DB_DRIVER", &DBDriver, "mysql")
 	mustEnv("DB_NAME", &DBName, "slatracker_dev")

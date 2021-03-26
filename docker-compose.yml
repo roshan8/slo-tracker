@@ -1,35 +1,32 @@
 version: "3.9"
 
-networks:
-  bridge:
-    # driver: bridge
-        
 services:
   db:
     image: mysql:5.7
-    network_mode: host
-    # ports:
-    #   - "3306:3306"    
-    # networks:
-    #   - bridge            
+    #network_mode: host
+    ports:
+      - "3306:3306"
     volumes:
       - db_data:/var/lib/mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: SecretPassword
-    
+
   sla-api:
     depends_on:
       - db
+    build:
+      context: .
+      dockerfile: Dockerfile
     image: sla-api:latest
-    network_mode: host
-    # ports:
-    #   - "8080:8080"
-    # networks:
-    #   - bridge      
+    #network_mode: host
+    ports:
+      - "8080:8080"
+    links:
+      - db
     restart: always
     environment:
-      WORDPRESS_DB_HOST: host.docker.internal
+      DB_HOST: db
 
 volumes:
   db_data: {}
