@@ -51,6 +51,11 @@ function App() {
   const [targetSLA, setTargetSLA] = useState(100);
   const [remainingErrBudget, setRemainingErrBudget] = useState(0);
 
+  var API_URL = "localhost"
+  if(process.env.API_URL) { 
+    API_URL = process.env.API_URL;
+  }
+
   const showSLADrawer = () => {
     setIsSLADrawerVisible(true);
   };
@@ -81,7 +86,7 @@ function App() {
           console.log('Success:', values);
 
           const slaCreationReq = await fetch(
-            "http://localhost:8080/api/v1/sla/1", {
+            `http://${API_URL}:8080/api/v1/sla/1`, {
               method: 'PATCH',
               body: JSON.stringify({
                 product_name: values["productname"],
@@ -149,7 +154,7 @@ function App() {
           console.log('Success:', values);
 
           const incidentCreationReq = await fetch(
-            "http://localhost:8080/api/v1/incident/", {
+            `http://${API_URL}:8080/api/v1/incident/`, {
               method: 'POST',
               body: JSON.stringify({
                 sli_name: values["sliname"],
@@ -246,7 +251,7 @@ function App() {
       const getIncidentApiCall = async () => {
         try {
           const incidentListResponse = await fetch(
-            "http://localhost:8080/api/v1/incident/"
+            `http://${API_URL}:8080/api/v1/incident/`
           );
           const { data: incidentList } = await incidentListResponse.json();
           setInicidentList(
@@ -263,7 +268,7 @@ function App() {
       const getSLAApiCall = async () => {
         try {
           const SLAListResponse = await fetch(
-            "http://localhost:8080/api/v1/sla/1"
+            `http://${API_URL}:8080/api/v1/sla/1`
           )
           .then(response => response.json())
           .then(response => {

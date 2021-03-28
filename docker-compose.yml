@@ -12,13 +12,13 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: SecretPassword
 
-  sla-api:
+  sla-be:
     depends_on:
       - db
     build:
       context: .
       dockerfile: Dockerfile
-    image: sla-api:latest
+    image: sla-be:latest
     #network_mode: host
     ports:
       - "8080:8080"
@@ -27,6 +27,21 @@ services:
     restart: always
     environment:
       DB_HOST: db
+
+  sla-fe:
+    depends_on:
+      - sla-be
+    build:
+      context: ui/
+      dockerfile: Dockerfile
+    image: sla-fe:latest
+    ports:
+      - "80:80"
+    links:
+      - sla-be
+    restart: always
+    environment:
+      API_URL: sla-be         
 
 volumes:
   db_data: {}

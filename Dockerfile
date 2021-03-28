@@ -6,8 +6,11 @@ LABEL version="0.0.1"
 LABEL description="sla-tracker : Track your product SLA"
 
 RUN mkdir -p /app/ 
-COPY ./sla-tracker /app/
 WORKDIR /app
+
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o /app/sla-tracker .
+
 
 EXPOSE 8080
 
