@@ -51,10 +51,12 @@ function App() {
   const [targetSLA, setTargetSLA] = useState(100);
   const [remainingErrBudget, setRemainingErrBudget] = useState(0);
 
-  var API_URL = "localhost"
-  if(process.env.API_URL) { 
-    API_URL = process.env.API_URL;
-  }
+  var API_URL = `${document.location.origin}:8080`
+  // if(process.env.API_URL) { 
+  //   API_URL = process.env.API_URL;
+  // }
+
+  console.log(process.env, "log")
 
   const showSLADrawer = () => {
     setIsSLADrawerVisible(true);
