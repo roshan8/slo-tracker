@@ -88,7 +88,7 @@ function App() {
           console.log('Success:', values);
 
           const slaCreationReq = await fetch(
-            `http://${API_URL}:8080/api/v1/sla/1`, {
+            `${API_URL}/api/v1/sla/1`, {
               method: 'PATCH',
               body: JSON.stringify({
                 product_name: values["productname"],
@@ -156,7 +156,7 @@ function App() {
           console.log('Success:', values);
 
           const incidentCreationReq = await fetch(
-            `http://${API_URL}:8080/api/v1/incident/`, {
+            `${API_URL}/api/v1/incident/`, {
               method: 'POST',
               body: JSON.stringify({
                 sli_name: values["sliname"],
@@ -253,7 +253,7 @@ function App() {
       const getIncidentApiCall = async () => {
         try {
           const incidentListResponse = await fetch(
-            `http://${API_URL}:8080/api/v1/incident/`
+            `${API_URL}/api/v1/incident/`
           );
           const { data: incidentList } = await incidentListResponse.json();
           setInicidentList(
@@ -270,7 +270,7 @@ function App() {
       const getSLAApiCall = async () => {
         try {
           const SLAListResponse = await fetch(
-            `http://${API_URL}:8080/api/v1/sla/1`
+            `${API_URL}/api/v1/sla/1`
           )
           .then(response => response.json())
           .then(response => {
