@@ -36,7 +36,7 @@ services:
       dockerfile: Dockerfile
     image: sla-fe:latest
     ports:
-      - "80:80"
+      - "3000:80"
     links:
       - sla-be
     restart: always
