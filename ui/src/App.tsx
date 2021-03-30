@@ -35,14 +35,6 @@ interface ISLAList {
   remaining_err_budget: number;
 }
 
-// const formLayout = {
-//   labelCol: { span: 8 },
-//   wrapperCol: { span: 16 },
-// };
-// const formTailLayout = {
-//   wrapperCol: { offset: 8, span: 16 },
-// };
-
 function App() {
   const [isSLADrawerVisible, setIsSLADrawerVisible] = useState(false);
   const [isIncidentDrawerVisible, setIsIncidentDrawerVisible] = useState(false);
@@ -51,12 +43,7 @@ function App() {
   const [targetSLA, setTargetSLA] = useState(100);
   const [remainingErrBudget, setRemainingErrBudget] = useState(0);
 
-  var API_URL = `${document.location.origin}:8080`
-  // if(process.env.API_URL) { 
-  //   API_URL = process.env.API_URL;
-  // }
-
-  console.log(process.env, "log")
+  var API_URL = `http://${document.location.hostname}:8080`
 
   const showSLADrawer = () => {
     setIsSLADrawerVisible(true);
@@ -74,9 +61,29 @@ function App() {
     setIsIncidentDrawerVisible(false);    
   };
 
-  // function for switch
-  function onChange(checked) {
-    console.log(`switch to ${checked}`);
+  function handleSwitchChange(checked) {
+    
+    console.log(`Updating incident: ${checked.id}`);
+
+    const updateIncidentApi = async () => {
+      try {
+        var isFalsePositive = (checked.mark_false_positive ? false : true)
+        console.log(isFalsePositive)
+        const incidentUpdateReq = await fetch(
+          `${API_URL}/api/v1/incident/${checked.id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+              mark_false_positive: isFalsePositive,
+            })
+          }
+        );
+      // TODO: Add response code validation.
+      } catch (err) {
+        console.log(err);
+      }
+    };    
+    updateIncidentApi();
+
   }
 
   const SLAFormLayout = () => {
@@ -244,7 +251,9 @@ function App() {
     {
       title: "Mark false positive",
       key: "action",
-      render: () => <Switch onChange={onChange} />,
+      render: (e, record) => (
+        <Switch onChange={() => handleSwitchChange(record)} defaultChecked={e.mark_false_positive}/>
+      ) 
     },
   ];
 

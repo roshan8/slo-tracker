@@ -18,12 +18,13 @@ type Incident struct {
 	MarkFalsePositive bool       `json:"mark_false_positive"`
 }
 
-// IncidentReq Schema stores the new incident creation request payload
+// IncidentReq Schema stores the new incident creation/update request payload
 type IncidentReq struct {
-	SliName          string  `json:"sli_name"`
-	Alertsource      string  `json:"alertsource"`
-	State            string  `json:"state"`
-	ErrorBudgetSpent float32 `json:"err_budget_spent"`
+	SliName           string  `json:"sli_name"`
+	Alertsource       string  `json:"alertsource"`
+	State             string  `json:"state"`
+	ErrorBudgetSpent  float32 `json:"err_budget_spent"`
+	MarkFalsePositive bool    `json:"mark_false_positive"`
 }
 
 // Ok implements the Ok interface, it validates incident input

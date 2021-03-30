@@ -36,6 +36,7 @@ func Init() {
 	dbConn = gormDb
 	gormDb.AutoMigrate(
 		&schema.Incident{},
+		&schema.IncidentReq{},
 		&schema.SLA{},
 		//TODO: add other schemas
 	)
