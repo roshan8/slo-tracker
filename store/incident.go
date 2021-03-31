@@ -84,11 +84,22 @@ func (cs *IncidentStore) Create(req *schema.IncidentReq) (*schema.Incident, *err
 
 // Update the incident record..
 func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incident) (*schema.Incident, *errors.AppError) {
+
+	var err *errors.AppError
+
+	if incident.MarkFalsePositive == true && update.MarkFalsePositive == false {
+		err = cs.SLAConn.CutErrBudget(incident.ErrorBudgetSpent)
+	}
+
+	if incident.MarkFalsePositive == false && update.MarkFalsePositive == true {
+		err = cs.SLAConn.CutErrBudget(-incident.ErrorBudgetSpent)
+	}
+
+	if err != nil {
+		return nil, errors.BadRequest(err.Error()).AddDebug(err)
+	}
+
 	if err := cs.DB.Model(incident).Updates(map[string]interface{}{
-		"SliName":           update.SliName,
-		"Alertsource":       update.Alertsource,
-		"State":             update.State,
-		"ErrorBudgetSpent":  update.ErrorBudgetSpent,
 		"MarkFalsePositive": update.MarkFalsePositive,
 	}).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)

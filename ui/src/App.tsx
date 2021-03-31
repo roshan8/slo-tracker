@@ -8,6 +8,7 @@ import {
   Form,
   Input,
   Drawer,
+  notification,
   Button,
   Table,
   Switch,
@@ -61,6 +62,13 @@ function App() {
     setIsIncidentDrawerVisible(false);    
   };
 
+  const openNotificationWithIcon = (type, message) => {
+    notification[type]({
+      // message:     'Notification',
+      description: message,
+    });
+  };
+
   function handleSwitchChange(checked) {
     
     console.log(`Updating incident: ${checked.id}`);
@@ -72,14 +80,15 @@ function App() {
         const incidentUpdateReq = await fetch(
           `${API_URL}/api/v1/incident/${checked.id}`, {
             method: 'PATCH',
-            body: JSON.stringify({
+            body: JSON.stringify({       
               mark_false_positive: isFalsePositive,
             })
           }
         );
-      // TODO: Add response code validation.
+        openNotificationWithIcon('success', 'Incident updated!')
       } catch (err) {
         console.log(err);
+        openNotificationWithIcon('error', 'Unable to update the incident :(')
       }
     };    
     updateIncidentApi();
@@ -103,9 +112,12 @@ function App() {
               })
             }
           );
+          openNotificationWithIcon('success', 'Target SLA updated!')
           // TODO: Add response code validation.
         } catch (err) {
+          openNotificationWithIcon('error', 'Unable to update the target SLA :(')
           console.log(err);
+
         }
         setIsSLADrawerVisible(false);    
       };    
@@ -173,9 +185,10 @@ function App() {
               })
             }
           );
-          // TODO: Add response code validation.
+          openNotificationWithIcon('success', 'Incident created!')
         } catch (err) {
           console.log(err);
+          openNotificationWithIcon('error', 'Unable to create an incident :(')
         }
         setIsIncidentDrawerVisible(false);    
       };    
@@ -273,6 +286,7 @@ function App() {
           );
         } catch (err) {
           console.log(err);
+          openNotificationWithIcon('error', 'Unable to fetch incidents :(')
         }
       };
     
@@ -293,6 +307,7 @@ function App() {
 
         } catch (err) {
           console.log(err);
+          openNotificationWithIcon('error', 'Unable to fetch SLA details :(')
         }
       };
 
