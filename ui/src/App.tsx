@@ -28,12 +28,10 @@ interface IIncidentList {
   mark_false_positive: boolean;
 }
 
-interface ISLAList {
-  id: number;
-  product_name: string;
-  target_sla: number;
-  current_sla: number;
-  remaining_err_budget: number;
+interface incidentSummaryType  {
+  id: string;
+  value: number;
+  label: string;
 }
 
 function App() {
@@ -43,6 +41,7 @@ function App() {
   const [currentSLA, setCurrentSLA] = useState(100);
   const [targetSLA, setTargetSLA] = useState(100);
   const [remainingErrBudget, setRemainingErrBudget] = useState(0);
+  const [incidentSummary, setincidentSummary] = useState<incidentSummaryType[]>([]);
 
   var API_URL = `http://${document.location.hostname}:8080`
 
@@ -156,7 +155,7 @@ function App() {
         <Form.Item 
           // {...formTailLayout}
         >
-          <Button type="primary" htmlType="submit" onClick={onFinish}>
+          <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
@@ -185,7 +184,8 @@ function App() {
               })
             }
           );
-          openNotificationWithIcon('success', 'Incident created!')
+          // window.location.reload(); 
+          openNotificationWithIcon('success', 'Incident created!');
         } catch (err) {
           console.log(err);
           openNotificationWithIcon('error', 'Unable to create an incident :(')
@@ -227,7 +227,7 @@ function App() {
         <Form.Item 
           // {...formTailLayout}
         >
-          <Button type="primary" htmlType="submit" onClick={onFinish}>
+          <Button type="primary" htmlType="submit">
             Submit
           </Button>
         </Form.Item>
@@ -270,6 +270,17 @@ function App() {
     },
   ];
 
+  function containsObject(obj, arr) {
+    var i;
+    for (i = 0; i < arr.length; i++) {
+        if (obj["sli_name"] == arr[i]["sli_name"]) {
+            return true;
+        }
+    }
+
+    return false;
+  }
+
   useEffect(
     () => {
       const getIncidentApiCall = async () => {
@@ -284,12 +295,46 @@ function App() {
               return i;
             })
           );
+          
+          // Format the incidentList data in incidentSummaryType format for the Pie Chat
+          let incidentArr = new Array()
+          let i = 0;
+          while (i < incidentList.length){
+            let found = 0, j = 0;
+
+            // Skip if incident marked as false positive
+            if (incidentList[i]["mark_false_positive"] == true) {
+              i++;
+              continue;
+            }
+
+            for (j = 0; j < incidentArr.length; j++) {
+              // If sli_name key already exist in incidentArr then update err_budget_spent value
+              if (incidentList[i]["sli_name"] === incidentArr[j]["id"]) {
+                incidentArr[j]["value"] += incidentList[i]["err_budget_spent"]
+                found = 1
+              }
+            }
+            // If sli_name key doesn't exist in incidentArr then add new item
+            if (found == 0) {
+              incidentArr.push(new Object(
+                {
+                  "id": incidentList[i]["sli_name"],
+                  "label": incidentList[i]["sli_name"],
+                  "value": incidentList[i]["err_budget_spent"]
+                }
+              ))
+            }
+            i++;
+          }
+          setincidentSummary(incidentArr)   
         } catch (err) {
           console.log(err);
           openNotificationWithIcon('error', 'Unable to fetch incidents :(')
         }
       };
     
+      // Fetch SLA details
       const getSLAApiCall = async () => {
         try {
           const SLAListResponse = await fetch(
@@ -315,8 +360,6 @@ function App() {
       getSLAApiCall();
 
     },
-
-
     [],
   )
 
@@ -366,7 +409,6 @@ function App() {
               <Statistic
                 title="SLA burning rate"
                 value="Healthy"
-                precision={2}
                 valueStyle={{ color: "#3f8600" }}
               />
             </Card>
@@ -409,7 +451,7 @@ function App() {
         <Col flex={0.5}>
           <div style={{ height: "50em", width: "40em" }}>
             <ResponsivePie
-              data={data}
+              data={incidentSummary}
               margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
               innerRadius={0.5}
               padAngle={0.7}
@@ -422,52 +464,6 @@ function App() {
               radialLabelsLinkColor={{ from: "color" }}
               sliceLabelsSkipAngle={10}
               sliceLabelsTextColor="#333333"
-              defs={[
-                {
-                  id: "dots",
-                  type: "patternDots",
-                  background: "inherit",
-                  color: "rgba(255, 255, 255, 0.3)",
-                  size: 4,
-                  padding: 1,
-                  stagger: true,
-                },
-                {
-                  id: "lines",
-                  type: "patternLines",
-                  background: "inherit",
-                  color: "rgba(255, 255, 255, 0.3)",
-                  rotation: -45,
-                  lineWidth: 6,
-                  spacing: 10,
-                },
-              ]}
-              fill={[
-                {
-                  match: {
-                    id: "PushNotificationFailure",
-                  },
-                  id: "dots",
-                },
-                {
-                  match: {
-                    id: "HighErrorRate",
-                  },
-                  id: "dots",
-                },
-                {
-                  match: {
-                    id: "HighLatency",
-                  },
-                  id: "dots",
-                },
-                {
-                  match: {
-                    id: "ThirdPartyOutage",
-                  },
-                  id: "dots",
-                },
-              ]}
               legends={[]}
             />
           </div>
