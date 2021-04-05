@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./app.css";
+import LoginApp from './Login';
+import ReactDOM from 'react-dom';
 import {
   Statistic,
   Card,
@@ -16,7 +18,6 @@ import {
 } from "antd";
 import "antd/dist/antd.css";
 import { ResponsivePie } from "@nivo/pie";
-import data from "./data.json";
 
 interface IIncidentList {
   id: number;
@@ -44,6 +45,16 @@ function App() {
   const [incidentSummary, setincidentSummary] = useState<incidentSummaryType[]>([]);
 
   var API_URL = `http://${document.location.hostname}:8080`
+
+  // Redirect user to login page when `IsAuthenticated` not set to `yes`
+  if (localStorage.getItem('IsAuthenticated') != "yes") {
+    ReactDOM.render(
+      <React.StrictMode>
+        <LoginApp />
+      </React.StrictMode>,
+      document.getElementById('root')
+    );
+  }
 
   const showSLADrawer = () => {
     setIsSLADrawerVisible(true);
@@ -270,17 +281,6 @@ function App() {
     },
   ];
 
-  function containsObject(obj, arr) {
-    var i;
-    for (i = 0; i < arr.length; i++) {
-        if (obj["sli_name"] == arr[i]["sli_name"]) {
-            return true;
-        }
-    }
-
-    return false;
-  }
-
   useEffect(
     () => {
       const getIncidentApiCall = async () => {
@@ -473,23 +473,7 @@ function App() {
         </Col>
       </Row>
     </div>
-    // <Grid type="column" height="100%" flexWidth={12}>
-    //   {/* heading */}
-    //   <Grid alignItems="center" justifyContent="space-between" flexWidth={12}>
-    //     <Heading fontSize={24} height={35}>Your SLA Tracker!</Heading>
-    //     <Grid alignItems="center">
 
-    //       {/* need to understand the usage of following div tag */}
-    //       <div style={{ marginLeft: 50, height: 24 }} className="header_select_box">
-
-    //       </div>
-    //     </Grid>
-    //   </Grid>
-    //   {/* body */}
-    //   <Grid flexWidth={12} height="100%">
-
-    //   </Grid>
-    // </Grid>
   );
 }
 
