@@ -2,15 +2,27 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
+import LoginApp from './Login';
 import reportWebVitals from './reportWebVitals';
 
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById('root')
-);
+if (localStorage.getItem('IsAuthenticated') == "yes") {
+  ReactDOM.render(
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>,
+    document.getElementById('root')
+  );
+} 
+else {
+  ReactDOM.render(
+    <React.StrictMode>
+      <LoginApp />
+    </React.StrictMode>,
+    document.getElementById('root')
+  );
+}
+
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

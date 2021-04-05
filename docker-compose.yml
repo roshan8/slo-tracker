@@ -41,7 +41,9 @@ services:
       - sla-be
     restart: always
     environment:
-      API_URL: sla-be         
+      API_URL: sla-be     
+      USERNAME: admin    
+      PASSWORD: admin   
 
 volumes:
   db_data: {}
