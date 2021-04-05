@@ -35,13 +35,20 @@ interface incidentSummaryType  {
   label: string;
 }
 
+interface burningRateType  {
+  label: string;
+  color: string;
+}
+
 function App() {
+
   const [isSLADrawerVisible, setIsSLADrawerVisible] = useState(false);
   const [isIncidentDrawerVisible, setIsIncidentDrawerVisible] = useState(false);
   const [incidentList, setInicidentList] = useState<IIncidentList[]>([]);
   const [currentSLA, setCurrentSLA] = useState(100);
   const [targetSLA, setTargetSLA] = useState(100);
   const [remainingErrBudget, setRemainingErrBudget] = useState(0);
+  const [burningRate, setBurningRate] = useState<burningRateType>();
   const [incidentSummary, setincidentSummary] = useState<incidentSummaryType[]>([]);
 
   var API_URL = `http://${document.location.hostname}:8080`
@@ -79,6 +86,33 @@ function App() {
     });
   };
 
+  // Calulates the allotted err budget for targeted SLA
+  // Also updates the SLA burning rate card
+  function CalculateErrBudget(targetSLAinPerc, remainingErrBudget) {
+    let allottedErrBudgetInMin = 0, totalSecsInYear = 31536000;
+    let downtimeInFraction = 1 - (targetSLAinPerc / 100)
+    allottedErrBudgetInMin = (downtimeInFraction * totalSecsInYear) / 60
+  
+    let month_raw = new Date().getMonth() + 1;
+    let errBudgetSpent = allottedErrBudgetInMin - remainingErrBudget
+    let errBudgetAllowed = (allottedErrBudgetInMin / 12) * month_raw
+
+    if (errBudgetSpent > errBudgetAllowed) {
+      setBurningRate({
+        "label": "Critical",
+        "color": "#cf1322"
+      })
+    }
+    else {
+      console.log(errBudgetSpent, errBudgetAllowed)
+      setBurningRate({
+          "label": "Healthy",
+          "color": "#3f8600"
+      })
+    }
+    return allottedErrBudgetInMin
+  }
+
   function handleSwitchChange(checked) {
     
     console.log(`Updating incident: ${checked.id}`);
@@ -86,7 +120,6 @@ function App() {
     const updateIncidentApi = async () => {
       try {
         var isFalsePositive = (checked.mark_false_positive ? false : true)
-        console.log(isFalsePositive)
         const incidentUpdateReq = await fetch(
           `${API_URL}/api/v1/incident/${checked.id}`, {
             method: 'PATCH',
@@ -110,8 +143,6 @@ function App() {
     const onFinish = (values: any) => {
       const createSLAApi = async () => {
         try {
-
-          console.log('Success:', values);
 
           const slaCreationReq = await fetch(
             `${API_URL}/api/v1/sla/1`, {
@@ -181,8 +212,6 @@ function App() {
     const onFinish = (values: any) => {
       const createIncidentApi = async () => {
         try {
-
-          console.log('Success:', values);
 
           const incidentCreationReq = await fetch(
             `${API_URL}/api/v1/incident/`, {
@@ -346,6 +375,7 @@ function App() {
             setCurrentSLA(response.data.current_sla)
             setTargetSLA(response.data.target_sla)
             setRemainingErrBudget(response.data.remaining_err_budget)
+            CalculateErrBudget(response.data.target_sla, response.data.remaining_err_budget)
           })
           .catch(err => { console.log(err); 
           });
@@ -385,7 +415,7 @@ function App() {
                 title="Your SLA"
                 value={ currentSLA }
                 precision={4}
-                valueStyle={{ color: "#cf1322" }}
+                valueStyle={{ color: "#3f8600" }}   
                 // prefix={<ArrowDownOutlined />}
                 suffix="%"
               />
@@ -408,8 +438,8 @@ function App() {
             <Card>
               <Statistic
                 title="SLA burning rate"
-                value="Healthy"
-                valueStyle={{ color: "#3f8600" }}
+                value={ burningRate?.label }
+                valueStyle={{ color: burningRate?.color }} 
               />
             </Card>
           </Col>          
