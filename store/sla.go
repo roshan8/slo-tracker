@@ -69,7 +69,6 @@ func (cs *SLAStore) GetByID(SLAID uint) (*schema.SLA, *errors.AppError) {
 	// calculate current sla based on RemainingErrBudget
 	totalDowntimeInSec := (apputils.CalculateErrBudget(SLA.TargetSLA) - SLA.RemainingErrBudget) * 60
 	SLA.CurrentSLA = ((31536000 - totalDowntimeInSec) / 31536000) * 100
-	fmt.Println("Returning updated currrent SLA", SLA.CurrentSLA)
 
 	return &SLA, nil
 }

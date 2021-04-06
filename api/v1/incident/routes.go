@@ -20,8 +20,7 @@ func Init(r chi.Router) {
 
 	r.Method(http.MethodGet, "/", api.Handler(getAllIncidentsHandler))
 	r.Method(http.MethodPost, "/", api.Handler(createIncidentHandler))
-	r.Method(http.MethodPost, "/promhook", api.Handler(createPromIncidentHandler))
-	r.Method(http.MethodPost, "/newrelichook", api.Handler(createNewrelicIncidentHandler))
+	r.Route("/webhook", webhookSubRoutes)
 	r.With(middleware.IncidentRequired).
 		Route("/{incidentID:[0-9]+}", incidentIDSubRoutes)
 }
@@ -31,4 +30,10 @@ func incidentIDSubRoutes(r chi.Router) {
 	r.Method(http.MethodGet, "/", api.Handler(getIncidentHandler))
 	r.Method(http.MethodPatch, "/", api.Handler(updateIncidentHandler))
 	// r.Method(http.MethodDelete, "/", api.Handler(deleteIncidentHandler))
+}
+
+func webhookSubRoutes(r chi.Router) {
+	r.Method(http.MethodPost, "/newrelic", api.Handler(createNewrelicIncidentHandler))
+	r.Method(http.MethodPost, "/prometheus", api.Handler(createPromIncidentHandler))
+	r.Method(http.MethodPost, "/pingdom", api.Handler(createPingdomIncidentHandler))
 }

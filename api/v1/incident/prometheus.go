@@ -21,7 +21,6 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 
 	if input.Status == "firing" {
 		for _, alert := range input.Alerts {
-			fmt.Println(alert.Labels.Alertname)
 			incident, _ := store.Incident().GetBySLIName(alert.Labels.Alertname)
 
 			// There are no open incident for this SLI, creating new incident
@@ -40,11 +39,7 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 
 	if input.Status == "resolved" {
 		for _, alert := range input.Alerts {
-			fmt.Println(alert.Labels.Alertname)
 			incident, err := store.Incident().GetBySLIName(alert.Labels.Alertname)
-
-			fmt.Println(incident)
-			fmt.Println(err)
 
 			if err != nil {
 				fmt.Println("Continue with the next alert")

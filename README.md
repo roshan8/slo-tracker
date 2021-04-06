@@ -5,8 +5,11 @@ A tool to track SLA, SLO and Error budgets
 docker-compose up -d
 
 # TODO
-[ ] - Add SLA burn rate graph
-[ ] - Add pingdom integration
-[ ] - Fix false positive button
-[ ] - Fix ErrBudget summary pie chart
-[ ] - Don't reduce err budget twice for simultaniously running incidents
+[x] - Add SLA burn rate graph    
+[x] - Fix false positive button   
+[x] - Fix ErrBudget summary pie chart            
+[x] - Add pingdom integration         
+[ ] - Create SLA record upon table creation    
+[ ] - Don't reduce err budget twice for simultaniously running incidents 
+
+
