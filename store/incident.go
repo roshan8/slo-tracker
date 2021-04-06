@@ -100,6 +100,8 @@ func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incide
 	}
 
 	if err := cs.DB.Model(incident).Updates(map[string]interface{}{
+		"State":             update.State,
+		"ErrorBudgetSpent":  update.ErrorBudgetSpent,
 		"MarkFalsePositive": update.MarkFalsePositive,
 	}).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)

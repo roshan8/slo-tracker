@@ -125,6 +125,8 @@ function App() {
             method: 'PATCH',
             body: JSON.stringify({       
               mark_false_positive: isFalsePositive,
+              state: checked.state,
+              err_budget_spent: checked.err_budget_spent,
             })
           }
         );

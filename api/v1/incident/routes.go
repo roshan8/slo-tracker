@@ -20,7 +20,8 @@ func Init(r chi.Router) {
 
 	r.Method(http.MethodGet, "/", api.Handler(getAllIncidentsHandler))
 	r.Method(http.MethodPost, "/", api.Handler(createIncidentHandler))
-	r.Method(http.MethodPost, "/prom", api.Handler(createPromIncidentHandler))
+	r.Method(http.MethodPost, "/promhook", api.Handler(createPromIncidentHandler))
+	r.Method(http.MethodPost, "/newrelichook", api.Handler(createNewrelicIncidentHandler))
 	r.With(middleware.IncidentRequired).
 		Route("/{incidentID:[0-9]+}", incidentIDSubRoutes)
 }

@@ -52,3 +52,14 @@ type PromIncidentReq struct {
 		EndsAt   time.Time `json:"endsAt"`
 	} `json:"alerts"`
 }
+
+type NewrelicIncidentReq struct {
+	CurrentState string `json:"current_state"`
+	PolicyName   string `json:"policy_name"`
+}
+
+type PingdomIncidentReq struct {
+	CheckName     string `json:"check_name"`
+	PreviousState string `json:"previous_state"`
+	CurrentState  string `json:"current_state"`
+}
