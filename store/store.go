@@ -4,8 +4,8 @@ import (
 	"database/sql"
 	"fmt"
 	"log"
-	"sla-tracker/config"
-	"sla-tracker/schema"
+	"slo-tracker/config"
+	"slo-tracker/schema"
 
 	_ "github.com/go-sql-driver/mysql"
 	"gorm.io/driver/mysql"
@@ -27,7 +27,7 @@ func Init() {
 	db.Close()
 
 	// Connect to newrely created database using gorm
-	dbConnectionString = fmt.Sprintf("root:SecretPassword@tcp(%s:3306)/slatracker_dev?charset=utf8mb4&parseTime=True&loc=Local", config.DBHost)
+	dbConnectionString = fmt.Sprintf("root:SecretPassword@tcp(%s:3306)/slotracker_dev?charset=utf8mb4&parseTime=True&loc=Local", config.DBHost)
 	gormDb, err := gorm.Open(mysql.Open(dbConnectionString), &gorm.Config{})
 	if err != nil {
 		log.Fatal(err)
@@ -37,7 +37,7 @@ func Init() {
 	gormDb.AutoMigrate(
 		&schema.Incident{},
 		&schema.IncidentReq{},
-		&schema.SLA{},
+		&schema.SLO{},
 		//TODO: add other schemas
 	)
 }
@@ -46,7 +46,7 @@ func Init() {
 type Conn struct {
 	DB           *gorm.DB
 	IncidentConn Incident
-	SLAConn      SLA
+	SLOConn      SLO
 	// TODO: add other connection
 }
 
@@ -57,7 +57,7 @@ func NewStore() *Conn {
 		DB: dbConn,
 	}
 	conn.IncidentConn = NewIncidentStore(conn)
-	conn.SLAConn = NewSLAStore(conn)
+	conn.SLOConn = NewSLOStore(conn)
 	// TODO: Add other connections
 
 	return conn
@@ -68,9 +68,9 @@ func (s *Conn) Incident() Incident {
 	return s.IncidentConn
 }
 
-// SLA implements the store interface and it returns the SLA interface
-func (s *Conn) SLA() SLA {
-	return s.SLAConn
+// SLO implements the store interface and it returns the SLO interface
+func (s *Conn) SLO() SLO {
+	return s.SLOConn
 }
 
 func getCommonIndexes(tableName string) map[string]string {

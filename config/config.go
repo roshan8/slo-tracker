@@ -36,9 +36,9 @@ func GetAllEnv() {
 	mustEnv("DB_HOST", &DBHost, "localhost")
 	mustEnv("PORT", &Port, "8080")
 	mustEnv("DB_DRIVER", &DBDriver, "mysql")
-	mustEnv("DB_NAME", &DBName, "slatracker_dev")
+	mustEnv("DB_NAME", &DBName, "slotracker_dev")
 	mustEnv("DB_DATASOURCE", &DBDataSource,
-		"root:SecretPassword@tcp(127.0.0.1:3306)/slatracker_dev?charset=utf8mb4&parseTime=True&loc=Local")
+		"root:SecretPassword@tcp(127.0.0.1:3306)/slotracker_dev?charset=utf8mb4&parseTime=True&loc=Local")
 }
 
 // mustEnv get the env variable with the name 'key' and store it in 'value'

@@ -4,7 +4,7 @@ import (
 	"strings"
 	"time"
 
-	"sla-tracker/pkg/errors"
+	"slo-tracker/pkg/errors"
 )
 
 // Incident stores the incidentList response payload

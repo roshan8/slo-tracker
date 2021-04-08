@@ -2,11 +2,11 @@ package api
 
 import (
 	"net/http"
-	"sla-tracker/middleware"
-	"sla-tracker/pkg/errors"
-	"sla-tracker/pkg/respond"
-	"sla-tracker/pkg/trace"
-	"sla-tracker/store"
+	"slo-tracker/middleware"
+	"slo-tracker/pkg/errors"
+	"slo-tracker/pkg/respond"
+	"slo-tracker/pkg/trace"
+	"slo-tracker/store"
 	"time"
 )
 

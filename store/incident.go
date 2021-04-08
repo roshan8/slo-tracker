@@ -2,8 +2,8 @@ package store
 
 import (
 	"fmt"
-	"sla-tracker/pkg/errors"
-	"sla-tracker/schema"
+	"slo-tracker/pkg/errors"
+	"slo-tracker/schema"
 
 	"gorm.io/gorm"
 )
@@ -88,11 +88,11 @@ func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incide
 	var err *errors.AppError
 
 	if incident.MarkFalsePositive == true && update.MarkFalsePositive == false {
-		err = cs.SLAConn.CutErrBudget(incident.ErrorBudgetSpent)
+		err = cs.SLOConn.CutErrBudget(incident.ErrorBudgetSpent)
 	}
 
 	if incident.MarkFalsePositive == false && update.MarkFalsePositive == true {
-		err = cs.SLAConn.CutErrBudget(-incident.ErrorBudgetSpent)
+		err = cs.SLOConn.CutErrBudget(-incident.ErrorBudgetSpent)
 	}
 
 	if err != nil {

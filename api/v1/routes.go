@@ -2,10 +2,10 @@ package v1
 
 import (
 	"net/http"
-	"sla-tracker/api"
-	v1 "sla-tracker/api"
-	"sla-tracker/api/v1/incident"
-	"sla-tracker/api/v1/sla"
+	"slo-tracker/api"
+	v1 "slo-tracker/api"
+	"slo-tracker/api/v1/incident"
+	"slo-tracker/api/v1/slo"
 
 	"github.com/go-chi/chi"
 )
@@ -21,6 +21,6 @@ func Routes(r chi.Router) {
 // Init initializes all the v1 routes
 func Init(r chi.Router) {
 	r.Route("/incident", incident.Init)
-	r.Route("/sla", sla.Init)
+	r.Route("/slo", slo.Init)
 	// TODO: add remaining routes
 }

@@ -3,9 +3,9 @@ package middleware
 import (
 	"context"
 	"net/http"
-	"sla-tracker/pkg/errors"
-	"sla-tracker/pkg/respond"
-	"sla-tracker/store"
+	"slo-tracker/pkg/errors"
+	"slo-tracker/pkg/respond"
+	"slo-tracker/store"
 	"strconv"
 
 	"github.com/go-chi/chi"

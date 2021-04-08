@@ -5,10 +5,10 @@ import (
 	"net/http"
 	"time"
 
-	"sla-tracker/pkg/errors"
-	"sla-tracker/pkg/respond"
-	"sla-tracker/schema"
-	"sla-tracker/utils"
+	"slo-tracker/pkg/errors"
+	"slo-tracker/pkg/respond"
+	"slo-tracker/schema"
+	"slo-tracker/utils"
 )
 
 // creates a new incident
@@ -53,7 +53,7 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 			updated, _ := store.Incident().Update(incident, updatedIncident) // TODO: error handling
 
 			// deduct error budget with incident downtime
-			err = store.SLA().CutErrBudget(updatedIncident.ErrorBudgetSpent)
+			err = store.SLO().CutErrBudget(updatedIncident.ErrorBudgetSpent)
 
 			respond.Created(w, updated)
 		}

@@ -1,15 +1,15 @@
 package store
 
 import (
-	"sla-tracker/pkg/errors"
-	"sla-tracker/schema"
+	"slo-tracker/pkg/errors"
+	"slo-tracker/schema"
 )
 
 // Store global store interface - provides db interface methods
 // for diff entities
 type Store interface {
 	Incident() Incident
-	SLA() SLA
+	SLO() SLO
 	// TODO: add others
 }
 
@@ -23,11 +23,11 @@ type Incident interface {
 	// Delete(incidentID uint) *errors.AppError
 }
 
-// SLA store interface expose the SLA db methods/operations
-type SLA interface {
-	All() ([]*schema.SLA, *errors.AppError)
-	Create(req *schema.SLA) (*schema.SLA, *errors.AppError)
-	GetByID(SLAID uint) (*schema.SLA, *errors.AppError)
-	Update(SLA *schema.SLA, update *schema.SLA) (*schema.SLA, *errors.AppError)
+// SLO store interface expose the SLO db methods/operations
+type SLO interface {
+	All() ([]*schema.SLO, *errors.AppError)
+	Create(req *schema.SLO) (*schema.SLO, *errors.AppError)
+	GetByID(SLOID uint) (*schema.SLO, *errors.AppError)
+	Update(SLO *schema.SLO, update *schema.SLO) (*schema.SLO, *errors.AppError)
 	CutErrBudget(downtimeInMins float32) *errors.AppError
 }

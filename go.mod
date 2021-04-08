@@ -1,4 +1,4 @@
-module sla-tracker
+module slo-tracker
 
 go 1.15
 

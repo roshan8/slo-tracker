@@ -43,11 +43,11 @@ interface burningRateType  {
 
 function App() {
 
-  const [isSLADrawerVisible, setIsSLADrawerVisible] = useState(false);
+  const [isSLODrawerVisible, setIsSLODrawerVisible] = useState(false);
   const [isIncidentDrawerVisible, setIsIncidentDrawerVisible] = useState(false);
   const [incidentList, setInicidentList] = useState<IIncidentList[]>([]);
-  const [currentSLA, setCurrentSLA] = useState(100);
-  const [targetSLA, setTargetSLA] = useState(100);
+  const [currentSLO, setCurrentSLO] = useState(100);
+  const [targetSLO, setTargetSLO] = useState(100);
   const [remainingErrBudget, setRemainingErrBudget] = useState(0);
   const [burningRate, setBurningRate] = useState<burningRateType>();
   const [incidentSummary, setincidentSummary] = useState<incidentSummaryType[]>([]);
@@ -68,16 +68,16 @@ function App() {
   function callback(key) {
     console.log(key);
   }
-  const showSLADrawer = () => {
-    setIsSLADrawerVisible(true);
+  const showSLODrawer = () => {
+    setIsSLODrawerVisible(true);
   };
 
   const showIncidentDrawer = () => {
     setIsIncidentDrawerVisible(true);
   };
 
-  const HandleSLAOk = () => {
-    setIsSLADrawerVisible(false);
+  const HandleSLOOk = () => {
+    setIsSLODrawerVisible(false);
   };
 
   const HandleIncidentOk = () => {
@@ -91,11 +91,11 @@ function App() {
     });
   };
 
-  // Calulates the allotted err budget for targeted SLA
-  // Also updates the SLA burning rate card
-  function CalculateErrBudget(targetSLAinPerc, remainingErrBudget) {
+  // Calulates the allotted err budget for targeted SLO
+  // Also updates the SLO burning rate card
+  function CalculateErrBudget(targetSLOinPerc, remainingErrBudget) {
     let allottedErrBudgetInMin = 0, totalSecsInYear = 31536000;
-    let downtimeInFraction = 1 - (targetSLAinPerc / 100)
+    let downtimeInFraction = 1 - (targetSLOinPerc / 100)
     allottedErrBudgetInMin = (downtimeInFraction * totalSecsInYear) / 60
   
     let month_raw = new Date().getMonth() + 1;
@@ -145,31 +145,31 @@ function App() {
 
   }
 
-  const SLAFormLayout = () => {
+  const SLOFormLayout = () => {
 
     const onFinish = (values: any) => {
-      const createSLAApi = async () => {
+      const createSLOApi = async () => {
         try {
 
-          const slaCreationReq = await fetch(
-            `${API_URL}/api/v1/sla/1`, {
+          const sloCreationReq = await fetch(
+            `${API_URL}/api/v1/slo/1`, {
               method: 'PATCH',
               body: JSON.stringify({
                 product_name: values["productname"],
-                target_sla: values["targetsla"],
+                target_slo: values["targetslo"],
               })
             }
           );
-          openNotificationWithIcon('success', 'Target SLA updated!')
+          openNotificationWithIcon('success', 'Target SLO updated!')
           // TODO: Add response code validation.
         } catch (err) {
-          openNotificationWithIcon('error', 'Unable to update the target SLA :(')
+          openNotificationWithIcon('error', 'Unable to update the target SLO :(')
           console.log(err);
 
         }
-        setIsSLADrawerVisible(false);    
+        setIsSLODrawerVisible(false);    
       };    
-      createSLAApi();
+      createSLOApi();
     };
   
     const onFinishFailed = (errorInfo: any) => {
@@ -194,8 +194,8 @@ function App() {
         </Form.Item>
 
         <Form.Item
-          label="Target SLA"
-          name="targetsla"
+          label="Target SLO(in %)"
+          name="targetslo"
           rules={[{ required: true, message: 'This is required field' }]}
         >
           <InputNumber />
@@ -232,7 +232,7 @@ function App() {
             }
           );
           // window.location.reload(); 
-          openNotificationWithIcon('success', 'Incident created!');
+          openNotificationWithIcon('success', 'Incident created!'); 
         } catch (err) {
           console.log(err);
           openNotificationWithIcon('error', 'Unable to create an incident :(')
@@ -370,31 +370,31 @@ function App() {
         }
       };
     
-      // Fetch SLA details
-      const getSLAApiCall = async () => {
+      // Fetch SLO details
+      const getSLOApiCall = async () => {
         try {
-          const SLAListResponse = await fetch(
-            `${API_URL}/api/v1/sla/1`
+          const SLOListResponse = await fetch(
+            `${API_URL}/api/v1/slo/1`
           )
           .then(response => response.json())
           .then(response => {
             console.log(response.data.product_name)
-            setCurrentSLA(response.data.current_sla)
-            setTargetSLA(response.data.target_sla)
+            setCurrentSLO(response.data.current_slo)
+            setTargetSLO(response.data.target_slo)
             setRemainingErrBudget(response.data.remaining_err_budget)
-            CalculateErrBudget(response.data.target_sla, response.data.remaining_err_budget)
+            CalculateErrBudget(response.data.target_slo, response.data.remaining_err_budget)
           })
           .catch(err => { console.log(err); 
           });
 
         } catch (err) {
           console.log(err);
-          openNotificationWithIcon('error', 'Unable to fetch SLA details :(')
+          openNotificationWithIcon('error', 'Unable to fetch SLO details :(')
         }
       };
 
       getIncidentApiCall();
-      getSLAApiCall();
+      getSLOApiCall();
 
     },
     [],
@@ -407,8 +407,8 @@ function App() {
           <Col span={6}>
             <Card>
               <Statistic
-                title="Target SLA"
-                value={ targetSLA }
+                title="Target SLO"
+                value={ targetSLO }
                 precision={2}
                 valueStyle={{ color: "#3f8600" }}
                 // prefix={<ArrowUpOutlined />}
@@ -419,8 +419,8 @@ function App() {
           <Col span={6}>
             <Card>
               <Statistic
-                title="Your SLA"
-                value={ currentSLA }
+                title="Your SLO"
+                value={ currentSLO }
                 precision={4}
                 valueStyle={{ color: "#3f8600" }}   
                 // prefix={<ArrowDownOutlined />}
@@ -444,7 +444,7 @@ function App() {
           <Col span={6}>
             <Card>
               <Statistic
-                title="SLA burning rate"
+                title="SLO burning rate"
                 value={ burningRate?.label }
                 valueStyle={{ color: burningRate?.color }} 
               />
@@ -455,17 +455,17 @@ function App() {
 
       <Row gutter={[8, 8]}>
         <Col span={12}>
-          <Button type="primary" block onClick={showSLADrawer}>
-            Update SLA Target
+          <Button type="primary" block onClick={showSLODrawer}>
+            Update SLO Target
           </Button>
           <Drawer
-            title="Modify target SLA"
+            title="Modify target SLO"
             placement="right"
-            visible={isSLADrawerVisible}
-            onClose={HandleSLAOk}
+            visible={isSLODrawerVisible}
+            onClose={HandleSLOOk}
             bodyStyle={{ paddingBottom: 80 }}
           >
-              <SLAFormLayout />
+              <SLOFormLayout />
           </Drawer>
         </Col>
         <Col span={12}>
@@ -473,7 +473,7 @@ function App() {
             Report an incident
           </Button>
           <Drawer
-            title="Report SLA voilating incident"
+            title="Report SLO voilating incident"
             placement="right"
             onClose={HandleIncidentOk}
             visible={isIncidentDrawerVisible}

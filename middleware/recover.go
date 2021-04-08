@@ -6,8 +6,8 @@ import (
 	"os"
 	"runtime/debug"
 
-	"sla-tracker/pkg/errors"
-	"sla-tracker/pkg/respond"
+	"slo-tracker/pkg/errors"
+	"slo-tracker/pkg/respond"
 
 	"github.com/go-chi/chi/middleware"
 )

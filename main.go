@@ -3,11 +3,11 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"sla-tracker/api"
-	v1 "sla-tracker/api/v1"
-	"sla-tracker/config"
-	appmiddleware "sla-tracker/middleware"
-	"sla-tracker/pkg/trace"
+	"slo-tracker/api"
+	v1 "slo-tracker/api/v1"
+	"slo-tracker/config"
+	appmiddleware "slo-tracker/middleware"
+	"slo-tracker/pkg/trace"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -15,7 +15,7 @@ import (
 )
 
 var (
-	name    = "sla-tracker"
+	name    = "slo-tracker"
 	version = "0.0.1"
 )
 

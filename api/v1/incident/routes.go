@@ -3,9 +3,9 @@ package incident
 import (
 	"net/http"
 
-	"sla-tracker/api"
-	"sla-tracker/middleware"
-	appstore "sla-tracker/store"
+	"slo-tracker/api"
+	"slo-tracker/middleware"
+	appstore "slo-tracker/store"
 
 	"github.com/go-chi/chi"
 )

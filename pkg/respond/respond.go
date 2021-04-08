@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"sla-tracker/pkg/errors"
-	"sla-tracker/pkg/trace"
+	"slo-tracker/pkg/errors"
+	"slo-tracker/pkg/trace"
 )
 
 // Response holds the handlerfunc response
