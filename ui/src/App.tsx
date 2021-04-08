@@ -7,6 +7,7 @@ import {
   Card,
   Row,
   Col,
+  Tabs,
   Form,
   Input,
   Drawer,
@@ -50,6 +51,7 @@ function App() {
   const [remainingErrBudget, setRemainingErrBudget] = useState(0);
   const [burningRate, setBurningRate] = useState<burningRateType>();
   const [incidentSummary, setincidentSummary] = useState<incidentSummaryType[]>([]);
+  const { TabPane } = Tabs;
 
   var API_URL = `http://${document.location.hostname}:8080`
 
@@ -63,6 +65,9 @@ function App() {
     );
   }
 
+  function callback(key) {
+    console.log(key);
+  }
   const showSLADrawer = () => {
     setIsSLADrawerVisible(true);
   };
@@ -481,24 +486,31 @@ function App() {
 
       <Row gutter={16}>
         <Col flex={0.5}>
-          <div style={{ height: "50em", width: "40em" }}>
-            <ResponsivePie
-              data={incidentSummary}
-              margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
-              innerRadius={0.5}
-              padAngle={0.7}
-              cornerRadius={3}
-              colors={{ scheme: "nivo" }}
-              borderWidth={1}
-              borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
-              radialLabelsSkipAngle={10}
-              radialLabelsTextColor="#333333"
-              radialLabelsLinkColor={{ from: "color" }}
-              sliceLabelsSkipAngle={10}
-              sliceLabelsTextColor="#333333"
-              legends={[]}
-            />
-          </div>
+        <Tabs defaultActiveKey="1" onChange={callback}>
+          <TabPane tab="ErrBudget consuption by SLI's" key="1">
+            <div style={{ height: "50em", width: "40em" }}>
+              <ResponsivePie
+                data={incidentSummary}
+                margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
+                innerRadius={0.5}
+                padAngle={0.7}
+                cornerRadius={3}
+                colors={{ scheme: "nivo" }}
+                borderWidth={1}
+                borderColor={{ from: "color", modifiers: [["darker", 0.2]] }}
+                radialLabelsSkipAngle={10}
+                radialLabelsTextColor="#333333"
+                radialLabelsLinkColor={{ from: "color" }}
+                sliceLabelsSkipAngle={10}
+                sliceLabelsTextColor="#333333"
+                legends={[]}
+              />
+            </div>
+          </TabPane>
+          <TabPane tab="ErrBudget consuption over time" key="2">
+            WIP
+          </TabPane>
+        </Tabs>
         </Col>
         <Col flex={4.5}>
           <Table dataSource={incidentList} columns={columns} />
