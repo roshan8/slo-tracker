@@ -29,20 +29,21 @@ func (cs *SLOStore) createTableIfNotExists() {
 		if err := cs.DB.Migrator().CreateTable(&schema.SLO{}).Error; err != nil {
 			fmt.Println(err)
 		}
-		// Create the first SLO record, Whenever use tries to
-		// set their target SLO, patch calls will be made on this record
-		fmt.Println("Creating the first record!")
-		firstSLORecord := &schema.SLO{
-			ProductName:        "Unnamed",
-			TargetSLO:          100,
-			CurrentSLO:         100,
-			RemainingErrBudget: 0,
-		}
-		if err := cs.DB.Save(firstSLORecord).Error; err != nil {
-			fmt.Println(errors.InternalServerStd().AddDebug(err))
-		}
-		fmt.Println("First SLO record got created")
 	}
+
+	// Create the first SLO record, Whenever use tries to
+	// set their target SLO, patch calls will be made on this record
+	fmt.Println("Creating the first record!")
+	firstSLORecord := &schema.SLO{
+		ProductName:        "Unnamed",
+		TargetSLO:          100,
+		CurrentSLO:         100,
+		RemainingErrBudget: 0,
+	}
+	if err := cs.DB.Save(firstSLORecord).Error; err != nil {
+		fmt.Println(errors.InternalServerStd().AddDebug(err))
+	}
+	fmt.Println("First SLO record got created")
 }
 
 // All returns all the SLOs
