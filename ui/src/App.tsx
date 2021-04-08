@@ -53,7 +53,7 @@ function App() {
   const [incidentSummary, setincidentSummary] = useState<incidentSummaryType[]>([]);
   const { TabPane } = Tabs;
 
-  var API_URL = `http://${document.location.hostname}:8080`
+  var API_URL = `http://${document.location.hostname}:8080`;
 
   // Redirect user to login page when `IsAuthenticated` not set to `yes`
   if (localStorage.getItem('IsAuthenticated') != "yes") {
@@ -136,6 +136,8 @@ function App() {
           }
         );
         openNotificationWithIcon('success', 'Incident updated!')
+        getSLOApiCall()
+        getIncidentApiCall()
       } catch (err) {
         console.log(err);
         openNotificationWithIcon('error', 'Unable to update the incident :(')
@@ -161,6 +163,7 @@ function App() {
             }
           );
           openNotificationWithIcon('success', 'Target SLO updated!')
+          getSLOApiCall()
           // TODO: Add response code validation.
         } catch (err) {
           openNotificationWithIcon('error', 'Unable to update the target SLO :(')
@@ -231,8 +234,9 @@ function App() {
               })
             }
           );
-          // window.location.reload(); 
           openNotificationWithIcon('success', 'Incident created!'); 
+          getIncidentApiCall()
+          getSLOApiCall()
         } catch (err) {
           console.log(err);
           openNotificationWithIcon('error', 'Unable to create an incident :(')
@@ -317,81 +321,84 @@ function App() {
     },
   ];
 
+  const getIncidentApiCall = async () => {
+    try {
+      const incidentListResponse = await fetch(
+        `${API_URL}/api/v1/incident/`
+      );
+      const { data: incidentList } = await incidentListResponse.json();
+      setInicidentList(
+        incidentList.map((i) => {
+          i.key = i.id;
+          return i;
+        })
+      );
+      
+      // Format the incidentList data in incidentSummaryType format for the Pie Chat
+      let incidentArr = new Array()
+      let i = 0;
+      while (i < incidentList.length){
+        let found = 0, j = 0;
+
+        // Skip if incident marked as false positive
+        if (incidentList[i]["mark_false_positive"] == true) {
+          i++;
+          continue;
+        }
+
+        for (j = 0; j < incidentArr.length; j++) {
+          // If sli_name key already exist in incidentArr then update err_budget_spent value
+          if (incidentList[i]["sli_name"] === incidentArr[j]["id"]) {
+            incidentArr[j]["value"] += incidentList[i]["err_budget_spent"]
+            found = 1
+          }
+        }
+        // If sli_name key doesn't exist in incidentArr then add new item
+        if (found == 0) {
+          incidentArr.push(new Object(
+            {
+              "id": incidentList[i]["sli_name"],
+              "label": incidentList[i]["sli_name"],
+              "value": incidentList[i]["err_budget_spent"]
+            }
+          ))
+        }
+        i++;
+      }
+      setincidentSummary(incidentArr)   
+    } catch (err) {
+      console.log(err);
+      openNotificationWithIcon('error', 'Unable to fetch incidents :(')
+    }
+  };
+
+  
+  // Fetch SLO details
+  const getSLOApiCall = async () => {
+    try {
+      const SLOListResponse = await fetch(
+        `${API_URL}/api/v1/slo/1`
+      )
+      .then(response => response.json())
+      .then(response => {
+        console.log(response.data.product_name)
+        setCurrentSLO(response.data.current_slo)
+        setTargetSLO(response.data.target_slo)
+        setRemainingErrBudget(response.data.remaining_err_budget)
+        CalculateErrBudget(response.data.target_slo, response.data.remaining_err_budget)
+      })
+      .catch(err => { console.log(err); 
+      });
+
+    } catch (err) {
+      console.log(err);
+      openNotificationWithIcon('error', 'Unable to fetch SLO details :(')
+    }
+  };
+
+  
   useEffect(
     () => {
-      const getIncidentApiCall = async () => {
-        try {
-          const incidentListResponse = await fetch(
-            `${API_URL}/api/v1/incident/`
-          );
-          const { data: incidentList } = await incidentListResponse.json();
-          setInicidentList(
-            incidentList.map((i) => {
-              i.key = i.id;
-              return i;
-            })
-          );
-          
-          // Format the incidentList data in incidentSummaryType format for the Pie Chat
-          let incidentArr = new Array()
-          let i = 0;
-          while (i < incidentList.length){
-            let found = 0, j = 0;
-
-            // Skip if incident marked as false positive
-            if (incidentList[i]["mark_false_positive"] == true) {
-              i++;
-              continue;
-            }
-
-            for (j = 0; j < incidentArr.length; j++) {
-              // If sli_name key already exist in incidentArr then update err_budget_spent value
-              if (incidentList[i]["sli_name"] === incidentArr[j]["id"]) {
-                incidentArr[j]["value"] += incidentList[i]["err_budget_spent"]
-                found = 1
-              }
-            }
-            // If sli_name key doesn't exist in incidentArr then add new item
-            if (found == 0) {
-              incidentArr.push(new Object(
-                {
-                  "id": incidentList[i]["sli_name"],
-                  "label": incidentList[i]["sli_name"],
-                  "value": incidentList[i]["err_budget_spent"]
-                }
-              ))
-            }
-            i++;
-          }
-          setincidentSummary(incidentArr)   
-        } catch (err) {
-          console.log(err);
-          openNotificationWithIcon('error', 'Unable to fetch incidents :(')
-        }
-      };
-    
-      // Fetch SLO details
-      const getSLOApiCall = async () => {
-        try {
-          const SLOListResponse = await fetch(
-            `${API_URL}/api/v1/slo/1`
-          )
-          .then(response => response.json())
-          .then(response => {
-            console.log(response.data.product_name)
-            setCurrentSLO(response.data.current_slo)
-            setTargetSLO(response.data.target_slo)
-            setRemainingErrBudget(response.data.remaining_err_budget)
-            CalculateErrBudget(response.data.target_slo, response.data.remaining_err_budget)
-          })
-          .catch(err => { console.log(err); 
-          });
-
-        } catch (err) {
-          console.log(err);
-          openNotificationWithIcon('error', 'Unable to fetch SLO details :(')
-        }
-      };
 
       getIncidentApiCall();
       getSLOApiCall();
