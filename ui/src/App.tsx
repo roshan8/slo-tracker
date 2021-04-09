@@ -19,6 +19,7 @@ import {
 } from "antd";
 import "antd/dist/antd.css";
 import { ResponsivePie } from "@nivo/pie";
+import { ResponsiveLine } from "@nivo/line";
 
 interface IIncidentList {
   id: number;
@@ -36,6 +37,11 @@ interface incidentSummaryType  {
   label: string;
 }
 
+interface errBudgetOverTimeType  {
+  x: string;
+  y: number;
+}
+
 interface burningRateType  {
   label: string;
   color: string;
@@ -50,7 +56,8 @@ function App() {
   const [targetSLO, setTargetSLO] = useState(100);
   const [remainingErrBudget, setRemainingErrBudget] = useState(0);
   const [burningRate, setBurningRate] = useState<burningRateType>();
-  const [incidentSummary, setincidentSummary] = useState<incidentSummaryType[]>([]);
+  const [incidentSummary, setIncidentSummary] = useState<incidentSummaryType[]>([]);
+  const [errBudgetOverTime, setErrBudgetOverTime] = useState<errBudgetOverTimeType[]>([]);
   const { TabPane } = Tabs;
 
   var API_URL = `http://${document.location.hostname}:8080`;
@@ -335,10 +342,11 @@ function App() {
       );
       
       // Format the incidentList data in incidentSummaryType format for the Pie Chat
-      let incidentArr = new Array()
+      let incidentSummaryArr = new Array()
+      let errBudgetArr = new Array()
       let i = 0;
       while (i < incidentList.length){
-        let found = 0, j = 0;
+        let sliNameFound = 0, j = 0, downtimeDateFound = 0;
 
         // Skip if incident marked as false positive
         if (incidentList[i]["mark_false_positive"] == true) {
@@ -346,16 +354,25 @@ function App() {
           continue;
         }
 
-        for (j = 0; j < incidentArr.length; j++) {
-          // If sli_name key already exist in incidentArr then update err_budget_spent value
-          if (incidentList[i]["sli_name"] === incidentArr[j]["id"]) {
-            incidentArr[j]["value"] += incidentList[i]["err_budget_spent"]
-            found = 1
+        for (j = 0; j < incidentSummaryArr.length; j++) {
+          // If sli_name key already exist in incidentSummaryArr then update err_budget_spent value
+          if (incidentList[i]["sli_name"] === incidentSummaryArr[j]["id"]) {
+            incidentSummaryArr[j]["value"] += incidentList[i]["err_budget_spent"]
+            sliNameFound = 1
           }
         }
-        // If sli_name key doesn't exist in incidentArr then add new item
-        if (found == 0) {
-          incidentArr.push(new Object(
+
+        for (j = 0; j < errBudgetArr.length; j++) {
+          // If date key already exist in errBudgetArr then update err_budget_spent value
+          if (incidentList[i]["created_at"].split('T', 1)[0] === errBudgetArr[j]["x"]) {
+            errBudgetArr[j]["y"] += incidentList[i]["err_budget_spent"]
+            downtimeDateFound = 1
+          }
+        }
+
+        // If sli_name key doesn't exist in incidentSummaryArr then add new item
+        if (sliNameFound == 0) {
+          incidentSummaryArr.push(new Object(
             {
               "id": incidentList[i]["sli_name"],
               "label": incidentList[i]["sli_name"],
@@ -363,9 +380,31 @@ function App() {
             }
           ))
         }
+
+        // If sli_name key doesn't exist in incidentSummaryArr then add new item
+        if (downtimeDateFound == 0) {
+          errBudgetArr.push(new Object(
+            {
+              "x": incidentList[i]["created_at"].split('T', 1)[0],
+              "y": incidentList[i]["err_budget_spent"]
+            }
+          ))
+        }
         i++;
       }
-      setincidentSummary(incidentArr)   
+
+      setIncidentSummary(incidentSummaryArr)  
+
+      let totalErrBudget = 0, j = 0; 
+      console.log(errBudgetArr.length)
+      for (j = errBudgetArr.length-1; j >= 0; j--) {
+        totalErrBudget += errBudgetArr[j]["y"]
+        errBudgetArr[j]["y"] = totalErrBudget
+        console.log(totalErrBudget)
+      }
+
+      console.log(errBudgetArr)
+      setErrBudgetOverTime(errBudgetArr)
     } catch (err) {
       console.log(err);
       openNotificationWithIcon('error', 'Unable to fetch incidents :(')
@@ -495,7 +534,7 @@ function App() {
         <Col flex={0.5}>
         <Tabs defaultActiveKey="1" onChange={callback}>
           <TabPane tab="ErrBudget consuption by SLI's" key="1">
-            <div style={{ height: "50em", width: "40em" }}>
+            <div style={{ height: "40em", width: "40em" }}>
               <ResponsivePie
                 data={incidentSummary}
                 margin={{ top: 40, right: 80, bottom: 80, left: 80 }}
@@ -514,8 +553,83 @@ function App() {
               />
             </div>
           </TabPane>
+
           <TabPane tab="ErrBudget consuption over time" key="2">
-            WIP
+            <div style={{ height: "40em", width: "40em" }}>
+              <ResponsiveLine
+                data={[
+                  {
+                    id: "ErrBudget",
+                    data: errBudgetOverTime
+                  }
+                ]}
+                margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+                xScale={{
+                  type: "time",
+                  format: "%Y-%m-%d"
+                }}
+                xFormat="time:%Y-%m-%d"
+                yScale={{
+                  type: "linear",
+                  min: "auto",
+                  max: "auto",
+                  stacked: false,
+                  reverse: false
+                }}
+                axisTop={null}
+                axisRight={null}
+                axisLeft={{
+                  orient: "left",
+                  tickSize: 5,
+                  tickPadding: 5,
+                  tickRotation: 0,
+                  legend: "Error budget spent",
+                  legendOffset: -40,
+                  legendPosition: "middle"
+                }}
+                axisBottom={{
+                  format: "%b %d",
+                  //tickValues: "every 2 days",
+                  // tickRotation: -90,
+                  // legend: "time scale",
+                  legendOffset: -12
+                }}
+                colors={{ scheme: "nivo" }}
+                pointSize={10}
+                pointColor={{ theme: "background" }}
+                pointBorderWidth={2}
+                pointBorderColor={{ from: "serieColor" }}
+                pointLabel="y"
+                pointLabelYOffset={-12}
+                useMesh={true}
+                legends={[
+                  {
+                    anchor: "bottom-right",
+                    direction: "column",
+                    justify: false,
+                    translateX: 100,
+                    translateY: 0,
+                    itemsSpacing: 0,
+                    itemDirection: "left-to-right",
+                    itemWidth: 80,
+                    itemHeight: 20,
+                    itemOpacity: 0.75,
+                    symbolSize: 12,
+                    symbolShape: "circle",
+                    symbolBorderColor: "rgba(0, 0, 0, .5)",
+                    effects: [
+                      {
+                        on: "hover",
+                        style: {
+                          itemBackground: "rgba(0, 0, 0, .03)",
+                          itemOpacity: 1
+                        }
+                      }
+                    ]
+                  }
+                ]}
+              />
+            </div>
           </TabPane>
         </Tabs>
         </Col>
