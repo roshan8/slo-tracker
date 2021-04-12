@@ -7,8 +7,8 @@ docker-compose up -d
 ```    
 > `admin:admin` is the default creds for UI, Which can be changed in docker-compose file.
 
-# Tutorial
-YTD
+# Ref
+https://opsmonk.dev/Tracking-error-budget-and-SLO/  
 
 # TODO
 [x] - Add SLO burn rate graph    
