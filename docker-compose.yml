@@ -1,0 +1,49 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:5.7
+    #network_mode: host
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: SecretPassword
+
+  slo-be:
+    depends_on:
+      - db
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: slo-be:latest
+    #network_mode: host
+    ports:
+      - "8080:8080"
+    links:
+      - db
+    restart: always
+    environment:
+      DB_HOST: db
+
+  slo-fe:
+    depends_on:
+      - slo-be
+    build:
+      context: ui/
+      dockerfile: Dockerfile
+    image: slo-fe:latest
+    ports:
+      - "3000:80"
+    links:
+      - slo-be
+    restart: always
+    environment:
+      API_URL: slo-be     
+      USERNAME: admin    
+      PASSWORD: admin   
+
+volumes:
+  db_data: {}
