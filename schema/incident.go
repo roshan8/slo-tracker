@@ -63,3 +63,8 @@ type PingdomIncidentReq struct {
 	PreviousState string `json:"previous_state"`
 	CurrentState  string `json:"current_state"`
 }
+
+type DatadogIncidentReq struct {
+	Title           string `json:"title"`
+	Alerttransition string `json:"alertTransition"`
+}
