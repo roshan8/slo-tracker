@@ -15,7 +15,8 @@ https://opsmonk.dev/Tracking-error-budget-and-SLO/
 [x] - Fix false positive button   
 [x] - Fix ErrBudget summary pie chart            
 [x] - Add pingdom integration    
-[ ] - Datadog integration     
+[x] - Datadog integration     
+[ ] - Support multiple SLO creation
 [ ] - Don't reduce err budget twice for simultaniously running incidents 
 
 
