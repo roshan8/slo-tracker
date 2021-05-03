@@ -29,8 +29,12 @@ func createIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.AppEr
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
+	// fetch the slo_name from context and add it to incident creation request
+	ctx := r.Context()
+	input.SLOName, _ = ctx.Value("SLOName").(string)
+
 	// deduct error budget with incident downtime
-	err := store.SLO().CutErrBudget(input.ErrorBudgetSpent)
+	err := store.SLO().CutErrBudget(input.SLOName, input.ErrorBudgetSpent)
 	if err != nil {
 		fmt.Println("Unable to deduct error budget for the incident")
 	}

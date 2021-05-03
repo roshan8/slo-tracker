@@ -71,6 +71,7 @@ func (cs *IncidentStore) Create(req *schema.IncidentReq) (*schema.Incident, *err
 
 	incident := &schema.Incident{
 		SliName:          req.SliName,
+		SLOName:          req.SLOName,
 		Alertsource:      req.Alertsource,
 		State:            req.State,
 		ErrorBudgetSpent: req.ErrorBudgetSpent,
@@ -88,11 +89,11 @@ func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incide
 	var err *errors.AppError
 
 	if incident.MarkFalsePositive == true && update.MarkFalsePositive == false {
-		err = cs.SLOConn.CutErrBudget(incident.ErrorBudgetSpent)
+		err = cs.SLOConn.CutErrBudget(incident.SLOName, incident.ErrorBudgetSpent)
 	}
 
 	if incident.MarkFalsePositive == false && update.MarkFalsePositive == true {
-		err = cs.SLOConn.CutErrBudget(-incident.ErrorBudgetSpent)
+		err = cs.SLOConn.CutErrBudget(incident.SLOName, -incident.ErrorBudgetSpent)
 	}
 
 	if err != nil {

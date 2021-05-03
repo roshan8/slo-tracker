@@ -164,7 +164,7 @@ function App() {
             `${API_URL}/api/v1/slo/1`, {
               method: 'PATCH',
               body: JSON.stringify({
-                product_name: values["productname"],
+                slo_name: values["sloname"],
                 target_slo: values["targetslo"],
               })
             }
@@ -197,7 +197,7 @@ function App() {
 
         <Form.Item
           label="Product name"
-          name="productname"
+          name="sloname"
           rules={[{ required: false }]}
         >
           <Input />
@@ -420,7 +420,7 @@ function App() {
       )
       .then(response => response.json())
       .then(response => {
-        console.log(response.data.product_name)
+        console.log(response.data.slo_name)
         setCurrentSLO(response.data.current_slo)
         setTargetSLO(response.data.target_slo)
         setRemainingErrBudget(response.data.remaining_err_budget)

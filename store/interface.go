@@ -28,6 +28,7 @@ type SLO interface {
 	All() ([]*schema.SLO, *errors.AppError)
 	Create(req *schema.SLO) (*schema.SLO, *errors.AppError)
 	GetByID(SLOID uint) (*schema.SLO, *errors.AppError)
+	GetByName(SLOName string) (*schema.SLO, *errors.AppError)
 	Update(SLO *schema.SLO, update *schema.SLO) (*schema.SLO, *errors.AppError)
-	CutErrBudget(downtimeInMins float32) *errors.AppError
+	CutErrBudget(SLOName string, downtimeInMins float32) *errors.AppError
 }

@@ -1,5 +1,5 @@
 # SLO-Tracker
-A simple but effective way to track SLO's and Error budgets. `SLO-tracker` can be integrated with Prometheus, Pingdom and Newrelic via webhook to receive SLO voilating incidents. Send all the alerts `SLO-tracker` defeats the purpose of this tool. Please send only SLO voilating incidents to this tool.
+A simple but effective way to track SLO's and Error budgets. `SLO-tracker` can be integrated with Prometheus, Pingdom, Datadog and Newrelic via webhook to receive SLO voilating incidents. Sending all the alerts `SLO-tracker` defeats the purpose of this tool. Please send only SLO voilating incidents to this tool.
 
 # How to deploy?
 ```sh    
@@ -16,7 +16,7 @@ https://opsmonk.dev/Tracking-error-budget-and-SLO/
 [x] - Fix ErrBudget summary pie chart            
 [x] - Add pingdom integration    
 [x] - Datadog integration     
-[ ] - Support multiple SLO creation
+[ ] - Support multiple SLO creation - WIP
 [ ] - Don't reduce err budget twice for simultaniously running incidents 
 
 
