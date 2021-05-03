@@ -15,7 +15,7 @@ type Store interface {
 
 // Incident store interface expose the Incident db methods/operations
 type Incident interface {
-	All() ([]*schema.Incident, *errors.AppError)
+	All(SLOName string) ([]*schema.Incident, *errors.AppError)
 	Create(req *schema.IncidentReq) (*schema.Incident, *errors.AppError)
 	GetByID(incidentID uint) (*schema.Incident, *errors.AppError)
 	GetBySLIName(sliName string) (*schema.Incident, *errors.AppError)

@@ -12,7 +12,12 @@ import (
 
 // getAllIncidentsHandler fetches and unmarshal the incidentt data
 func getAllIncidentsHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
-	incidents, err := store.Incident().All()
+
+	// fetch the slo_name from contex
+	ctx := r.Context()
+	SLOName, _ := ctx.Value("SLOName").(string)
+
+	incidents, err := store.Incident().All(SLOName)
 	if err != nil {
 		return err
 	}
