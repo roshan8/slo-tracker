@@ -26,7 +26,7 @@ interface IIncidentList {
   sli_name: string;
   alertsource: string;
   state: string;
-  slo_name: string;
+  // slo_name: string;
   created_at: Date;
   err_budget_spent: number;
   mark_false_positive: boolean;
@@ -305,11 +305,11 @@ function App() {
       dataIndex: "state",
       key: "state",
     },
-    {
-      title: "SLO",
-      dataIndex: "slo_name",
-      key: "slo_name",
-    },            
+    // {
+    //   title: "SLO",
+    //   dataIndex: "slo_name",
+    //   key: "slo_name",
+    // },            
     {
       title: "Alertsource",
       dataIndex: "alertsource",
