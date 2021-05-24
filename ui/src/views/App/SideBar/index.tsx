@@ -8,17 +8,22 @@ import './sidebar.css';
 interface IProps {
   SLOs: ISLO[];
   activeSLOId?: number;
+  setActiveSlo: (slo: ISLO) => void;
 }
 
-const SideBar: React.FC<IProps> = ({ SLOs, activeSLOId }) => {
+const SideBar: React.FC<IProps> = ({ SLOs, activeSLOId, ...props }) => {
+  const onSLOSelect = (value: any) => {
+    const SLOId = parseInt(value.key);
+    const selectedSLO = SLOs.filter((s) => s.id === SLOId);
+
+    if (selectedSLO.length) props.setActiveSlo(selectedSLO[0]);
+  };
   return (
-    <div>
-      <Menu defaultSelectedKeys={[String(activeSLOId)]}>
-        {SLOs.map((slo, i) => (
-          <Menu.Item key={String(slo.id)}>{slo.slo_name}</Menu.Item>
-        ))}
-      </Menu>
-    </div>
+    <Menu defaultSelectedKeys={[String(activeSLOId)]} onClick={onSLOSelect}>
+      {SLOs.map((slo) => (
+        <Menu.Item key={String(slo.id)}>{slo.slo_name}</Menu.Item>
+      ))}
+    </Menu>
   );
 };
 

@@ -39,7 +39,14 @@ const AppView: React.FC = () => {
           You have no SLOs. Create one to continue
         </p>
       );
-    else return <SideBar SLOs={SLOs} activeSLOId={activeSLO?.id} />;
+    else
+      return (
+        <SideBar
+          SLOs={SLOs}
+          activeSLOId={activeSLO?.id}
+          setActiveSlo={setActiveSLO}
+        />
+      );
   };
 
   return (
