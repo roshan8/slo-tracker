@@ -9,10 +9,8 @@ const useGetSLOs = () => {
   const [error, setError] = useState<string | null>(null);
   const [SLOs, setSLOs] = useState<ISLO[]>([])
 
-
-  useEffect(() => {
-    (async() => {
-      setLoading(true);
+  const getSLOs = async () => {
+    setLoading(true);
       setError(null);
 
       try {
@@ -23,13 +21,19 @@ const useGetSLOs = () => {
       } finally {
         setLoading(false);
       }
+  }
+
+  useEffect(() => {
+    (async() => {
+      await getSLOs();
     })()
   }, []);
 
   return {
     loading,
     error,
-    SLOs
+    SLOs,
+    refreshSLOs: getSLOs,
   }
 }
 

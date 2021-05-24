@@ -9,16 +9,25 @@ import useGetSLOs from '../../core/hooks/useGetSLOs';
 import './app.css';
 import Loader from '../../components/Loader';
 import { ISLO } from '../../core/interfaces/ISLO';
+import SLODrawer from './Drawer';
 
 const { Header, Content, Sider } = Layout;
 
 const AppView: React.FC = () => {
-  const { loading, error, SLOs } = useGetSLOs();
+  const { loading, error, SLOs, refreshSLOs } = useGetSLOs();
   const [activeSLO, setActiveSLO] = useState<ISLO | null>(null);
+  const [sloDrawer, setSLODrawer] = useState<{
+    type: 'create' | 'update';
+    show: boolean;
+  }>({ type: 'create', show: false });
+
+  const closeSLODrawer = () => setSLODrawer({ ...sloDrawer, show: false });
+  const openSLODrawer = (type: 'create' | 'update') => () =>
+    setSLODrawer({ type, show: true });
 
   useEffect(() => {
-    if (SLOs.length) setActiveSLO(SLOs[0]);
-  }, [SLOs]);
+    if (!activeSLO && SLOs.length) setActiveSLO(SLOs[0]);
+  }, [SLOs, activeSLO]);
 
   const renderSideBar = () => {
     if (loading && !error) return <Loader marginTop="150px" />;
@@ -36,7 +45,7 @@ const AppView: React.FC = () => {
   return (
     <Layout className="app__layout">
       <Header className="app__layout_header app__layout-light_background">
-        <TopBar />
+        <TopBar onAddSLO={openSLODrawer('create')} />
       </Header>
       <Layout>
         <Sider
@@ -48,6 +57,12 @@ const AppView: React.FC = () => {
         </Sider>
         <Content>Content</Content>
       </Layout>
+      <SLODrawer
+        type={sloDrawer.type}
+        show={sloDrawer.show}
+        onClose={closeSLODrawer}
+        refreshSLOs={refreshSLOs}
+      />
     </Layout>
   );
 };
