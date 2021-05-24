@@ -2,13 +2,19 @@ import React from 'react';
 import { Layout } from 'antd';
 
 import TopBar from './TopBar';
+import SideBar from './SideBar';
+
+import useGetSLOs from '../../core/hooks/useGetSLOs';
 
 import './app.css';
-import SideBar from './SideBar';
 
 const { Header, Content, Sider } = Layout;
 
 const AppView = () => {
+  const { loading, error, SLOs } = useGetSLOs();
+
+  console.log('slos!!!!!!!', SLOs, loading, error);
+
   return (
     <Layout className="app__layout">
       <Header className="app__layout_header app__layout-light_background">

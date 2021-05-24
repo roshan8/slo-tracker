@@ -6,7 +6,7 @@ const { Title } = Typography;
 const TopBar = () => {
   return (
     <div>
-      <Title style={{ fontSize: '26px' }}>SLOs</Title>
+      <Title style={{ fontSize: '26px', fontWeight: 400 }}>SLOs</Title>
     </div>
   );
 };

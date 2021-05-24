@@ -15,6 +15,7 @@
     "@types/react-dom": "^17.0.0",
     "@types/styled-components": "^5.1.7",
     "antd": "^4.12.3",
+    "axios": "^0.21.1",
     "nivo": "^0.31.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
