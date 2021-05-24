@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { LoadingOutlined } from '@ant-design/icons';
-import { blue } from '@ant-design/colors';
-import { Spin } from 'antd';
 
 import LoginApp from './views/Login';
 import AppView from './views/App';
 
 import 'antd/dist/antd.css';
-
-const LoadingIcon = (
-  <LoadingOutlined
-    style={{ fontSize: 36, fontWeight: 500, color: blue.primary }}
-    spin
-  />
-);
+import Loader from './components/Loader';
 
 const authLocalKey = 'isAuthenticated';
 
@@ -48,17 +39,7 @@ const App: React.FC = () => {
     }
   };
 
-  if (loading)
-    return (
-      <div
-        style={{
-          textAlign: 'center',
-          marginTop: 'calc(100vh /2)',
-        }}
-      >
-        <Spin indicator={LoadingIcon} />
-      </div>
-    );
+  if (loading) return <Loader marginTop="calc(100vh / 2)" />;
 
   if (isAuthenticated) return <AppView />;
 

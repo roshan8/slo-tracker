@@ -1,21 +1,21 @@
 import React from 'react';
 import { Menu } from 'antd';
 
+import { ISLO } from '../../../core/interfaces/ISLO';
+
 import './sidebar.css';
 
-const SideBar = () => {
-  const slos = [
-    'Add to Cart',
-    'Browse Products',
-    'Credit Card Payments',
-    'Error Budgets',
-  ];
+interface IProps {
+  SLOs: ISLO[];
+  activeSLOId?: number;
+}
 
+const SideBar: React.FC<IProps> = ({ SLOs, activeSLOId }) => {
   return (
     <div>
-      <Menu>
-        {slos.map((slo, i) => (
-          <Menu.Item key={i}>{slo}</Menu.Item>
+      <Menu defaultSelectedKeys={[String(activeSLOId)]}>
+        {SLOs.map((slo, i) => (
+          <Menu.Item key={String(slo.id)}>{slo.slo_name}</Menu.Item>
         ))}
       </Menu>
     </div>
