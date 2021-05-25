@@ -28,6 +28,20 @@ const AppView: React.FC = () => {
 
   useEffect(() => {
     if (!activeSLO && SLOs.length) setActiveSLO(SLOs[0]);
+
+    if (!activeSLO) return;
+
+    // Update active SLO when slos change
+    const activeSLOsArray = SLOs.filter((s) => s.id === activeSLO.id);
+    const newActiveSLO = activeSLOsArray[0];
+
+    if (newActiveSLO && activeSLO.id === newActiveSLO.id) {
+      if (
+        activeSLO.slo_name !== newActiveSLO.slo_name ||
+        activeSLO.target_slo !== newActiveSLO.target_slo
+      )
+        setActiveSLO(newActiveSLO);
+    }
   }, [SLOs, activeSLO]);
 
   const renderSideBar = () => {
@@ -66,12 +80,17 @@ const AppView: React.FC = () => {
           {renderSideBar()}
         </Sider>
         <Content>
-          <SLO activeSLO={activeSLO} SLOsLoading={loading} />
+          <SLO
+            activeSLO={activeSLO}
+            SLOsLoading={loading}
+            onUpdateSLO={openSLODrawer('update')}
+          />
         </Content>
       </Layout>
       <SLODrawer
         type={sloDrawer.type}
         show={sloDrawer.show}
+        activeSLO={activeSLO}
         onClose={closeSLODrawer}
         refreshSLOs={refreshSLOs}
       />
