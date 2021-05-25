@@ -4,7 +4,7 @@ import SLOService from "../services/service.slo";
 
 const _sloService = new SLOService();
 
-const useGetSLOs = () => {
+const useGetAllSLOs = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [SLOs, setSLOs] = useState<ISLO[]>([])
@@ -37,4 +37,4 @@ const useGetSLOs = () => {
   }
 }
 
-export default useGetSLOs;
+export default useGetAllSLOs;

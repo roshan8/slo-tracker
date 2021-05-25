@@ -25,7 +25,7 @@ func Init(r chi.Router) {
 
 	// ROUTE: {host}/v1/incident/SLOName/:incidentID/*
 	r.With(middleware.SLORequired).
-		Route("/incident/{SLOName:[a-zA-Z]+}", incident.Init) // TODO: Allow hyphen for sloname
+		Route("/incident/{SLOName}", incident.Init) // TODO: Allow hyphen for sloname
 
 	r.Route("/slo", slo.Init)
 	// TODO: add remaining routes

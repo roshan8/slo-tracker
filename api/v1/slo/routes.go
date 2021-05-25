@@ -22,7 +22,7 @@ func Init(r chi.Router) {
 	r.Method(http.MethodGet, "/", api.Handler(getAllSLOsHandler))
 	r.Method(http.MethodPost, "/", api.Handler(createSLOHandler))
 	r.With(middleware.SLORequired).
-		Route("/{SLOName:[a-zA-Z1-9]+}", sloNameSubRoutes)
+		Route("/{SLOName}", sloNameSubRoutes)
 }
 
 // ROUTE: {host}/v1/slo/:sloName/*
