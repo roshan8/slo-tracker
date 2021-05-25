@@ -6,6 +6,7 @@ import Loader from '../../../components/Loader';
 import useGetSLIs from '../../../core/hooks/useGetSLIs';
 import useGetSLO from '../../../core/hooks/useGetSLO';
 import { ISLO } from '../../../core/interfaces/ISLO';
+import Cards from './Cards';
 
 interface IProps {
   activeSLO: ISLO | null;
@@ -16,8 +17,8 @@ interface IProps {
 const { Title } = Typography;
 
 const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
-  const { SLIs, SLILoading, SLIError } = useGetSLIs(activeSLO);
-  const { SLO, SLOLoading, SLOError } = useGetSLO(activeSLO);
+  const { SLIs } = useGetSLIs(activeSLO);
+  const { SLO } = useGetSLO(activeSLO);
 
   if (props.SLOsLoading) {
     return <Loader marginTop="calc(100vh /3)" />;
@@ -49,6 +50,8 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
         </Row>
         <Button type="primary">Report Incident</Button>
       </Row>
+
+      <Cards SLO={SLO} />
     </Col>
   );
 };

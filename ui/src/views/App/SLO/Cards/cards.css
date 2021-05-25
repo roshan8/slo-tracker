@@ -1,0 +1,19 @@
+.SLO__cards_container {
+  margin-top: 24px;
+}
+
+.SLO__cards_card {
+  background: #fff;
+  border-radius: 4px;
+  padding: 10px 14px;
+}
+
+.SLO__cards_card h1 {
+  font-size: 14px;
+  color: #a8a8a8;
+}
+
+.SLO__cards_card_content {
+  font-size: 20px;
+  font-weight: 500;
+}

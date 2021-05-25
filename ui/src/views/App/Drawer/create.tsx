@@ -19,7 +19,7 @@ const CreateSLO: React.FC<IProps> = (props) => {
 
   const onSubmit = async (values: any) => {
     const slo_name = values['slo_name'];
-    const target_slo = parseInt(values['target_slo']);
+    const target_slo = parseFloat(values['target_slo']);
 
     try {
       await _sloService.create({
