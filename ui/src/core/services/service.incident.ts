@@ -14,6 +14,7 @@ class IncidentService {
 
   create = (data: Pick<IIncident, 'sli_name' | 'alertsource' | 'err_budget_spent' | 'state'>) => axios.post<IResponse<IIncident>>(this._api, data);
 
+  update = (incidentID: number, data: Partial<IIncident>) => axios.patch(`${this._api}/${incidentID}`, data);
 }
 
 export default IncidentService;

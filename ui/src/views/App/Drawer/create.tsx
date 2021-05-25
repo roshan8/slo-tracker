@@ -45,7 +45,11 @@ const CreateSLO: React.FC<IProps> = (props) => {
         <Input placeholder="Eg: Checkout Flow" />
       </Form.Item>
 
-      <Form.Item label="Target SLO in %" name="target_slo">
+      <Form.Item
+        label="Target SLO in %"
+        name="target_slo"
+        rules={[{ required: true, message: 'Please provide a target SLO' }]}
+      >
         <Input placeholder="Eg: 99.999" />
       </Form.Item>
 

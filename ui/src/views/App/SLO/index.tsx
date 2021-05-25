@@ -7,6 +7,7 @@ import useGetSLIs from '../../../core/hooks/useGetSLIs';
 import useGetSLO from '../../../core/hooks/useGetSLO';
 import { ISLO } from '../../../core/interfaces/ISLO';
 import Cards from './Cards';
+import SLITable from './SLITable';
 
 interface IProps {
   activeSLO: ISLO | null;
@@ -17,8 +18,8 @@ interface IProps {
 const { Title } = Typography;
 
 const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
-  const { SLIs } = useGetSLIs(activeSLO);
-  const { SLO } = useGetSLO(activeSLO);
+  const { SLIs, refreshSLIs } = useGetSLIs(activeSLO);
+  const { SLO, refreshSLO } = useGetSLO(activeSLO);
 
   if (props.SLOsLoading) {
     return <Loader marginTop="calc(100vh /3)" />;
@@ -52,6 +53,7 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
       </Row>
 
       <Cards SLO={SLO} />
+      <SLITable SLIs={SLIs} refreshSLIs={refreshSLIs} refreshSLO={refreshSLO} />
     </Col>
   );
 };
