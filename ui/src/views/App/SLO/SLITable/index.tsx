@@ -1,19 +1,13 @@
-import { Switch, Table, notification } from 'antd';
+import { Switch, Table } from 'antd';
 import React from 'react';
+import openNotification from '../../../../core/helpers/notification';
 import { IIncident } from '../../../../core/interfaces/IIncident';
 import IncidentService from '../../../../core/services/service.incident';
 
 interface IProps {
   SLIs: IIncident[];
-  refreshSLO: () => void;
-  refreshSLIs: () => void;
+  refreshSLOAndSLIs: (slo?: boolean, slis?: boolean) => void;
 }
-
-const openNotification = (type, message) => {
-  notification[type]({
-    description: message,
-  });
-};
 
 const tableColumns = (
   onMarkPositive: (state: boolean, sli: IIncident) => void
@@ -73,8 +67,7 @@ const SLITable: React.FC<IProps> = ({ SLIs, ...props }) => {
         state: sli.state,
         err_budget_spent: sli.err_budget_spent,
       });
-      props.refreshSLO();
-      props.refreshSLIs();
+      props.refreshSLOAndSLIs();
       openNotification('success', 'Incident updated successfully');
     } catch (err) {
       console.log(err);
@@ -84,7 +77,11 @@ const SLITable: React.FC<IProps> = ({ SLIs, ...props }) => {
 
   return (
     <div style={{ margin: '20px 0' }}>
-      <Table dataSource={tableData} columns={tableColumns(onMarkPositive)} />
+      <Table
+        dataSource={tableData}
+        columns={tableColumns(onMarkPositive)}
+        pagination={{ pageSize: 5 }}
+      />
     </div>
   );
 };

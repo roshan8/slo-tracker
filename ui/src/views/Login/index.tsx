@@ -1,16 +1,10 @@
 import React from 'react';
-import { Form, Input, Button, notification, Typography } from 'antd';
+import { Form, Input, Button, Typography } from 'antd';
 
 import './login.css';
+import openNotification from '../../core/helpers/notification';
 
 const { Title } = Typography;
-
-const openNotificationWithIcon = (type, message) => {
-  notification[type]({
-    description: message,
-  });
-};
-
 interface IProps {
   authenticateUser: (auth: boolean) => void;
 }
@@ -36,13 +30,10 @@ const LoginApp: React.FC<IProps> = (props) => {
     }
 
     if (isAuthenticated) {
-      openNotificationWithIcon('success', 'Successfully Logged in!');
+      openNotification('success', 'Successfully Logged in!');
       props.authenticateUser(true);
     } else {
-      openNotificationWithIcon(
-        'error',
-        'Please check your username / password'
-      );
+      openNotification('error', 'Please check your username / password');
       props.authenticateUser(false);
     }
   };

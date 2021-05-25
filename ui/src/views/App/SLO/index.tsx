@@ -1,5 +1,5 @@
 import { Button, Col, Row, Typography } from 'antd';
-import React from 'react';
+import React, { useState } from 'react';
 import { EditOutlined } from '@ant-design/icons';
 
 import Loader from '../../../components/Loader';
@@ -8,6 +8,7 @@ import useGetSLO from '../../../core/hooks/useGetSLO';
 import { ISLO } from '../../../core/interfaces/ISLO';
 import Cards from './Cards';
 import SLITable from './SLITable';
+import ReportDrawer from './ReportDrawer';
 
 interface IProps {
   activeSLO: ISLO | null;
@@ -20,6 +21,15 @@ const { Title } = Typography;
 const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
   const { SLIs, refreshSLIs } = useGetSLIs(activeSLO);
   const { SLO, refreshSLO } = useGetSLO(activeSLO);
+
+  const refreshSLOAndSLIs = (slo: boolean = true, slis: boolean = true) => {
+    if (slo) refreshSLO();
+    if (slis) refreshSLIs();
+  };
+
+  const [showReport, setShowReport] = useState(false);
+  const closeReport = () => setShowReport(false);
+  const openReport = () => setShowReport(true);
 
   if (props.SLOsLoading) {
     return <Loader marginTop="calc(100vh /3)" />;
@@ -49,11 +59,19 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
             />
           </div>
         </Row>
-        <Button type="primary">Report Incident</Button>
+        <Button type="primary" onClick={openReport}>
+          Report Incident
+        </Button>
       </Row>
 
       <Cards SLO={SLO} />
-      <SLITable SLIs={SLIs} refreshSLIs={refreshSLIs} refreshSLO={refreshSLO} />
+      <SLITable SLIs={SLIs} refreshSLOAndSLIs={refreshSLOAndSLIs} />
+      <ReportDrawer
+        show={showReport}
+        onClose={closeReport}
+        SLO={SLO}
+        refreshSLOAndSLIs={refreshSLOAndSLIs}
+      />
     </Col>
   );
 };

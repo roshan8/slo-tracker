@@ -1,17 +1,12 @@
 import React from 'react';
-import { Button, Form, Input, notification } from 'antd';
+import { Button, Form, Input } from 'antd';
 import SLOService from '../../../core/services/service.slo';
+import openNotification from '../../../core/helpers/notification';
 
 interface IProps {
   refreshSLOs: () => void;
   closeDrawer: () => void;
 }
-
-const openNotification = (type, message) => {
-  notification[type]({
-    description: message,
-  });
-};
 
 const CreateSLO: React.FC<IProps> = (props) => {
   const _sloService = new SLOService();

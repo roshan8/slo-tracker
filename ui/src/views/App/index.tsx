@@ -75,11 +75,11 @@ const AppView: React.FC = () => {
         <Sider
           breakpoint="lg"
           collapsedWidth="0"
-          className="app__layout-light_background"
+          className="app__layout-light_background app__layout_fixed_layout"
         >
           {renderSideBar()}
         </Sider>
-        <Content>
+        <Content className="app__layout_fixed_layout">
           <SLO
             activeSLO={activeSLO}
             SLOsLoading={loading}

@@ -1,19 +1,14 @@
 import React, { useEffect } from 'react';
-import { Button, Form, Input, notification } from 'antd';
+import { Button, Form, Input } from 'antd';
 import SLOService from '../../../core/services/service.slo';
 import { ISLO } from '../../../core/interfaces/ISLO';
+import openNotification from '../../../core/helpers/notification';
 
 interface IProps {
   refreshSLOs: () => void;
   closeDrawer: () => void;
   activeSLO: ISLO | null;
 }
-
-const openNotification = (type, message) => {
-  notification[type]({
-    description: message,
-  });
-};
 
 const UpdateSLO: React.FC<IProps> = (props) => {
   const _sloService = new SLOService();
