@@ -5,17 +5,23 @@ import { SLOCards } from './helpers';
 
 import './cards.css';
 
-interface IProps {
+export interface ICardData {
   SLO: ISLO;
+  falsePositives: number;
+  past30Days: number;
 }
 
-const Cards: React.FC<IProps> = ({ SLO }) => {
+interface IProps {
+  data: ICardData;
+}
+
+const Cards: React.FC<IProps> = ({ data }) => {
   return (
     <Row justify="space-between" className="SLO__cards_container">
       {SLOCards.map((card) => (
-        <Col lg={4} className="SLO__cards_card">
+        <Col className="SLO__cards_card">
           <h1>{card.title}</h1>
-          <div className="SLO__cards_card_content">{card.render(SLO)}</div>
+          <div className="SLO__cards_card_content">{card.render(data)}</div>
         </Col>
       ))}
     </Row>

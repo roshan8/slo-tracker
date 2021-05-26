@@ -1,31 +1,31 @@
 import { ReactChild } from 'react';
-import { ISLO } from '../../../../core/interfaces/ISLO';
+import { ICardData } from '.';
 
 interface ISLOCard {
   title: string;
-  render: (slo: ISLO) => ReactChild;
+  render: (data: ICardData) => ReactChild;
 }
 
 export const SLOCards: ISLOCard[] = [
   {
     title: 'Target',
-    render: (slo: ISLO) => <div>{slo.target_slo}%</div>,
+    render: ({ SLO }) => <div>{SLO.target_slo}%</div>,
   },
   {
     title: 'Your SLO',
-    render: (slo: ISLO) => <div>{slo.current_slo}%</div>,
+    render: ({ SLO }) => <div>{SLO.current_slo}%</div>,
   },
   {
     title: '30 Days Consumption',
-    render: (slo: ISLO) => <div>99.99%</div>,
+    render: ({ past30Days }) => <div>{past30Days} min</div>,
   },
   {
     title: 'Remaining Error Budget',
-    render: (slo: ISLO) => <div>{slo.remaining_err_budget} min</div>,
+    render: ({ SLO }) => <div>{SLO.remaining_err_budget} min</div>,
   },
   {
     title: 'SLO Burning Rate',
-    render: (slo: ISLO) => {
+    render: ({ SLO: slo }) => {
       const totalSecsInYear = 31536000;
       const downtimeInFraction = 1 - slo.target_slo / 100;
       const allottedErrBudgetInMin =
@@ -46,5 +46,9 @@ export const SLOCards: ISLOCard[] = [
 
       return <div style={{ color }}>{content}</div>;
     },
+  },
+  {
+    title: 'False Positives',
+    render: ({ falsePositives }) => <div>{falsePositives}</div>,
   },
 ];

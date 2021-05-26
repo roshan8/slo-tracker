@@ -1,4 +1,4 @@
-import { Button, Col, Row, Typography } from 'antd';
+import { Button, Col, Row, Tabs, Typography } from 'antd';
 import React, { useState } from 'react';
 import { EditOutlined } from '@ant-design/icons';
 
@@ -9,6 +9,9 @@ import { ISLO } from '../../../core/interfaces/ISLO';
 import Cards from './Cards';
 import SLITable from './SLITable';
 import ReportDrawer from './ReportDrawer';
+import useCalculateSLIs from '../../../core/hooks/useCalculateSLIs';
+
+const { TabPane } = Tabs;
 
 interface IProps {
   activeSLO: ISLO | null;
@@ -21,6 +24,12 @@ const { Title } = Typography;
 const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
   const { SLIs, refreshSLIs } = useGetSLIs(activeSLO);
   const { SLO, refreshSLO } = useGetSLO(activeSLO);
+  const {
+    incidentSummary,
+    errBudgetOverTime,
+    past30Days,
+    falsePositives,
+  } = useCalculateSLIs(SLIs);
 
   const refreshSLOAndSLIs = (slo: boolean = true, slis: boolean = true) => {
     if (slo) refreshSLO();
@@ -64,8 +73,22 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
         </Button>
       </Row>
 
-      <Cards SLO={SLO} />
-      <SLITable SLIs={SLIs} refreshSLOAndSLIs={refreshSLOAndSLIs} />
+      <Cards data={{ SLO, falsePositives, past30Days }} />
+
+      <Tabs defaultActiveKey="table">
+        <TabPane key="table" tab="Incidents">
+          <SLITable SLIs={SLIs} refreshSLOAndSLIs={refreshSLOAndSLIs} />
+        </TabPane>
+
+        <TabPane key="consumption_over_time" tab="Error consumption over time">
+          <h1>Error consumption over time</h1>
+        </TabPane>
+
+        <TabPane key="error_budget" tab="Error budget consumption">
+          <h1>Error budget consumption</h1>
+        </TabPane>
+      </Tabs>
+
       <ReportDrawer
         show={showReport}
         onClose={closeReport}

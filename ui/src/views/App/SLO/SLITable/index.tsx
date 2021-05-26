@@ -76,13 +76,11 @@ const SLITable: React.FC<IProps> = ({ SLIs, ...props }) => {
   };
 
   return (
-    <div style={{ margin: '20px 0' }}>
-      <Table
-        dataSource={tableData}
-        columns={tableColumns(onMarkPositive)}
-        pagination={{ pageSize: 5 }}
-      />
-    </div>
+    <Table
+      dataSource={tableData}
+      columns={tableColumns(onMarkPositive)}
+      pagination={{ pageSize: 5 }}
+    />
   );
 };
 
