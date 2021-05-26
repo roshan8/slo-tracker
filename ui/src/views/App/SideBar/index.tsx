@@ -4,6 +4,7 @@ import { Menu } from 'antd';
 import { ISLO } from '../../../core/interfaces/ISLO';
 
 import './sidebar.css';
+import PoweredBy from './poweredBy';
 
 interface IProps {
   SLOs: ISLO[];
@@ -19,11 +20,21 @@ const SideBar: React.FC<IProps> = ({ SLOs, activeSLOId, ...props }) => {
     if (selectedSLO.length) props.setActiveSlo(selectedSLO[0]);
   };
   return (
-    <Menu defaultSelectedKeys={[String(activeSLOId)]} onClick={onSLOSelect}>
-      {SLOs.map((slo) => (
-        <Menu.Item key={String(slo.id)}>{slo.slo_name}</Menu.Item>
-      ))}
-    </Menu>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        height: '100%',
+      }}
+    >
+      <Menu defaultSelectedKeys={[String(activeSLOId)]} onClick={onSLOSelect}>
+        {SLOs.map((slo) => (
+          <Menu.Item key={String(slo.id)}>{slo.slo_name}</Menu.Item>
+        ))}
+      </Menu>
+      <PoweredBy />
+    </div>
   );
 };
 

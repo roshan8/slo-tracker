@@ -1,5 +1,5 @@
 .SLO__cards_container {
-  margin: 24px 0 36px 0;
+  margin: 24px 0;
 }
 
 .SLO__cards_card {
@@ -7,6 +7,7 @@
   border-radius: 4px;
   padding: 10px 14px;
   flex: 1;
+  margin-bottom: 8px;
 }
 
 .SLO__cards_card h1 {
