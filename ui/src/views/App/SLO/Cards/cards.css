@@ -6,7 +6,7 @@
   background: #fff;
   border-radius: 4px;
   padding: 10px 14px;
-  width: 190px;
+  flex: 1;
 }
 
 .SLO__cards_card h1 {
@@ -17,5 +17,5 @@
 .SLO__cards_card_content {
   font-size: 20px;
   font-weight: 500;
-  color: green;
+  color: #50aa02;
 }

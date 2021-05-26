@@ -18,8 +18,15 @@ interface IProps {
 const Cards: React.FC<IProps> = ({ data }) => {
   return (
     <Row justify="space-between" className="SLO__cards_container">
-      {SLOCards.map((card) => (
-        <Col className="SLO__cards_card">
+      {SLOCards.map((card, idx) => (
+        <Col
+          className="SLO__cards_card"
+          key={card.title}
+          style={{
+            marginLeft: idx === 0 ? '0px' : '6px',
+            marginRight: idx === SLOCards.length - 1 ? '0px' : '6px',
+          }}
+        >
           <h1>{card.title}</h1>
           <div className="SLO__cards_card_content">{card.render(data)}</div>
         </Col>
