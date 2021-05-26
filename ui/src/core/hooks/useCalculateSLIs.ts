@@ -91,7 +91,6 @@ const useCalculateSLIs = (incidentList: IIncident[]) => {
     for (j = errBudgetArr.length - 1; j >= 0; j--) {
       totalErrBudget += errBudgetArr[j]['y'];
       errBudgetArr[j]['y'] = totalErrBudget;
-      console.log(totalErrBudget);
     }
 
     setErrBudgetOverTime(errBudgetArr);

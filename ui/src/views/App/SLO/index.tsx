@@ -11,6 +11,7 @@ import SLITable from './SLITable';
 import ReportDrawer from './ReportDrawer';
 import useCalculateSLIs from '../../../core/hooks/useCalculateSLIs';
 import ConsumptionGraph from './ConsumptionGraph';
+import ErrBudgetPie from './ErrBudgetPie';
 
 const { TabPane } = Tabs;
 
@@ -86,7 +87,7 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
         </TabPane>
 
         <TabPane key="error_budget" tab="Error budget consumption">
-          <h1>Error budget consumption</h1>
+          <ErrBudgetPie data={incidentSummary} />
         </TabPane>
       </Tabs>
 
