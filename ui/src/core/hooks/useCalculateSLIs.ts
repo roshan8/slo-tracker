@@ -75,7 +75,6 @@ const useCalculateSLIs = (incidentList: IIncident[]) => {
 
       // Add error budget if with 30 days
       const incidentDate = new Date(incidentList[i].created_at);
-      console.log(incidentDate, last30Days);
       if (incidentDate >= last30Days) {
         past30DaysConsumptions += incidentList[i].err_budget_spent;
       }
@@ -89,14 +88,12 @@ const useCalculateSLIs = (incidentList: IIncident[]) => {
 
     let totalErrBudget = 0,
       j = 0;
-    console.log(errBudgetArr.length);
     for (j = errBudgetArr.length - 1; j >= 0; j--) {
       totalErrBudget += errBudgetArr[j]['y'];
       errBudgetArr[j]['y'] = totalErrBudget;
       console.log(totalErrBudget);
     }
 
-    console.log(errBudgetArr);
     setErrBudgetOverTime(errBudgetArr);
   }, [incidentList]);
 

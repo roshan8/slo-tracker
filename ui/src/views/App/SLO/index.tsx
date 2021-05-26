@@ -10,6 +10,7 @@ import Cards from './Cards';
 import SLITable from './SLITable';
 import ReportDrawer from './ReportDrawer';
 import useCalculateSLIs from '../../../core/hooks/useCalculateSLIs';
+import ConsumptionGraph from './ConsumptionGraph';
 
 const { TabPane } = Tabs;
 
@@ -81,7 +82,7 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
         </TabPane>
 
         <TabPane key="consumption_over_time" tab="Error consumption over time">
-          <h1>Error consumption over time</h1>
+          <ConsumptionGraph data={errBudgetOverTime} />
         </TabPane>
 
         <TabPane key="error_budget" tab="Error budget consumption">
