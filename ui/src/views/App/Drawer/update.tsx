@@ -13,6 +13,7 @@ interface IProps {
 const UpdateSLO: React.FC<IProps> = (props) => {
   const _sloService = new SLOService();
   const [form] = Form.useForm();
+  let isChecked;
 
   const initialValues = props.activeSLO
     ? {
@@ -23,12 +24,16 @@ const UpdateSLO: React.FC<IProps> = (props) => {
 
   useEffect(() => form.resetFields(), [form, props.activeSLO]);
 
+
+  function onChange(e) {
+    isChecked = e.target.checked
+  }
+
   const onSubmit = async (values: any) => {
     if (!props.activeSLO) return;
 
     const slo_name = values['slo_name'];
     const target_slo = parseFloat(values['target_slo']);
-    const reset_slo = parseFloat(values['reset_slo']);
 
     if (target_slo < 1 || target_slo > 100) {
       openNotification('error', 'Target SLO should be between 1 to 100.');
@@ -39,7 +44,8 @@ const UpdateSLO: React.FC<IProps> = (props) => {
       await _sloService.update(props.activeSLO.slo_name, {
         slo_name,
         target_slo,
-      });
+      },
+      isChecked);
       props.refreshSLOs();
       openNotification('success', 'Successfully updated SLO');
       props.closeDrawer();
@@ -76,7 +82,7 @@ const UpdateSLO: React.FC<IProps> = (props) => {
       <Form.Item
         name="reset_slo"
       >
-        <Checkbox>
+        <Checkbox onChange={onChange}>
           Reset complete Error-budget
         </Checkbox>
       </Form.Item>

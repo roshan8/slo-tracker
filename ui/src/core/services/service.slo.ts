@@ -11,7 +11,7 @@ class SLOService {
   get = (sloId: string) => axios.get<IResponse<ISLO>>(`${this._api}/${sloId}`)
 
   create = (data: Pick<ISLO, 'slo_name' | 'target_slo'>) => axios.post<IResponse<ISLO>>(this._api, data);
-  update = (sloId: string, data: Pick<ISLO, 'slo_name' | 'target_slo'>) => axios.patch<IResponse<ISLO>>(`${this._api}/${sloId}`, data);
+  update = (sloId: string, data: Pick<ISLO, 'slo_name' | 'target_slo'>, isReset: boolean) => axios.patch<IResponse<ISLO>>(`${this._api}/${sloId}?isReset=${isReset}`, data);
 }
 
 export default SLOService;
