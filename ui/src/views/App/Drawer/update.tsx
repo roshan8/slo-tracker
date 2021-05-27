@@ -29,6 +29,11 @@ const UpdateSLO: React.FC<IProps> = (props) => {
     const slo_name = values['slo_name'];
     const target_slo = parseFloat(values['target_slo']);
 
+    if (target_slo < 1 || target_slo > 100) {
+      openNotification('error', 'Target SLO should be between 1 to 100.');
+      return;
+    }
+
     try {
       await _sloService.update(props.activeSLO.slo_name, {
         slo_name,
@@ -51,7 +56,7 @@ const UpdateSLO: React.FC<IProps> = (props) => {
       initialValues={initialValues}
     >
       <Form.Item
-        label="Product Name"
+        label="SLO Name"
         name="slo_name"
         rules={[{ required: true, message: 'Please give your SLO a name!' }]}
       >
