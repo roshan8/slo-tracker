@@ -29,5 +29,5 @@ func Init(r chi.Router) {
 func sloNameSubRoutes(r chi.Router) {
 	r.Method(http.MethodGet, "/", api.Handler(getSLOHandler))
 	r.Method(http.MethodPatch, "/", api.Handler(updateSLOHandler))
-	// r.Method(http.MethodDelete, "/", api.Handler(deleteSLOHandler))
+	r.Method(http.MethodDelete, "/", api.Handler(deleteSLOHandler))
 }

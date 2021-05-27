@@ -115,6 +115,14 @@ func (cs *SLOStore) Update(SLO *schema.SLO, update *schema.SLO) (*schema.SLO, *e
 	return SLO, nil
 }
 
+// Delete the SLO record..
+func (cs *SLOStore) Delete(SLO *schema.SLO) *errors.AppError {
+	if err := cs.DB.Delete(&SLO).Error; err != nil {
+		return errors.InternalServerStd().AddDebug(err)
+	}
+	return nil
+}
+
 // CutErrBudget subtract the downtime mins from error budget
 func (cs *SLOStore) CutErrBudget(SLOName string, downtimeInMins float32) *errors.AppError {
 

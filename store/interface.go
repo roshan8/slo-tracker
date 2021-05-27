@@ -10,7 +10,6 @@ import (
 type Store interface {
 	Incident() Incident
 	SLO() SLO
-	// TODO: add others
 }
 
 // Incident store interface expose the Incident db methods/operations
@@ -20,7 +19,6 @@ type Incident interface {
 	GetByID(incidentID uint) (*schema.Incident, *errors.AppError)
 	GetBySLIName(sliName string) (*schema.Incident, *errors.AppError)
 	Update(incident *schema.Incident, update *schema.Incident) (*schema.Incident, *errors.AppError)
-	// Delete(incidentID uint) *errors.AppError
 }
 
 // SLO store interface expose the SLO db methods/operations
@@ -30,5 +28,6 @@ type SLO interface {
 	GetByID(SLOID uint) (*schema.SLO, *errors.AppError)
 	GetByName(SLOName string) (*schema.SLO, *errors.AppError)
 	Update(SLO *schema.SLO, update *schema.SLO) (*schema.SLO, *errors.AppError)
+	Delete(SLO *schema.SLO) *errors.AppError
 	CutErrBudget(SLOName string, downtimeInMins float32) *errors.AppError
 }

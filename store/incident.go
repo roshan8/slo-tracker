@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// IncidentStore implements the cities interface
+// IncidentStore implements the incident interface
 type IncidentStore struct {
 	*Conn
 }
@@ -26,7 +26,6 @@ func (cs *IncidentStore) createTableIfNotExists() {
 			fmt.Println(err)
 		}
 	}
-
 }
 
 // All returns all the Incidents
