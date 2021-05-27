@@ -2,6 +2,7 @@ package slo
 
 import (
 	"net/http"
+	"strconv"
 
 	"slo-tracker/pkg/errors"
 	"slo-tracker/pkg/respond"
@@ -51,6 +52,8 @@ func getSLOHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 // Updates the slo
 func updateSLOHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 	var input schema.SLO
+	var isReset bool = true
+
 	ctx := r.Context()
 	slo, _ := ctx.Value("SLO").(*schema.SLO)
 
@@ -58,7 +61,16 @@ func updateSLOHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
-	input.RemainingErrBudget = utils.CalculateErrBudget(input.TargetSLO)
+	isReset, _ = strconv.ParseBool(r.URL.Query().Get("isReset"))
+
+	// Consider already spent error budget when isReset set to false
+	if isReset == true {
+		input.RemainingErrBudget = utils.CalculateErrBudget(input.TargetSLO)
+	} else {
+		alreadySpentErrBudget := utils.CalculateErrBudget(slo.TargetSLO) - slo.RemainingErrBudget
+		input.RemainingErrBudget = utils.CalculateErrBudget(input.TargetSLO) - alreadySpentErrBudget
+	}
+
 	updated, err := store.SLO().Update(slo, &input)
 	if err != nil {
 		return err

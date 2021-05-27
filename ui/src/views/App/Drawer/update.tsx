@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Form, Input } from 'antd';
+import { Button, Form, Input, Checkbox } from 'antd';
 import SLOService from '../../../core/services/service.slo';
 import { ISLO } from '../../../core/interfaces/ISLO';
 import openNotification from '../../../core/helpers/notification';
@@ -28,6 +28,7 @@ const UpdateSLO: React.FC<IProps> = (props) => {
 
     const slo_name = values['slo_name'];
     const target_slo = parseFloat(values['target_slo']);
+    const reset_slo = parseFloat(values['reset_slo']);
 
     if (target_slo < 1 || target_slo > 100) {
       openNotification('error', 'Target SLO should be between 1 to 100.');
@@ -55,13 +56,14 @@ const UpdateSLO: React.FC<IProps> = (props) => {
       form={form}
       initialValues={initialValues}
     >
-      <Form.Item
+
+      {/* <Form.Item
         label="SLO Name"
         name="slo_name"
         rules={[{ required: true, message: 'Please give your SLO a name!' }]}
       >
         <Input placeholder="Eg: Checkout Flow" />
-      </Form.Item>
+      </Form.Item> */}
 
       <Form.Item
         label="Target SLO in %"
@@ -69,6 +71,15 @@ const UpdateSLO: React.FC<IProps> = (props) => {
         rules={[{ required: true, message: 'Please provide a target SLO' }]}
       >
         <Input placeholder="Eg: 99.999" />
+      </Form.Item>
+
+      <Form.Item
+        label="SLO Reset"
+        name="reset_slo"
+      >
+        <Checkbox>
+          Reset complete Error-budget
+        </Checkbox>
       </Form.Item>
 
       <Form.Item>
