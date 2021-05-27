@@ -74,7 +74,6 @@ const UpdateSLO: React.FC<IProps> = (props) => {
       </Form.Item>
 
       <Form.Item
-        label="SLO Reset"
         name="reset_slo"
       >
         <Checkbox>
