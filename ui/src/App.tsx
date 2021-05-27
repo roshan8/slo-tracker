@@ -26,6 +26,7 @@ interface IIncidentList {
   sli_name: string;
   alertsource: string;
   state: string;
+  // slo_name: string;
   created_at: Date;
   err_budget_spent: number;
   mark_false_positive: boolean;
@@ -133,7 +134,7 @@ function App() {
       try {
         var isFalsePositive = (checked.mark_false_positive ? false : true)
         const incidentUpdateReq = await fetch(
-          `${API_URL}/api/v1/incident/${checked.id}`, {
+          `${API_URL}/api/v1/incident/Unnamed/${checked.id}`, {
             method: 'PATCH',
             body: JSON.stringify({       
               mark_false_positive: isFalsePositive,
@@ -161,10 +162,10 @@ function App() {
         try {
 
           const sloCreationReq = await fetch(
-            `${API_URL}/api/v1/slo/1`, {
+            `${API_URL}/api/v1/slo/Unnamed`, {
               method: 'PATCH',
               body: JSON.stringify({
-                product_name: values["productname"],
+                slo_name: values["sloname"],
                 target_slo: values["targetslo"],
               })
             }
@@ -197,7 +198,7 @@ function App() {
 
         <Form.Item
           label="Product name"
-          name="productname"
+          name="sloname"
           rules={[{ required: false }]}
         >
           <Input />
@@ -231,7 +232,7 @@ function App() {
         try {
 
           const incidentCreationReq = await fetch(
-            `${API_URL}/api/v1/incident/`, {
+            `${API_URL}/api/v1/incident/Unnamed/`, {
               method: 'POST',
               body: JSON.stringify({
                 sli_name: values["sliname"],
@@ -303,7 +304,12 @@ function App() {
       title: "Status",
       dataIndex: "state",
       key: "state",
-    },        
+    },
+    // {
+    //   title: "SLO",
+    //   dataIndex: "slo_name",
+    //   key: "slo_name",
+    // },            
     {
       title: "Alertsource",
       dataIndex: "alertsource",
@@ -331,7 +337,7 @@ function App() {
   const getIncidentApiCall = async () => {
     try {
       const incidentListResponse = await fetch(
-        `${API_URL}/api/v1/incident/`
+        `${API_URL}/api/v1/incident/Unnamed/`
       );
       const { data: incidentList } = await incidentListResponse.json();
       setInicidentList(
@@ -416,11 +422,11 @@ function App() {
   const getSLOApiCall = async () => {
     try {
       const SLOListResponse = await fetch(
-        `${API_URL}/api/v1/slo/1`
+        `${API_URL}/api/v1/slo/Unnamed`
       )
       .then(response => response.json())
       .then(response => {
-        console.log(response.data.product_name)
+        console.log(response.data.slo_name)
         setCurrentSLO(response.data.current_slo)
         setTargetSLO(response.data.target_slo)
         setRemainingErrBudget(response.data.remaining_err_budget)

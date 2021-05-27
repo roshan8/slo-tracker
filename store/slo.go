@@ -35,7 +35,7 @@ func (cs *SLOStore) createTableIfNotExists() {
 	// set their target SLO, patch calls will be made on this record
 	fmt.Println("Creating the first record!")
 	firstSLORecord := &schema.SLO{
-		ProductName:        "Unnamed",
+		SLOName:            "Unnamed",
 		TargetSLO:          100,
 		CurrentSLO:         100,
 		RemainingErrBudget: 0,
@@ -74,11 +74,28 @@ func (cs *SLOStore) GetByID(SLOID uint) (*schema.SLO, *errors.AppError) {
 	return &SLO, nil
 }
 
+// GetByName returns the matched record for the given slo_name
+func (cs *SLOStore) GetByName(SLOName string) (*schema.SLO, *errors.AppError) {
+	var SLO schema.SLO
+	if err := cs.DB.First(&SLO, "slo_name=?", SLOName).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, errors.BadRequest("invalid SLO name").AddDebug(err)
+		}
+		return nil, errors.InternalServerStd().AddDebug(err)
+	}
+
+	// calculate current slo based on RemainingErrBudget
+	totalDowntimeInSec := (apputils.CalculateErrBudget(SLO.TargetSLO) - SLO.RemainingErrBudget) * 60
+	SLO.CurrentSLO = ((31536000 - totalDowntimeInSec) / 31536000) * 100
+
+	return &SLO, nil
+}
+
 // Create a new SLO
 func (cs *SLOStore) Create(req *schema.SLO) (*schema.SLO, *errors.AppError) {
 
 	slo := &schema.SLO{
-		ProductName:        req.ProductName,
+		SLOName:            req.SLOName,
 		TargetSLO:          req.TargetSLO,
 		CurrentSLO:         req.CurrentSLO,
 		RemainingErrBudget: req.RemainingErrBudget,
@@ -99,9 +116,9 @@ func (cs *SLOStore) Update(SLO *schema.SLO, update *schema.SLO) (*schema.SLO, *e
 }
 
 // CutErrBudget subtract the downtime mins from error budget
-func (cs *SLOStore) CutErrBudget(downtimeInMins float32) *errors.AppError {
+func (cs *SLOStore) CutErrBudget(SLOName string, downtimeInMins float32) *errors.AppError {
 
-	sloRecord, err := cs.GetByID(1)
+	sloRecord, err := cs.GetByName(SLOName)
 
 	if err != nil {
 		return errors.InternalServerStd().AddDebug(err)

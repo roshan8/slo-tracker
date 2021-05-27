@@ -24,6 +24,10 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 
 		incident, _ := store.Incident().GetBySLIName(input.PolicyName)
 
+		// fetch the slo_name from context and add it to incident creation request
+		ctx := r.Context()
+		incident.SLOName, _ = ctx.Value("SLOName").(string)
+
 		fmt.Println("Creating new incident")
 		// There are no open incident for this SLI, creating new incident
 		if incident == nil || incident.State != "open" {
@@ -51,7 +55,7 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 		updated, _ := store.Incident().Update(incident, updatedIncident) // TODO: error handling
 
 		// deduct error budget with incident downtime
-		err = store.SLO().CutErrBudget(updatedIncident.ErrorBudgetSpent)
+		err = store.SLO().CutErrBudget(updated.SLOName, updatedIncident.ErrorBudgetSpent)
 
 		respond.Created(w, updated)
 

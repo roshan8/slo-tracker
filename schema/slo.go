@@ -7,7 +7,7 @@ import (
 // SLO stores the SLO response payload
 type SLO struct {
 	ID                 uint       `json:"id,omitempty" sql:"primary_key"`
-	ProductName        string     `json:"product_name"`
+	SLOName            string     `json:"slo_name" gorm:"unique;not null"`
 	TargetSLO          float32    `json:"target_slo"`
 	CurrentSLO         float32    `json:"current_slo"`
 	UpdatedAt          *time.Time `json:"updated_at,omitempty" sql:"default:current_timestamp"`

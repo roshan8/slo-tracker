@@ -6,6 +6,7 @@ import (
 	v1 "slo-tracker/api"
 	"slo-tracker/api/v1/incident"
 	"slo-tracker/api/v1/slo"
+	"slo-tracker/middleware"
 
 	"github.com/go-chi/chi"
 )
@@ -20,7 +21,12 @@ func Routes(r chi.Router) {
 
 // Init initializes all the v1 routes
 func Init(r chi.Router) {
-	r.Route("/incident", incident.Init)
+	// r.Route("/incident", incident.Init)
+
+	// ROUTE: {host}/v1/incident/SLOName/:incidentID/*
+	r.With(middleware.SLORequired).
+		Route("/incident/{SLOName:[a-zA-Z]+}", incident.Init) // TODO: Allow hyphen for sloname
+
 	r.Route("/slo", slo.Init)
 	// TODO: add remaining routes
 }

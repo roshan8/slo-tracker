@@ -30,9 +30,9 @@ func (cs *IncidentStore) createTableIfNotExists() {
 }
 
 // All returns all the Incidents
-func (cs *IncidentStore) All() ([]*schema.Incident, *errors.AppError) {
+func (cs *IncidentStore) All(SLOName string) ([]*schema.Incident, *errors.AppError) {
 	var Incidents []*schema.Incident
-	if err := cs.DB.Order("created_at desc").Find(&Incidents).Error; err != nil { // For displaying all the columns
+	if err := cs.DB.Order("created_at desc").Find(&Incidents, "slo_name=?", SLOName).Error; err != nil { // For displaying all the columns
 		// if err := cs.DB.Select("SliName, Alertsource, State, CreatedAt, ErrorBudgetSpent, MarkFalsePositive").Find(&Incidents).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)
 	}
@@ -71,6 +71,7 @@ func (cs *IncidentStore) Create(req *schema.IncidentReq) (*schema.Incident, *err
 
 	incident := &schema.Incident{
 		SliName:          req.SliName,
+		SLOName:          req.SLOName,
 		Alertsource:      req.Alertsource,
 		State:            req.State,
 		ErrorBudgetSpent: req.ErrorBudgetSpent,
@@ -88,11 +89,11 @@ func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incide
 	var err *errors.AppError
 
 	if incident.MarkFalsePositive == true && update.MarkFalsePositive == false {
-		err = cs.SLOConn.CutErrBudget(incident.ErrorBudgetSpent)
+		err = cs.SLOConn.CutErrBudget(incident.SLOName, incident.ErrorBudgetSpent)
 	}
 
 	if incident.MarkFalsePositive == false && update.MarkFalsePositive == true {
-		err = cs.SLOConn.CutErrBudget(-incident.ErrorBudgetSpent)
+		err = cs.SLOConn.CutErrBudget(incident.SLOName, -incident.ErrorBudgetSpent)
 	}
 
 	if err != nil {
