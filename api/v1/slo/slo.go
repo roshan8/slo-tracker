@@ -64,8 +64,10 @@ func updateSLOHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 	isReset, _ = strconv.ParseBool(r.URL.Query().Get("isReset"))
 
 	// Consider already spent error budget when isReset set to false
+	// If not, reset Error budget completely and delete past incidents
 	if isReset == true {
 		input.RemainingErrBudget = utils.CalculateErrBudget(input.TargetSLO)
+		store.IncidentConn.Delete(slo.SLOName)
 	} else {
 		alreadySpentErrBudget := utils.CalculateErrBudget(slo.TargetSLO) - slo.RemainingErrBudget
 		input.RemainingErrBudget = utils.CalculateErrBudget(input.TargetSLO) - alreadySpentErrBudget

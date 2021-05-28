@@ -19,6 +19,7 @@ type Incident interface {
 	GetByID(incidentID uint) (*schema.Incident, *errors.AppError)
 	GetBySLIName(sliName string) (*schema.Incident, *errors.AppError)
 	Update(incident *schema.Incident, update *schema.Incident) (*schema.Incident, *errors.AppError)
+	Delete(SLOName string) *errors.AppError
 }
 
 // SLO store interface expose the SLO db methods/operations

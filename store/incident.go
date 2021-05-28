@@ -109,3 +109,11 @@ func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incide
 
 	return incident, nil
 }
+
+// Deletes all the incidents matching SLOName field
+func (cs *IncidentStore) Delete(SLOName string) *errors.AppError {
+	if err := cs.DB.Delete(schema.Incident{}, "slo_name = ?", SLOName).Error; err != nil {
+		return errors.InternalServerStd().AddDebug(err)
+	}
+	return nil
+}
