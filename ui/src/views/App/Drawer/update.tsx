@@ -63,13 +63,13 @@ const UpdateSLO: React.FC<IProps> = (props) => {
       initialValues={initialValues}
     >
 
-      {/* <Form.Item
+      <Form.Item
         label="SLO Name"
         name="slo_name"
         rules={[{ required: true, message: 'Please give your SLO a name!' }]}
       >
         <Input placeholder="Eg: Checkout Flow" />
-      </Form.Item> */}
+      </Form.Item>
 
       <Form.Item
         label="Target SLO in %"
