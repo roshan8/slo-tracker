@@ -1,7 +1,7 @@
 export interface IIncident {
   id: number;
   sli_name: string;
-  slo_name: string;
+  slo_id: number;
   alertsource: string;
   state: string;
   created_at: Date;

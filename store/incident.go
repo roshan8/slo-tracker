@@ -53,9 +53,9 @@ func (cs *IncidentStore) GetByID(incidentID uint) (*schema.Incident, *errors.App
 }
 
 // GetBySLIName returns the matched record for the given SLI
-func (cs *IncidentStore) GetBySLIName(sliName string) (*schema.Incident, *errors.AppError) {
+func (cs *IncidentStore) GetBySLIName(sloID uint, sliName string) (*schema.Incident, *errors.AppError) {
 	var incident schema.Incident
-	if err := cs.DB.First(&incident, "state=? AND sli_name=?", "open", sliName).Error; err != nil {
+	if err := cs.DB.First(&incident, "state=? AND sli_name=? AND slo_id=?", "open", sliName, sloID).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.InternalServerStd().AddDebug(err)
 		}

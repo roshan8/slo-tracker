@@ -19,13 +19,13 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
+	// fetch the slo_id from context and add it to incident creation request
+	ctx := r.Context()
+	SLOID, _ := ctx.Value("SLOID").(uint)
+
 	if input.Status == "firing" {
 		for _, alert := range input.Alerts {
-			incident, _ := store.Incident().GetBySLIName(alert.Labels.Alertname)
-
-			// fetch the slo_id from context and add it to incident creation request
-			ctx := r.Context()
-			SLOID, _ := ctx.Value("SLOID").(uint)
+			incident, _ := store.Incident().GetBySLIName(SLOID, alert.Labels.Alertname)
 
 			// There are no open incident for this SLI, creating new incident
 			if incident == nil || incident.State != "open" {
@@ -44,7 +44,7 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 
 	if input.Status == "resolved" {
 		for _, alert := range input.Alerts {
-			incident, err := store.Incident().GetBySLIName(alert.Labels.Alertname)
+			incident, err := store.Incident().GetBySLIName(SLOID, alert.Labels.Alertname)
 
 			if err != nil {
 				fmt.Println("Continue with the next alert")

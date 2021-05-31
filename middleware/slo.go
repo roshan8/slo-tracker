@@ -29,7 +29,7 @@ func SLORequired(next http.Handler) http.Handler {
 		}
 
 		ctx := ContextWrapAll(r.Context(), map[interface{}]interface{}{
-			"SLOID": SLOID,
+			"SLOID": uint(SLOID),
 			"SLO":   SLO,
 		})
 		next.ServeHTTP(w, r.WithContext(ctx))

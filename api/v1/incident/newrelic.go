@@ -20,13 +20,13 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
+	// fetch the slo_id from context and add it to incident creation request
+	ctx := r.Context()
+	SLOID, _ := ctx.Value("SLOID").(uint)
+
 	if input.CurrentState == "open" {
 
-		incident, _ := store.Incident().GetBySLIName(input.PolicyName)
-
-		// fetch the slo_id from context and add it to incident creation request
-		ctx := r.Context()
-		SLOID, _ := ctx.Value("SLOID").(uint)
+		incident, _ := store.Incident().GetBySLIName(SLOID, input.PolicyName)
 
 		fmt.Println("Creating new incident")
 		// There are no open incident for this SLI, creating new incident
@@ -45,7 +45,7 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 
 	if input.CurrentState == "closed" {
 
-		incident, err := store.Incident().GetBySLIName(input.PolicyName)
+		incident, err := store.Incident().GetBySLIName(SLOID, input.PolicyName)
 		if err != nil {
 			return errors.BadRequest(err.Error()).AddDebug(err)
 		}

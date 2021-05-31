@@ -59,7 +59,7 @@ const SLITable: React.FC<IProps> = ({ SLIs, ...props }) => {
   }));
 
   const onMarkPositive = async (state: boolean, sli: IIncident) => {
-    const _incidentService = new IncidentService(sli.id);
+    const _incidentService = new IncidentService(sli.slo_id);
 
     try {
       await _incidentService.update(sli.id, {

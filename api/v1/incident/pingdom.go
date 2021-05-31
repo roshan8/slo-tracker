@@ -20,13 +20,13 @@ func createPingdomIncidentHandler(w http.ResponseWriter, r *http.Request) *error
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
+	// fetch the slo_id from context and add it to incident creation request
+	ctx := r.Context()
+	SLOID, _ := ctx.Value("SLOID").(uint)
+
 	if input.CurrentState == "DOWN" {
 
-		incident, _ := store.Incident().GetBySLIName(input.CheckName)
-
-		// fetch the slo_id from context and add it to incident creation request
-		ctx := r.Context()
-		SLOID, _ := ctx.Value("SLOID").(uint)
+		incident, _ := store.Incident().GetBySLIName(SLOID, input.CheckName)
 
 		fmt.Println("Creating new incident")
 		// There are no open incident for this SLI, creating new incident
@@ -45,7 +45,7 @@ func createPingdomIncidentHandler(w http.ResponseWriter, r *http.Request) *error
 
 	if input.CurrentState == "UP" {
 
-		incident, err := store.Incident().GetBySLIName(input.CheckName)
+		incident, err := store.Incident().GetBySLIName(SLOID, input.CheckName)
 		if err != nil {
 			return errors.BadRequest(err.Error()).AddDebug(err)
 		}

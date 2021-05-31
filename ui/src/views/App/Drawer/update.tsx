@@ -41,7 +41,7 @@ const UpdateSLO: React.FC<IProps> = (props) => {
     }
 
     try {
-      await _sloService.update(props.activeSLO.slo_name, {
+      await _sloService.update(props.activeSLO.id, {
         slo_name,
         target_slo,
       },
