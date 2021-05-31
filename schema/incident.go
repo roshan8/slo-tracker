@@ -11,7 +11,7 @@ import (
 type Incident struct {
 	ID                uint       `json:"id,omitempty" sql:"primary_key"`
 	SliName           string     `json:"sli_name"`
-	SLOName           string     `json:"slo_name"` // References SLO model
+	SLOID             uint       `json:"slo_id"` // References SLO model
 	Alertsource       string     `json:"alertsource"`
 	State             string     `json:"state"`
 	CreatedAt         *time.Time `json:"created_at,omitempty" sql:"default:current_timestamp"`
@@ -22,7 +22,7 @@ type Incident struct {
 // IncidentReq Schema stores the new incident creation/update request payload
 type IncidentReq struct {
 	SliName           string  `json:"sli_name"`
-	SLOName           string  `json:"slo_name"` // References SLO model
+	SLOID             uint    `json:"slo_id"` // References SLO model
 	Alertsource       string  `json:"alertsource"`
 	State             string  `json:"state"`
 	ErrorBudgetSpent  float32 `json:"err_budget_spent"`

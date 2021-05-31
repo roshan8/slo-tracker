@@ -24,9 +24,9 @@ func createDatadogIncidentHandler(w http.ResponseWriter, r *http.Request) *error
 
 		incident, _ := store.Incident().GetBySLIName(input.Title)
 
-		// fetch the slo_name from context and add it to incident creation request
+		// fetch the slo_id from context and add it to incident creation request
 		ctx := r.Context()
-		incident.SLOName, _ = ctx.Value("SLOName").(string)
+		SLOID, _ := ctx.Value("SLOID").(uint)
 
 		fmt.Println("Creating new incident")
 		// There are no open incident for this SLI, creating new incident
@@ -34,6 +34,7 @@ func createDatadogIncidentHandler(w http.ResponseWriter, r *http.Request) *error
 			fmt.Println("Existing incident not found, so creating one now")
 			incident, _ = store.Incident().Create(&schema.IncidentReq{
 				SliName:          input.Title,
+				SLOID:            SLOID,
 				Alertsource:      "Datadog",
 				State:            "open",
 				ErrorBudgetSpent: 0,
@@ -55,7 +56,7 @@ func createDatadogIncidentHandler(w http.ResponseWriter, r *http.Request) *error
 		updated, _ := store.Incident().Update(incident, updatedIncident) // TODO: error handling
 
 		// deduct error budget with incident downtime
-		err = store.SLO().CutErrBudget(updatedIncident.SLOName, updatedIncident.ErrorBudgetSpent)
+		err = store.SLO().CutErrBudget(updatedIncident.SLOID, updatedIncident.ErrorBudgetSpent)
 
 		respond.Created(w, updated)
 

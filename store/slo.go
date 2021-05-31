@@ -43,7 +43,7 @@ func (cs *SLOStore) createTableIfNotExists() {
 	if err := cs.DB.Save(firstSLORecord).Error; err != nil {
 		fmt.Println(errors.InternalServerStd().AddDebug(err))
 	}
-	fmt.Println("First SLO record got created")
+	fmt.Println("Default SLO record got created")
 }
 
 // All returns all the SLOs
@@ -124,9 +124,9 @@ func (cs *SLOStore) Delete(SLO *schema.SLO) *errors.AppError {
 }
 
 // CutErrBudget subtract the downtime mins from error budget
-func (cs *SLOStore) CutErrBudget(SLOName string, downtimeInMins float32) *errors.AppError {
+func (cs *SLOStore) CutErrBudget(SLOID uint, downtimeInMins float32) *errors.AppError {
 
-	sloRecord, err := cs.GetByName(SLOName)
+	sloRecord, err := cs.GetByID(SLOID)
 
 	if err != nil {
 		return errors.InternalServerStd().AddDebug(err)

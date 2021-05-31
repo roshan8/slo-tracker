@@ -18,7 +18,7 @@ const ReportDrawer: React.FC<IProps> = ({ show, onClose, ...props }) => {
     const sli_name = values['sli_name'];
     const err_budget_spent = parseFloat(values['err_budget']);
 
-    const _incidentService = new IncidentService(props.SLO.slo_name);
+    const _incidentService = new IncidentService(props.SLO.id);
 
     try {
       await _incidentService.create({

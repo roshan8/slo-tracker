@@ -22,11 +22,11 @@ func Init(r chi.Router) {
 	r.Method(http.MethodGet, "/", api.Handler(getAllSLOsHandler))
 	r.Method(http.MethodPost, "/", api.Handler(createSLOHandler))
 	r.With(middleware.SLORequired).
-		Route("/{SLOName}", sloNameSubRoutes)
+		Route("/{SLOID}", sloIDSubRoutes)
 }
 
-// ROUTE: {host}/v1/slo/:sloName/*
-func sloNameSubRoutes(r chi.Router) {
+// ROUTE: {host}/v1/slo/:sloID/*
+func sloIDSubRoutes(r chi.Router) {
 	r.Method(http.MethodGet, "/", api.Handler(getSLOHandler))
 	r.Method(http.MethodPatch, "/", api.Handler(updateSLOHandler))
 	r.Method(http.MethodDelete, "/", api.Handler(deleteSLOHandler))

@@ -8,7 +8,7 @@ class SLOService {
 
   all = () => axios.get<IResponse<ISLO[]>>(this._api);
 
-  get = (sloId: string) => axios.get<IResponse<ISLO>>(`${this._api}/${sloId}`)
+  get = (sloId: number) => axios.get<IResponse<ISLO>>(`${this._api}/${sloId}`)
 
   create = (data: Pick<ISLO, 'slo_name' | 'target_slo'>) => axios.post<IResponse<ISLO>>(this._api, data);
   update = (sloId: string, data: Pick<ISLO, 'slo_name' | 'target_slo'>, isReset: boolean) => axios.patch<IResponse<ISLO>>(`${this._api}/${sloId}?isReset=${isReset}`, data);

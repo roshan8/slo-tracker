@@ -14,7 +14,7 @@ const useGetSLIs = (slo: ISLO | null) => {
     setLoading(true);
     setError(null);
 
-    const _incidentService = new IncidentService(slo.slo_name);
+    const _incidentService = new IncidentService(slo.id);
 
     try {
       const response = await _incidentService.get();

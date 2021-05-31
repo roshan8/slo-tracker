@@ -6,7 +6,7 @@ import { IResponse } from "../interfaces/IResponse";
 class IncidentService {
   private _api = '';
 
-  constructor(SLOId: string) {
+  constructor(SLOId: number) {
     this._api = `${API}/api/v1/incident/${SLOId}`;
   }
 

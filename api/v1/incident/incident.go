@@ -13,11 +13,11 @@ import (
 // getAllIncidentsHandler fetches and unmarshal the incidentt data
 func getAllIncidentsHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 
-	// fetch the slo_name from contex
+	// fetch the slo_id from contex
 	ctx := r.Context()
-	SLOName, _ := ctx.Value("SLOName").(string)
+	SLOID, _ := ctx.Value("SLOID").(uint)
 
-	incidents, err := store.Incident().All(SLOName)
+	incidents, err := store.Incident().All(SLOID)
 	if err != nil {
 		return err
 	}
@@ -34,12 +34,12 @@ func createIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.AppEr
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
-	// fetch the slo_name from context and add it to incident creation request
+	// fetch the slo_id from context and add it to incident creation request
 	ctx := r.Context()
-	input.SLOName, _ = ctx.Value("SLOName").(string)
+	input.SLOID, _ = ctx.Value("SLOID").(uint)
 
 	// deduct error budget with incident downtime
-	err := store.SLO().CutErrBudget(input.SLOName, input.ErrorBudgetSpent)
+	err := store.SLO().CutErrBudget(input.SLOID, input.ErrorBudgetSpent)
 	if err != nil {
 		fmt.Println("Unable to deduct error budget for the incident")
 	}

@@ -16,7 +16,7 @@ const useGetSLO = (activeSLO: ISLO | null) => {
     setError(null);
 
     try {
-      const response = await _sloService.get(activeSLO.slo_name);
+      const response = await _sloService.get(activeSLO.id);
       setSLO(response.data.data);
     } catch (err) {
       console.log(err)
