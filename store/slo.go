@@ -35,8 +35,8 @@ func (cs *SLOStore) createTableIfNotExists() {
 	// set their target SLO, patch calls will be made on this record
 	fmt.Println("Creating the first record!")
 	firstSLORecord := &schema.SLO{
-		SLOName:            "Unnamed",
-		TargetSLO:          100,
+		SLOName:            "Default",
+		TargetSLO:          99.99,
 		CurrentSLO:         100,
 		RemainingErrBudget: 0,
 	}

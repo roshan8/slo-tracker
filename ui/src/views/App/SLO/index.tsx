@@ -50,7 +50,7 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
     return (
       <div style={{ textAlign: 'center', margin: '150px 20px' }}>
         <p style={{ fontSize: 20, fontWeight: 500 }}>
-          Please select a SLO to get your SLIs
+          Get started by creating your first SLO!
         </p>
       </div>
     );
