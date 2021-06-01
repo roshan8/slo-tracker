@@ -21,10 +21,8 @@ func Routes(r chi.Router) {
 
 // Init initializes all the v1 routes
 func Init(r chi.Router) {
-
 	// ROUTE: {host}/v1/incident/SLOID/:incidentID/*
 	r.With(middleware.SLORequired).
 		Route("/incident/{SLOID}", incident.Init)
-
 	r.Route("/slo", slo.Init)
 }

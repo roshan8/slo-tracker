@@ -28,6 +28,10 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 
 		incident, _ := store.Incident().GetBySLIName(SLOID, input.PolicyName)
 
+		// fetch the slo_name from context and add it to incident creation request
+		ctx := r.Context()
+		incident.SLOName, _ = ctx.Value("SLOName").(string)
+
 		fmt.Println("Creating new incident")
 		// There are no open incident for this SLI, creating new incident
 		if incident == nil || incident.State != "open" {
