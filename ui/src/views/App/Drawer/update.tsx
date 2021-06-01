@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Button, Form, Input, Checkbox } from 'antd';
+import { Button, Form, Input, Checkbox, Row, Popconfirm } from 'antd';
 import SLOService from '../../../core/services/service.slo';
 import { ISLO } from '../../../core/interfaces/ISLO';
 import openNotification from '../../../core/helpers/notification';
@@ -24,9 +24,8 @@ const UpdateSLO: React.FC<IProps> = (props) => {
 
   useEffect(() => form.resetFields(), [form, props.activeSLO]);
 
-
   function onChange(e) {
-    isChecked = e.target.checked
+    isChecked = e.target.checked;
   }
 
   const onSubmit = async (values: any) => {
@@ -41,17 +40,36 @@ const UpdateSLO: React.FC<IProps> = (props) => {
     }
 
     try {
-      await _sloService.update(props.activeSLO.id, {
-        slo_name,
-        target_slo,
-      },
-      isChecked);
+      await _sloService.update(
+        props.activeSLO.id,
+        {
+          slo_name,
+          target_slo,
+        },
+        isChecked
+      );
       props.refreshSLOs();
       openNotification('success', 'Successfully updated SLO');
       props.closeDrawer();
       form.resetFields();
     } catch (err) {
       openNotification('error', 'Error while updating SLO. Please try again.');
+    }
+  };
+
+  const onConfirmDelete = async () => {
+    if (!props.activeSLO) return;
+
+    try {
+      await _sloService.delete(props.activeSLO.id);
+
+      props.refreshSLOs();
+      openNotification('success', 'Successfully Deleted SLO');
+      props.closeDrawer();
+      form.resetFields();
+    } catch (err) {
+      console.log(err);
+      openNotification('error', 'Error while deleting SLO. Please try again.');
     }
   };
 
@@ -62,7 +80,6 @@ const UpdateSLO: React.FC<IProps> = (props) => {
       form={form}
       initialValues={initialValues}
     >
-
       <Form.Item
         label="SLO Name"
         name="slo_name"
@@ -79,18 +96,24 @@ const UpdateSLO: React.FC<IProps> = (props) => {
         <Input placeholder="Eg: 99.999" />
       </Form.Item>
 
-      <Form.Item
-        name="reset_slo"
-      >
-        <Checkbox onChange={onChange}>
-          Reset complete Error-budget
-        </Checkbox>
+      <Form.Item name="reset_slo">
+        <Checkbox onChange={onChange}>Reset complete Error-budget</Checkbox>
       </Form.Item>
 
       <Form.Item>
-        <Button style={{ float: 'right' }} type="primary" htmlType="submit">
-          Update SLO
-        </Button>
+        <Row style={{ justifyContent: 'space-between' }}>
+          <Button type="primary" htmlType="submit">
+            Update SLO
+          </Button>
+          <Popconfirm
+            title="Are you sure you want to delete this SLO?"
+            okText="Yes. Delete SLO"
+            placement="topRight"
+            onConfirm={onConfirmDelete}
+          >
+            <Button danger>Delete SLO</Button>
+          </Popconfirm>
+        </Row>
       </Form.Item>
     </Form>
   );

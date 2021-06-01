@@ -84,13 +84,12 @@ func updateSLOHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
 
 // Deletes the slo
 func deleteSLOHandler(w http.ResponseWriter, r *http.Request) *errors.AppError {
-	var input schema.SLO
 	ctx := r.Context()
 	slo, _ := ctx.Value("SLO").(*schema.SLO)
 
-	if err := utils.Decode(r, &input); err != nil {
-		return errors.BadRequest(err.Error()).AddDebug(err)
-	}
+	// if err := utils.Decode(r, &input); err != nil {
+	// 	return errors.BadRequest(err.Error()).AddDebug(err)
+	// }
 
 	if err := store.SLO().Delete(slo); err != nil {
 		return errors.InternalServerStd().AddDebug(err)

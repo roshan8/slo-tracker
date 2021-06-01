@@ -37,7 +37,7 @@ export const SLOCards: ISLOCard[] = [
       const errBudgetAllowed = (allottedErrBudgetInMin / 12) * month_raw;
 
       let content = 'Healthy';
-      let color = '#50aa020';
+      let color = '#50aa02';
 
       if (errBudgetSpent > errBudgetAllowed) {
         content = 'Critical';

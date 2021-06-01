@@ -31,6 +31,11 @@ const AppView: React.FC = () => {
 
     if (!activeSLO) return;
 
+    // Reset activeSLO to first if no activeSLO is not part of SLOs
+    // Used to reset on delete SLO
+    if (!SLOs.some((s) => s.id === activeSLO.id))
+      setActiveSLO(SLOs.length ? SLOs[0] : null);
+
     // Update active SLO when slos change
     const activeSLOsArray = SLOs.filter((s) => s.id === activeSLO.id);
     const newActiveSLO = activeSLOsArray[0];
