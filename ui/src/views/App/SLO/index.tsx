@@ -1,6 +1,6 @@
 import { Button, Col, Row, Tabs, Typography } from 'antd';
 import React, { useState } from 'react';
-import { EditOutlined } from '@ant-design/icons';
+import { EditOutlined, AlertOutlined } from '@ant-design/icons';
 
 import Loader from '../../../components/Loader';
 import useGetSLIs from '../../../core/hooks/useGetSLIs';
@@ -12,6 +12,7 @@ import ReportDrawer from './ReportDrawer';
 import useCalculateSLIs from '../../../core/hooks/useCalculateSLIs';
 import ConsumptionGraph from './ConsumptionGraph';
 import ErrBudgetPie from './ErrBudgetPie';
+import AlertSourcesModal from './AlertSources';
 
 const { TabPane } = Tabs;
 
@@ -42,6 +43,10 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
   const closeReport = () => setShowReport(false);
   const openReport = () => setShowReport(true);
 
+  const [alertSourceModal, setAlertSourceModal] = useState(false);
+  const openAlertSourceModal = () => setAlertSourceModal(true);
+  const closeAlertSourceModal = () => setAlertSourceModal(false);
+
   if (props.SLOsLoading) {
     return <Loader marginTop="calc(100vh /3)" />;
   }
@@ -70,9 +75,15 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
             />
           </div>
         </Row>
-        <Button type="primary" onClick={openReport}>
-          Report Incident
-        </Button>
+        <Row>
+          <Button style={{ marginRight: 24 }} onClick={openAlertSourceModal}>
+            <AlertOutlined />
+            Alert Sources
+          </Button>
+          <Button type="primary" onClick={openReport}>
+            Report Incident
+          </Button>
+        </Row>
       </Row>
 
       <Cards data={{ SLO, falsePositives, past30Days }} />
@@ -90,6 +101,12 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
           <ErrBudgetPie data={incidentSummary} />
         </TabPane>
       </Tabs>
+
+      <AlertSourcesModal
+        show={alertSourceModal}
+        close={closeAlertSourceModal}
+        SLO={SLO}
+      />
 
       <ReportDrawer
         show={showReport}

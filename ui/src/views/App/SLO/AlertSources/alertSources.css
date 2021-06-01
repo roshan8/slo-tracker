@@ -1,0 +1,27 @@
+.alert_sources_modal__container {
+  display: grid;
+  grid-template-columns: 200px auto;
+  grid-template-areas: 'listing copy_column';
+}
+
+.alert_sources_modal__listing {
+  grid-area: listing;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+  max-height: 300px;
+  border: 1px solid #b6bcc8;
+  margin-right: 8px;
+  border-radius: 4px;
+  overflow-y: auto;
+}
+
+.alert_sources_modal__copy_column {
+  grid-area: copy_column;
+  height: 100%;
+  margin: 0 20px;
+}
+
+.alert_sources_modal__copy_column h2 {
+  font-size: 20px;
+}
