@@ -1,4 +1,4 @@
-import { Button, Modal } from 'antd';
+import { Button, Input, Modal } from 'antd';
 import React, { useState } from 'react';
 import Copyable from '../../../../components/Copyable';
 import { IAlertSource } from '../../../../core/interfaces/IAlertSource';
@@ -16,6 +16,12 @@ interface IProps {
 
 const AlertSourcesModal: React.FC<IProps> = ({ show, close, SLO }) => {
   const [activeAlert, setActiveAlert] = useState<IAlertSource>(alertSources[0]);
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const onSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const query = event.target.value;
+    setSearchQuery(query);
+  };
 
   return (
     <Modal
@@ -30,18 +36,32 @@ const AlertSourcesModal: React.FC<IProps> = ({ show, close, SLO }) => {
         <h1>{SLO.slo_name}</h1>
         <div className="alert_sources_modal__container">
           <div className="alert_sources_modal__listing">
-            {alertSources.map((alertSource) => (
-              <Button
-                type="text"
-                style={{
-                  textAlign: 'left',
-                  fontWeight: 500,
-                }}
-                onClick={() => setActiveAlert(alertSource)}
-              >
-                {alertSource.name}
-              </Button>
-            ))}
+            <Input
+              placeholder="Search"
+              value={searchQuery}
+              onChange={onSearch}
+              style={{
+                margin: '12px',
+                width: '168px',
+              }}
+              autoFocus
+            />
+            {alertSources
+              .filter((al) =>
+                al.name.toLowerCase().includes(searchQuery.toLowerCase())
+              )
+              .map((alertSource) => (
+                <Button
+                  type="text"
+                  style={{
+                    textAlign: 'left',
+                    fontWeight: 500,
+                  }}
+                  onClick={() => setActiveAlert(alertSource)}
+                >
+                  {alertSource.name}
+                </Button>
+              ))}
           </div>
           <div className="alert_sources_modal__copy_column">
             <h2>{activeAlert.name} Webhook URL</h2>
