@@ -27,10 +27,6 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 		for _, alert := range input.Alerts {
 			incident, _ := store.Incident().GetBySLIName(SLOID, alert.Labels.Alertname)
 
-			// fetch the slo_name from context and add it to incident creation request
-			ctx := r.Context()
-			incident.SLOName, _ = ctx.Value("SLOName").(string)
-
 			// There are no open incident for this SLI, creating new incident
 			if incident == nil || incident.State != "open" {
 				fmt.Println("Existing incident not found, so creating one now")

@@ -36,7 +36,7 @@ func (cs *SLOStore) createTableIfNotExists() {
 	fmt.Println("Creating the first record!")
 	firstSLORecord := &schema.SLO{
 		SLOName:            "Default",
-		TargetSLO:          99.99,
+		TargetSLO:          100,
 		CurrentSLO:         100,
 		RemainingErrBudget: 0,
 	}

@@ -1,8 +1,11 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
+	"slo-tracker/pkg/errors"
 	"slo-tracker/pkg/respond"
+	"strconv"
 
 	"github.com/go-chi/chi"
 )
@@ -18,7 +21,7 @@ func SLORequired(next http.Handler) http.Handler {
 			return
 		}
 
-		SLO, err := Store.SLO().GetByName(SLONameStr)
+		SLO, err := Store.SLO().GetByID(uint(SLOID))
 		if err != nil {
 			fmt.Println(err, SLO)
 			respond.Fail(w, errors.BadRequest("Unable to find SLO").AddDebug(err))
@@ -26,8 +29,8 @@ func SLORequired(next http.Handler) http.Handler {
 		}
 
 		ctx := ContextWrapAll(r.Context(), map[interface{}]interface{}{
-			"SLOName": string(SLONameStr),
-			"SLO":     SLO,
+			"SLOID": uint(SLOID),
+			"SLO":   SLO,
 		})
 		next.ServeHTTP(w, r.WithContext(ctx))
 	}
