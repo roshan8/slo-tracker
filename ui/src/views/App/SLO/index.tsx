@@ -11,7 +11,7 @@ import SLITable from './SLITable';
 import ReportDrawer from './ReportDrawer';
 import useCalculateSLIs from '../../../core/hooks/useCalculateSLIs';
 import ConsumptionGraph from './ConsumptionGraph';
-import ErrBudgetPie from './ErrBudgetPie';
+import ErrBudgetBar from './ErrBudgetBar'
 import AlertSourcesModal from './AlertSources';
 
 const { TabPane } = Tabs;
@@ -87,7 +87,7 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
       </Row>
 
       <Cards data={{ SLO, falsePositives, past30Days }} />
-
+      <ErrBudgetBar data={incidentSummary}/>
       <Tabs defaultActiveKey="table">
         <TabPane key="table" tab="Incidents">
           <SLITable SLIs={SLIs} refreshSLOAndSLIs={refreshSLOAndSLIs} />
@@ -95,10 +95,6 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
 
         <TabPane key="consumption_over_time" tab="Error consumption over time">
           <ConsumptionGraph data={errBudgetOverTime} />
-        </TabPane>
-
-        <TabPane key="error_budget" tab="Error budget consumption">
-          <ErrBudgetPie data={incidentSummary} />
         </TabPane>
       </Tabs>
 
