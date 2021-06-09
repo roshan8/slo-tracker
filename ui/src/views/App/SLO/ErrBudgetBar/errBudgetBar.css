@@ -1,5 +1,5 @@
 .multi-progress-bar {
-	height: 8px;
+	height: auto;
 	width: auto;
 }
 
@@ -15,7 +15,7 @@
 
 .multi-progress-bar .bars .bar {
 	float: left;
-	height: 5px;
+	height: 8px;
 }
 
 .multi-progress-bar .bars:hover + .vals {

@@ -87,7 +87,19 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
       </Row>
 
       <Cards data={{ SLO, falsePositives, past30Days }} />
-      <ErrBudgetBar data={incidentSummary} sli={SLIs}/>
+
+      {incidentSummary.length 
+      ? 
+        <Row className="SLO__cards_container">
+          <Col className="SLO__cards_card">
+            <ErrBudgetBar data={incidentSummary} sli={SLIs}/>
+          </Col>
+        </Row>
+      : 
+        <></>
+      }
+      
+
       <Tabs defaultActiveKey="table">
         <TabPane key="table" tab="Incidents">
           <SLITable SLIs={SLIs} refreshSLOAndSLIs={refreshSLOAndSLIs} />
