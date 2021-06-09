@@ -1,8 +1,6 @@
 .multi-progress-bar {
 	height: 8px;
-	width: 700%;
-	display: block;
-	margin: 50px auto;
+	width: 70em;
 }
 
 .multi-progress-bar .vals .value {
