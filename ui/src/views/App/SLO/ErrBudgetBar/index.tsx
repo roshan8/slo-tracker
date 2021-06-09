@@ -41,10 +41,7 @@ const ErrBudgetBar: React.FC<IProps> = ({ data, sli}) => {
 		const w = (val.value / sum) * 100;
 		const popoverContent = (
 			<>
-				<span className="dot" style={{ color: colors[i], fontSize: 25, marginLeft: "10px" , marginRight: "5px"}}>
-					●
-				</span>
-				<span className="label" style={{marginRight: "10px"}}>
+				<span className="label">
 					{val.label}
 				</span>
 				<div className="perc" style={{fontWeight: 500}}>
