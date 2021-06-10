@@ -1,6 +1,7 @@
 import React from "react";
 import { Popover } from "antd";
 import { IIncident, IIncidentSummary } from "../../../../core/interfaces/IIncident";
+import colors from "../../../../core/helpers/colors"
 
 import "./errBudgetBar.css";
 interface IProps {
@@ -10,12 +11,8 @@ interface IProps {
 
 
 const ErrBudgetBar: React.FC<IProps> = ({ data, sli}) => {
-	let sum = 0, k: number;
+	let sum = 0 ;
 	let counts = {};
-	let colors = {};
-	for(k=0; k< 50; k++){
-		colors[k] = `hsla(${k * 36}, 100%, 50%, 1)`;
-	}
 	data.forEach((x) => {
 		sum += x.value;
 	});
