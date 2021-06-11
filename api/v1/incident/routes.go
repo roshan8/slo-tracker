@@ -29,7 +29,6 @@ func Init(r chi.Router) {
 func incidentIDSubRoutes(r chi.Router) {
 	r.Method(http.MethodGet, "/", api.Handler(getIncidentHandler))
 	r.Method(http.MethodPatch, "/", api.Handler(updateIncidentHandler))
-	// r.Method(http.MethodDelete, "/", api.Handler(deleteIncidentHandler))
 }
 
 func webhookSubRoutes(r chi.Router) {

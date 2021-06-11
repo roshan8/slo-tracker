@@ -19,19 +19,20 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
+	// fetch the slo_id from context and add it to incident creation request
+	ctx := r.Context()
+	SLOID, _ := ctx.Value("SLOID").(uint)
+
 	if input.Status == "firing" {
 		for _, alert := range input.Alerts {
-			incident, _ := store.Incident().GetBySLIName(alert.Labels.Alertname)
-
-			// fetch the slo_name from context and add it to incident creation request
-			ctx := r.Context()
-			incident.SLOName, _ = ctx.Value("SLOName").(string)
+			incident, _ := store.Incident().GetBySLIName(SLOID, alert.Labels.Alertname)
 
 			// There are no open incident for this SLI, creating new incident
 			if incident == nil || incident.State != "open" {
 				fmt.Println("Existing incident not found, so creating one now")
 				incident, _ = store.Incident().Create(&schema.IncidentReq{
 					SliName:          alert.Labels.Alertname,
+					SLOID:            SLOID,
 					Alertsource:      "Prometheus",
 					State:            "open",
 					ErrorBudgetSpent: 0,
@@ -43,7 +44,7 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 
 	if input.Status == "resolved" {
 		for _, alert := range input.Alerts {
-			incident, err := store.Incident().GetBySLIName(alert.Labels.Alertname)
+			incident, err := store.Incident().GetBySLIName(SLOID, alert.Labels.Alertname)
 
 			if err != nil {
 				fmt.Println("Continue with the next alert")
@@ -57,7 +58,7 @@ func createPromIncidentHandler(w http.ResponseWriter, r *http.Request) *errors.A
 			updated, _ := store.Incident().Update(incident, updatedIncident) // TODO: error handling
 
 			// deduct error budget with incident downtime
-			err = store.SLO().CutErrBudget(updatedIncident.SLOName, updatedIncident.ErrorBudgetSpent)
+			err = store.SLO().CutErrBudget(updatedIncident.SLOID, updatedIncident.ErrorBudgetSpent)
 
 			respond.Created(w, updated)
 		}

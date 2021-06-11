@@ -8,7 +8,7 @@ import (
 	"gorm.io/gorm"
 )
 
-// IncidentStore implements the cities interface
+// IncidentStore implements the incident interface
 type IncidentStore struct {
 	*Conn
 }
@@ -26,13 +26,12 @@ func (cs *IncidentStore) createTableIfNotExists() {
 			fmt.Println(err)
 		}
 	}
-
 }
 
 // All returns all the Incidents
-func (cs *IncidentStore) All(SLOName string) ([]*schema.Incident, *errors.AppError) {
+func (cs *IncidentStore) All(SLOID uint) ([]*schema.Incident, *errors.AppError) {
 	var Incidents []*schema.Incident
-	if err := cs.DB.Order("created_at desc").Find(&Incidents, "slo_name=?", SLOName).Error; err != nil { // For displaying all the columns
+	if err := cs.DB.Order("created_at desc").Find(&Incidents, "slo_id=?", SLOID).Error; err != nil { // For displaying all the columns
 		// if err := cs.DB.Select("SliName, Alertsource, State, CreatedAt, ErrorBudgetSpent, MarkFalsePositive").Find(&Incidents).Error; err != nil {
 		return nil, errors.InternalServerStd().AddDebug(err)
 	}
@@ -54,9 +53,9 @@ func (cs *IncidentStore) GetByID(incidentID uint) (*schema.Incident, *errors.App
 }
 
 // GetBySLIName returns the matched record for the given SLI
-func (cs *IncidentStore) GetBySLIName(sliName string) (*schema.Incident, *errors.AppError) {
+func (cs *IncidentStore) GetBySLIName(sloID uint, sliName string) (*schema.Incident, *errors.AppError) {
 	var incident schema.Incident
-	if err := cs.DB.First(&incident, "state=? AND sli_name=?", "open", sliName).Error; err != nil {
+	if err := cs.DB.First(&incident, "state=? AND sli_name=? AND slo_id=?", "open", sliName, sloID).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
 			return nil, errors.InternalServerStd().AddDebug(err)
 		}
@@ -71,7 +70,7 @@ func (cs *IncidentStore) Create(req *schema.IncidentReq) (*schema.Incident, *err
 
 	incident := &schema.Incident{
 		SliName:          req.SliName,
-		SLOName:          req.SLOName,
+		SLOID:            req.SLOID,
 		Alertsource:      req.Alertsource,
 		State:            req.State,
 		ErrorBudgetSpent: req.ErrorBudgetSpent,
@@ -89,11 +88,11 @@ func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incide
 	var err *errors.AppError
 
 	if incident.MarkFalsePositive == true && update.MarkFalsePositive == false {
-		err = cs.SLOConn.CutErrBudget(incident.SLOName, incident.ErrorBudgetSpent)
+		err = cs.SLOConn.CutErrBudget(incident.SLOID, incident.ErrorBudgetSpent)
 	}
 
 	if incident.MarkFalsePositive == false && update.MarkFalsePositive == true {
-		err = cs.SLOConn.CutErrBudget(incident.SLOName, -incident.ErrorBudgetSpent)
+		err = cs.SLOConn.CutErrBudget(incident.SLOID, -incident.ErrorBudgetSpent)
 	}
 
 	if err != nil {
@@ -109,4 +108,12 @@ func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incide
 	}
 
 	return incident, nil
+}
+
+// Deletes all the incidents matching SLOID field
+func (cs *IncidentStore) Delete(SLOID uint) *errors.AppError {
+	if err := cs.DB.Delete(schema.Incident{}, "slo_id = ?", SLOID).Error; err != nil {
+		return errors.InternalServerStd().AddDebug(err)
+	}
+	return nil
 }

@@ -1,0 +1,17 @@
+.ant-menu-item-selected {
+  border-left: 2px solid var(--antd-wave-shadow-color);
+  color: #000000 !important;
+  font-weight: 500;
+}
+
+.ant-menu-item {
+  background-color: #f8f8f8;
+  margin: 0 !important;
+  height: 52px !important;
+  line-height: 52px !important;
+  border-bottom: 1px solid #e4e7eb;
+}
+
+.ant-menu-item:hover {
+  color: #000000 !important;
+}

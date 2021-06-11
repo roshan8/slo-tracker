@@ -35,7 +35,7 @@ func (cs *SLOStore) createTableIfNotExists() {
 	// set their target SLO, patch calls will be made on this record
 	fmt.Println("Creating the first record!")
 	firstSLORecord := &schema.SLO{
-		SLOName:            "Unnamed",
+		SLOName:            "Default",
 		TargetSLO:          100,
 		CurrentSLO:         100,
 		RemainingErrBudget: 0,
@@ -43,7 +43,7 @@ func (cs *SLOStore) createTableIfNotExists() {
 	if err := cs.DB.Save(firstSLORecord).Error; err != nil {
 		fmt.Println(errors.InternalServerStd().AddDebug(err))
 	}
-	fmt.Println("First SLO record got created")
+	fmt.Println("Default SLO record got created")
 }
 
 // All returns all the SLOs
@@ -115,10 +115,18 @@ func (cs *SLOStore) Update(SLO *schema.SLO, update *schema.SLO) (*schema.SLO, *e
 	return SLO, nil
 }
 
-// CutErrBudget subtract the downtime mins from error budget
-func (cs *SLOStore) CutErrBudget(SLOName string, downtimeInMins float32) *errors.AppError {
+// Delete the SLO record..
+func (cs *SLOStore) Delete(SLO *schema.SLO) *errors.AppError {
+	if err := cs.DB.Delete(&SLO).Error; err != nil {
+		return errors.InternalServerStd().AddDebug(err)
+	}
+	return nil
+}
 
-	sloRecord, err := cs.GetByName(SLOName)
+// CutErrBudget subtract the downtime mins from error budget
+func (cs *SLOStore) CutErrBudget(SLOID uint, downtimeInMins float32) *errors.AppError {
+
+	sloRecord, err := cs.GetByID(SLOID)
 
 	if err != nil {
 		return errors.InternalServerStd().AddDebug(err)

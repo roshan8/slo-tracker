@@ -1,0 +1,12 @@
+.login__container {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 200px 20px 100px 20px;
+  height: 100vh;
+}
+
+.login__container h1 {
+  text-align: center;
+  margin-bottom: 48px !important;
+}

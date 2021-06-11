@@ -20,13 +20,13 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
+	// fetch the slo_id from context and add it to incident creation request
+	ctx := r.Context()
+	SLOID, _ := ctx.Value("SLOID").(uint)
+
 	if input.CurrentState == "open" {
 
-		incident, _ := store.Incident().GetBySLIName(input.PolicyName)
-
-		// fetch the slo_name from context and add it to incident creation request
-		ctx := r.Context()
-		incident.SLOName, _ = ctx.Value("SLOName").(string)
+		incident, _ := store.Incident().GetBySLIName(SLOID, input.PolicyName)
 
 		fmt.Println("Creating new incident")
 		// There are no open incident for this SLI, creating new incident
@@ -34,6 +34,7 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 			fmt.Println("Existing incident not found, so creating one now")
 			incident, _ = store.Incident().Create(&schema.IncidentReq{
 				SliName:          input.PolicyName,
+				SLOID:            SLOID,
 				Alertsource:      "Newrelic",
 				State:            "open",
 				ErrorBudgetSpent: 0,
@@ -44,7 +45,7 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 
 	if input.CurrentState == "closed" {
 
-		incident, err := store.Incident().GetBySLIName(input.PolicyName)
+		incident, err := store.Incident().GetBySLIName(SLOID, input.PolicyName)
 		if err != nil {
 			return errors.BadRequest(err.Error()).AddDebug(err)
 		}
@@ -55,7 +56,7 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 		updated, _ := store.Incident().Update(incident, updatedIncident) // TODO: error handling
 
 		// deduct error budget with incident downtime
-		err = store.SLO().CutErrBudget(updated.SLOName, updatedIncident.ErrorBudgetSpent)
+		err = store.SLO().CutErrBudget(updated.SLOID, updatedIncident.ErrorBudgetSpent)
 
 		respond.Created(w, updated)
 

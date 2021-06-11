@@ -1,0 +1,17 @@
+.app__layout {
+  height: 100vh;
+}
+
+.app__layout-light_background {
+  background-color: white !important;
+}
+
+.app__layout_header {
+  height: 72px !important;
+  padding: 20px 30px !important;
+}
+
+.app__layout_fixed_layout {
+  height: (100vh - 72px);
+  overflow: auto;
+}

@@ -1,0 +1,13 @@
+.copyable__container {
+  border: 1px solid #b6bcc8;
+  justify-content: space-between;
+  border-radius: 4px;
+  padding: 4px 8px;
+}
+
+.copyable__content {
+  width: 86%;
+  overflow-x: auto;
+  height: 32px;
+  border: none;
+}

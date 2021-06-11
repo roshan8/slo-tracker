@@ -1,0 +1,33 @@
+.multi-progress-bar {
+	height: auto;
+	width: auto;
+}
+
+.multi-progress-bar .vals .value {
+	float: left;
+	text-align: center;
+}
+
+.multi-progress-bar .line .ln {
+	float: left;
+	text-align: center;
+}
+
+.multi-progress-bar .bars .bar {
+	float: left;
+	height: 8px;
+}
+
+.multi-progress-bar .bars:hover + .vals {
+	font-size: 5px;
+}
+
+.multi-progress-bar .bars div.bar:first-of-type {
+	border-top-left-radius: 5px;
+	border-bottom-left-radius: 5px;
+}
+
+.multi-progress-bar .bars div.bar:last-of-type {
+	border-top-right-radius: 5px;
+	border-bottom-right-radius: 5px;
+}

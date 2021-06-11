@@ -1,7 +1,6 @@
 package incident
 
 import (
-	"fmt"
 	"net/http"
 	"time"
 
@@ -20,20 +19,19 @@ func createDatadogIncidentHandler(w http.ResponseWriter, r *http.Request) *error
 		return errors.BadRequest(err.Error()).AddDebug(err)
 	}
 
+	// fetch the slo_id from context and add it to incident creation request
+	ctx := r.Context()
+	SLOID, _ := ctx.Value("SLOID").(uint)
+
 	if input.Alerttransition == "Triggered" {
 
-		incident, _ := store.Incident().GetBySLIName(input.Title)
+		incident, _ := store.Incident().GetBySLIName(SLOID, input.Title)
 
-		// fetch the slo_name from context and add it to incident creation request
-		ctx := r.Context()
-		incident.SLOName, _ = ctx.Value("SLOName").(string)
-
-		fmt.Println("Creating new incident")
-		// There are no open incident for this SLI, creating new incident
+		// If there are no open incident for this SLI, creating new incident
 		if incident == nil || incident.State != "open" {
-			fmt.Println("Existing incident not found, so creating one now")
 			incident, _ = store.Incident().Create(&schema.IncidentReq{
 				SliName:          input.Title,
+				SLOID:            SLOID,
 				Alertsource:      "Datadog",
 				State:            "open",
 				ErrorBudgetSpent: 0,
@@ -44,7 +42,7 @@ func createDatadogIncidentHandler(w http.ResponseWriter, r *http.Request) *error
 
 	if input.Alerttransition == "Recovered" {
 
-		incident, err := store.Incident().GetBySLIName(input.Title)
+		incident, err := store.Incident().GetBySLIName(SLOID, input.Title)
 		if err != nil {
 			return errors.BadRequest(err.Error()).AddDebug(err)
 		}
@@ -55,7 +53,7 @@ func createDatadogIncidentHandler(w http.ResponseWriter, r *http.Request) *error
 		updated, _ := store.Incident().Update(incident, updatedIncident) // TODO: error handling
 
 		// deduct error budget with incident downtime
-		err = store.SLO().CutErrBudget(updatedIncident.SLOName, updatedIncident.ErrorBudgetSpent)
+		err = store.SLO().CutErrBudget(updatedIncident.SLOID, updatedIncident.ErrorBudgetSpent)
 
 		respond.Created(w, updated)
 
