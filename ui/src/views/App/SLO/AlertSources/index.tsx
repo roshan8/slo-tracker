@@ -66,7 +66,7 @@ const AlertSourcesModal: React.FC<IProps> = ({ show, close, SLO }) => {
           <div className="alert_sources_modal__copy_column">
             <h2>{activeAlert.name} Webhook URL</h2>
             <Copyable
-              content={`${API}/v1/incident/${SLO.id}/${activeAlert.id}`}
+              content={`${API}/api/v1/incident/${SLO.id}/webhook/${activeAlert.id}`}
             />
           </div>
         </div>
