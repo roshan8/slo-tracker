@@ -62,7 +62,7 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
   }
 
   return (
-    <Col style={{ padding: '40px 20px' }}>
+    <Col style={{ padding: '20px' }}>
       <Row justify="space-between">
         <Row>
           <Title style={{ fontSize: '24px' }}>{SLO.slo_name}</Title>
@@ -98,8 +98,8 @@ const SLO: React.FC<IProps> = ({ activeSLO, ...props }) => {
       : 
         <></>
       }
-      
 
+      
       <Tabs defaultActiveKey="table">
         <TabPane key="table" tab="Incidents">
           <SLITable SLIs={SLIs} refreshSLOAndSLIs={refreshSLOAndSLIs} />

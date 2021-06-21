@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Layout } from 'antd';
+import { Layout, Col, Row } from 'antd';
+import { BrowserRouter } from 'react-router-dom';
+import { Switch, Route } from 'react-router';
 
 import TopBar from './TopBar';
 import SideBar from './SideBar';
@@ -11,6 +13,7 @@ import Loader from '../../components/Loader';
 import { ISLO } from '../../core/interfaces/ISLO';
 import SLODrawer from './Drawer';
 import SLO from './SLO';
+import { Overview, SLOTable } from './Overview'
 
 const { Header, Content, Sider } = Layout;
 
@@ -71,11 +74,8 @@ const AppView: React.FC = () => {
       );
   };
 
-  return (
-    <Layout className="app__layout">
-      <Header className="app__layout_header app__layout-light_background">
-        <TopBar onAddSLO={openSLODrawer('create')} />
-      </Header>
+  const SLOContent = () => { 
+    return (
       <Layout>
         <Sider
           breakpoint="lg"
@@ -92,6 +92,24 @@ const AppView: React.FC = () => {
           />
         </Content>
       </Layout>
+  )};
+
+  return (
+    <Layout className="app__layout">
+      <BrowserRouter>
+      <Header className="app__layout_header app__layout-light_background" >
+        <Col>
+          <Row justify="space-between">
+            <TopBar onAddSLO={openSLODrawer('create')} />
+            <Overview />
+         </Row>
+        </Col>
+      </Header>
+        <Switch>
+          <Route exact path="/" component={SLOContent} />
+          <Route exact path="/overview" component={SLOTable} />
+        </Switch>
+      </BrowserRouter>
       <SLODrawer
         type={sloDrawer.type}
         show={sloDrawer.show}
