@@ -1,7 +1,10 @@
 package middleware
 
 import (
+	"bytes"
 	"fmt"
+	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"runtime/debug"
@@ -31,6 +34,15 @@ func Recoverer(next http.Handler) http.Handler {
 				return
 			}
 		}()
+
+		bodyBytes, err := ioutil.ReadAll(r.Body)
+		if err != nil {
+			log.Printf("Unable to decode the payload body")
+		}
+		print(string(bodyBytes))
+
+		r.Body.Close()
+		r.Body = ioutil.NopCloser(bytes.NewBuffer(bodyBytes))
 
 		next.ServeHTTP(w, r)
 	}
