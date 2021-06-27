@@ -13,15 +13,15 @@ export const SLOCards: ISLOCard[] = [
   },
   {
     title: 'Your SLO',
-    render: ({ SLO }) => <div>{SLO.current_slo}%</div>,
+    render: ({ SLO }) => <div>{SLO.current_slo.toFixed(6)}%</div>,
   },
   {
     title: '30 Days Consumption',
-    render: ({ past30Days }) => <div>{past30Days} min</div>,
+    render: ({ past30Days }) => <div>{past30Days.toFixed(3)} min</div>,
   },
   {
     title: 'Remaining Error Budget',
-    render: ({ SLO }) => <div>{SLO.remaining_err_budget} min</div>,
+    render: ({ SLO }) => <div>{SLO.remaining_err_budget.toFixed(3)} min</div>,
   },
   {
     title: 'SLO Burning Rate',
