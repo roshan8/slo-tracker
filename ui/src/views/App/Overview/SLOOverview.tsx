@@ -7,7 +7,12 @@ import useCalculateSLIs from '../../../core/hooks/useCalculateSLIs';
 import { ISLO } from '../../../core/interfaces/ISLO';
 import useGetSLIs from '../../../core/hooks/useGetSLIs';
 
-const tableColumns = () => [
+interface IProps {
+    SLO_s: ISLO[];
+    setActiveSLO: (activeSLO: ISLO) => void;
+}
+
+const tableColumns = (props) => [
     {
         title: 'SLO',
         dataIndex: 'slo_name',
@@ -20,11 +25,7 @@ const tableColumns = () => [
     },
     {
         title: 'Your SLO',
-        render: (o: ISLO) => {
-            if(o.current_slo === 0)
-                return <div>100</div>
-            return <div>{o.current_slo}</div>
-        }
+        render: (o: ISLO) => o.current_slo === 0 ? 100 : o.current_slo
     },
     {
         title: '30 days consumption (mins)',
@@ -81,26 +82,22 @@ const tableColumns = () => [
     {
         title: 'View Incidents',
         key: 'View Incidents',
-        render: (o: ISLO) => {
-            
-            return <Link to="/">View Incidents</Link>
-        },
+        render: (o: ISLO) => <Link to={{pathname:"/" }} onClick={() => {props.setActiveSLO(o)}} >View Incidents</Link>
     },
     
 ];
 
-const SLOTable: React.FC = () => {
+const SLOTable: React.FC<IProps> = ({SLO_s, ...props}) => {
     const { SLOs } = useGetAllSLOs();
     const tableData = SLOs.map((i) => ({
         key: i.id,
         ...i,
     }));
-
     return (
         <>
             <div style={{fontSize: 20, fontWeight: 500, margin: "20px 1em"}}>Overview</div>
             <Table dataSource={tableData}
-            columns={tableColumns()}
+            columns={tableColumns(props)}
             pagination={{ pageSize: 5}} size="middle" style={{width: "auto", margin: "0 2em"}}/>
         </>
     );

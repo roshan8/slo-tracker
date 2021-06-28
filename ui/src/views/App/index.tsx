@@ -13,7 +13,8 @@ import Loader from '../../components/Loader';
 import { ISLO } from '../../core/interfaces/ISLO';
 import SLODrawer from './Drawer';
 import SLO from './SLO';
-import { Overview, SLOTable } from './Overview'
+import Overview from './Overview/Overview'
+import SLOTable from './Overview/SLOOverview';
 
 const { Header, Content, Sider } = Layout;
 
@@ -94,6 +95,8 @@ const AppView: React.FC = () => {
       </Layout>
   )};
 
+  const setSLO = (activeSLO: ISLO) => {setActiveSLO(activeSLO)};
+
   return (
     <Layout className="app__layout">
       <BrowserRouter>
@@ -107,7 +110,7 @@ const AppView: React.FC = () => {
       </Header>
         <Switch>
           <Route exact path="/" component={SLOContent} />
-          <Route exact path="/overview" component={SLOTable} />
+          <Route exact path="/overview" component={() => <SLOTable SLO_s={SLOs} setActiveSLO={setSLO}/>} />
         </Switch>
       </BrowserRouter>
       <SLODrawer
