@@ -26,14 +26,14 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 
 	if input.CurrentState == "open" {
 
-		incident, _ := store.Incident().GetBySLIName(SLOID, input.PolicyName)
+		incident, _ := store.Incident().GetBySLIName(SLOID, input.ConditionName)
 
 		fmt.Println("Creating new incident")
 		// There are no open incident for this SLI, creating new incident
 		if incident == nil || incident.State != "open" {
 			fmt.Println("Existing incident not found, so creating one now")
 			incident, _ = store.Incident().Create(&schema.IncidentReq{
-				SliName:          input.PolicyName,
+				SliName:          input.ConditionName,
 				SLOID:            SLOID,
 				Alertsource:      "Newrelic",
 				State:            "open",
@@ -45,7 +45,7 @@ func createNewrelicIncidentHandler(w http.ResponseWriter, r *http.Request) *erro
 
 	if input.CurrentState == "closed" {
 
-		incident, err := store.Incident().GetBySLIName(SLOID, input.PolicyName)
+		incident, err := store.Incident().GetBySLIName(SLOID, input.ConditionName)
 		if err != nil {
 			return errors.BadRequest(err.Error()).AddDebug(err)
 		}

@@ -41,7 +41,8 @@ services:
       - slo-be
     restart: always
     environment:
-      API_URL: slo-be     
+      API_URL: slo-be    
+      # Please update username and password if you don't want to use the defaults. 
       USERNAME: admin    
       PASSWORD: admin   
 

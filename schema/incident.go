@@ -56,8 +56,8 @@ type PromIncidentReq struct {
 }
 
 type NewrelicIncidentReq struct {
-	CurrentState string `json:"current_state"`
-	PolicyName   string `json:"policy_name"`
+	CurrentState  string `json:"current_state"`
+	ConditionName string `json:"condition_name"`
 }
 
 type PingdomIncidentReq struct {
