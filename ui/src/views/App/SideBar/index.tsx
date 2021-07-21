@@ -4,6 +4,7 @@ import { Menu } from 'antd';
 import { ISLO } from '../../../core/interfaces/ISLO';
 
 import './sidebar.css';
+import Overview from '../Overview/Overview';
 // import PoweredBy from './poweredBy';
 
 interface IProps {
@@ -33,6 +34,7 @@ const SideBar: React.FC<IProps> = ({ SLOs, activeSLOId, ...props }) => {
           <Menu.Item key={String(slo.id)}>{slo.slo_name}</Menu.Item>
         ))}
       </Menu>
+      <Overview />
       {/* <PoweredBy /> */}
     </div>
   );
