@@ -8,15 +8,9 @@ interface IProps {
 
 const TopBar: React.FC<IProps> = (props) => {
 	return (
-		// <Col>
-		// 	<Row>
-				// <div style={{ lineHeight: "30px" }}>
-					<Button type="dashed" icon={<PlusOutlined/>} onClick={props.onAddSLO}>
-						Create SLO
-					</Button>
-				// </div>
-		// 	</Row>
-		// </Col>
+		<Button type="dashed" icon={<PlusOutlined/>} onClick={props.onAddSLO}>
+			Create SLO
+		</Button>
 	);
 };
 
