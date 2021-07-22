@@ -4,9 +4,11 @@ import { ArrowsAltOutlined } from "@ant-design/icons";
 
 const Overview = () => {
 	return (
-		<Button type="default" style={{margin: "10px 10px"}}>
-			<ArrowsAltOutlined />
-			<Link to="/overview" style={{margin: "inherit", color:"darkslategray"}}>SLO Overview</Link>
+		<Button size="large" type="primary" style={{margin: "10px 10px"}}>
+			<Link to="/overview">
+				<ArrowsAltOutlined style={{marginRight: "10px"}}/>
+				SLO Overview
+			</Link>
 		</Button>
 	);
 };
