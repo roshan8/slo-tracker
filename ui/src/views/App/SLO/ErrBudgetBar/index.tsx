@@ -25,19 +25,19 @@ const ErrBudgetBar: React.FC<IProps> = ({ data, sli }) => {
 
 	const legend = data.map((val, i) => {
 		return (
-			<span style={{ display: "inline-block" }}>
+			<span style={{ display: "inline-block", marginTop:"10px"}}>
 				<span
 					className="dot"
 					style={{
 						color: colors[i],
-						fontSize: 25,
 						marginLeft: "10px",
 						marginRight: "5px",
+						float: "left"
 					}}
 				>
-					●
+					&#11044;
 				</span>
-				<span className="label" style={{ marginRight: "10px" }}>
+				<span className="label" style={{ marginRight: "10px", float: "left"}}>
 					{val.label}
 				</span>
 			</span>
@@ -77,7 +77,7 @@ const ErrBudgetBar: React.FC<IProps> = ({ data, sli }) => {
 					Error Budget Consumption by SLIs
 				</div>
 				<div className="bars">{prog}</div>
-				<div style={{ marginLeft: "10px", marginTop: "10px" }}>{legend}</div>
+				{legend}
 			</div>
 		);
 	})();
