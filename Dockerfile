@@ -5,7 +5,6 @@ LABEL maintainer="roshan.aloor@gmail.com"
 LABEL version="0.0.1"
 LABEL description="slo-tracker : Track your product SLO"
 
-RUN mkdir -p /app/ 
 WORKDIR /app
 
 COPY . .
