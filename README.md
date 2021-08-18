@@ -28,8 +28,11 @@ docker-compose up --build -d
 - Pingdom
 - SLO-Tracker API 
 
+### UI Screenshots
+![SLO-Overview](images/slo-overview.png) 
+![SLO-InDetailed](images/detailed-slo.png)
+**Demo dashboard:** http://slotracker.com:3000/
 ### Ref
 https://opsmonk.dev/Tracking-error-budget-and-SLO/  
-Demo dashboard: http://slotracker.com:3000/
 
 #### P.S: Sending all the alerts `SLO-tracker` from your monitoring tool defeats the purpose. Please send only SLO voilating incidents to this tool.
