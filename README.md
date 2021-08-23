@@ -26,6 +26,7 @@ docker-compose up --build -d
 - Datadog
 - Newrelic
 - Pingdom
+- Grafana
 - SLO-Tracker API 
 
 ### UI Screenshots

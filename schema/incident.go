@@ -55,6 +55,12 @@ type PromIncidentReq struct {
 	} `json:"alerts"`
 }
 
+type GrafanaIncidentReq struct {
+	RuleName string `json:"ruleName"`
+	State    string `json:"state"`
+	Message  string `json:"message"`
+}
+
 type NewrelicIncidentReq struct {
 	CurrentState  string `json:"current_state"`
 	ConditionName string `json:"condition_name"`

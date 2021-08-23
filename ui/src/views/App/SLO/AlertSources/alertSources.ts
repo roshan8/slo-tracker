@@ -17,6 +17,10 @@ const alertSources: IAlertSource[] = [
     name: 'Data Dog',
     id: 'datadog',
   },
+  {
+    name: 'Grafana',
+    id: 'grafana'
+  }
 ];
 
 export default alertSources;

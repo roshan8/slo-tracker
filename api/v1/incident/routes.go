@@ -36,4 +36,5 @@ func webhookSubRoutes(r chi.Router) {
 	r.Method(http.MethodPost, "/prometheus", api.Handler(createPromIncidentHandler))
 	r.Method(http.MethodPost, "/pingdom", api.Handler(createPingdomIncidentHandler))
 	r.Method(http.MethodPost, "/datadog", api.Handler(createDatadogIncidentHandler))
+	r.Method(http.MethodPost, "/grafana", api.Handler(createGrafanaIncidentHandler))
 }
