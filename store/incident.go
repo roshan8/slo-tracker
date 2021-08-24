@@ -87,11 +87,15 @@ func (cs *IncidentStore) Update(incident *schema.Incident, update *schema.Incide
 
 	var err *errors.AppError
 
-	if incident.MarkFalsePositive == true && update.MarkFalsePositive == false {
+	if incident.MarkFalsePositive && !update.MarkFalsePositive {
 		err = cs.SLOConn.CutErrBudget(incident.SLOID, incident.ErrorBudgetSpent)
 	}
 
-	if incident.MarkFalsePositive == false && update.MarkFalsePositive == true {
+	if !incident.MarkFalsePositive && update.MarkFalsePositive {
+		// Close the open incident if it's being marked as false positive
+		if update.State == "open" {
+			update.State = "closed"
+		}
 		err = cs.SLOConn.CutErrBudget(incident.SLOID, -incident.ErrorBudgetSpent)
 	}
 
