@@ -27,13 +27,16 @@ docker-compose up --build -d
 - Newrelic
 - Pingdom
 - Grafana
-- SLO-Tracker API 
+- SLO-Tracker API  
 
+#### P.S: Sending all the alerts `SLO-tracker` from your monitoring tool defeats the purpose. Please send only SLO voilating incidents to this tool.   
+ 
 ### UI Screenshots
 ![SLO-Overview](images/slo-overview.png) 
 ![SLO-InDetailed](images/detailed-slo.png)
-**Demo dashboard:** http://slotracker.com:3000/
-### Ref
-https://opsmonk.dev/Tracking-error-budget-and-SLO/  
+**Demo dashboard:** http://slotracker.com:3000/   
+**Blog:** https://opsmonk.dev/Tracking-error-budget-and-SLO/   
 
-#### P.S: Sending all the alerts `SLO-tracker` from your monitoring tool defeats the purpose. Please send only SLO voilating incidents to this tool.
+### Contributing
+
+Refer to [CONTRIBUTING.md](https://github.com/roshan8/slo-tracker/blob/main/CONTRIBUTING.md)
