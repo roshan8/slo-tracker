@@ -34,8 +34,8 @@ docker-compose up --build -d
 ### UI Screenshots
 ![SLO-Overview](images/slo-overview.png) 
 ![SLO-InDetailed](images/detailed-slo.png)
-**Demo dashboard:** http://demo.slotracker.com:3000/   
-**Blog:** https://opsmonk.dev/Tracking-error-budget-and-SLO/   
+**Demo dashboard:** http://demo.slotracker.com:3000/   (creds: admin:admin)   
+**Blog:** https://dev.to/squadcast/introducing-our-open-source-slo-tracker-a-simple-tool-to-track-slos-and-error-budget-4dp
 
 ### Contributing
 
