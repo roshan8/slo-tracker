@@ -15,6 +15,20 @@ In the event of an incident, manually aggregating these SLIs from multiple tools
 - Displays basic Analytics for SLO violation distribution (SLI distribution graph, Error budget consumption over time)
 - Easy to set up, lightweight since it only stores and computes what matters (SLO violation alerts) and not the bulk of the data (every single metric) 
 
+### Local building/testing
+```sh
+make
+```
+
+This will run `gofmt` and `go test` on code before attempting a local build (using a standard Golang docker container)
+
+### Local vendor updating
+```sh
+make vendor-update
+```
+
+Updates (and saves locally) all dependencies in the `vendor/` folder.
+
 ### Installation and usage
 ```sh    
 docker-compose up --build -d      
