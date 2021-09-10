@@ -27,7 +27,7 @@ func (cs *SLOStore) createTableIfNotExists() {
 	fmt.Println("Creating the slo table now!")
 	if !cs.DB.Migrator().HasTable(&schema.SLO{}) {
 		if err := cs.DB.Migrator().CreateTable(&schema.SLO{}).Error; err != nil {
-			fmt.Println(err)
+			fmt.Println(err())
 		}
 	}
 

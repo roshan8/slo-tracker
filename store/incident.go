@@ -23,7 +23,7 @@ func NewIncidentStore(st *Conn) *IncidentStore {
 func (cs *IncidentStore) createTableIfNotExists() {
 	if !cs.DB.Migrator().HasTable(&schema.Incident{}) {
 		if err := cs.DB.Migrator().CreateTable(&schema.Incident{}).Error; err != nil {
-			fmt.Println(err)
+			fmt.Println(err())
 		}
 	}
 }
