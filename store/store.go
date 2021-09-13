@@ -18,7 +18,8 @@ var dbConn *gorm.DB
 func Init() {
 
 	// Connect to mysql using sql driver and create a database
-	db, err := sql.Open(config.DBDriver, config.DBDsn)
+	tempDsn := fmt.Sprintf("%s:%s@tcp(%s:%s)/", config.DBUser, config.DBPass, config.DBHost, config.DBPort)
+	db, err := sql.Open("mysql", tempDsn)
 	if err != nil {
 		panic(err)
 	}
