@@ -1,5 +1,5 @@
 ## SLO-Tracker ![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=flat-square) 
-A simple but effective way to track SLO's and Error budgets. `SLO-tracker` can be integrated with few alerting tools via webhook integration to receive SLO voilating incidents. 
+A simple but effective way to track SLO's and Error budgets. `SLO-tracker` can be integrated with few alerting tools via webhook integration to receive SLO violating incidents. 
 
 ### Motivation
 SLOs are a predefined approach to defining the amount of downtime that is acceptable for your product. Tracking SLO's and error budgets can be hard without proper tooling support because of the multitude of alert sources. 
@@ -29,7 +29,7 @@ docker-compose up --build -d
 - Grafana
 - SLO-Tracker API  
 
-#### P.S: Sending all the alerts `SLO-tracker` from your monitoring tool defeats the purpose. Please send only SLO voilating incidents to this tool.   
+#### P.S: Sending all the alerts `SLO-tracker` from your monitoring tool defeats the purpose. Please send only SLO violating incidents to this tool.   
  
 ### UI Screenshots
 ![SLO-Overview](images/slo-overview.png) 
