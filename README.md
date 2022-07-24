@@ -40,3 +40,9 @@ docker-compose up --build -d
 ### Contributing
 
 Refer to [CONTRIBUTING.md](https://github.com/roshan8/slo-tracker/blob/main/CONTRIBUTING.md)
+
+
+## Stargazers over time
+
+[![Stargazers over time](https://starchart.cc/roshan8/slo-tracker.svg)](https://starchart.cc/roshan8/slo-tracker)
+
