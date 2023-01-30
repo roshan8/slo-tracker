@@ -1,0 +1,5 @@
+# these don't end up in the final image, but no need to consider them in the build context
+*.md
+LICENSE
+images
+ui
